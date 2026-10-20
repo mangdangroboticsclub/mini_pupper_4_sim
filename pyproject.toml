@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mp4-sim"
+version = "0.1.0"
+description = "Mini Pupper simulation, locomotion training (GPU and CPU), and ONNX policy export"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "MIT" }
+# Shared by both modes. Backend-specific packages and every version pin live
+# in requirements/ and are installed by scripts/install/.
+dependencies = [
+    "numpy",
+    "mujoco",
+    "torch",
+    "onnx",
+    "onnxruntime",
+]
+
+[project.entry-points."mjlab.tasks"]
+mp4_sim = "mp4_sim.gpu.tasks"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mp4_sim"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

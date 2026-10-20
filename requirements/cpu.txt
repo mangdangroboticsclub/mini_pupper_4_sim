@@ -1,0 +1,29 @@
+# CPU-only mode (no CUDA): MuJoCo + Gymnasium + Stable-Baselines3 training,
+# ONNX export and runtime. No mjlab / mujoco-warp / warp-lang: they need an
+# NVIDIA GPU to be useful.
+# Versions come from constraints.txt.
+
+mujoco
+numpy
+scipy
+
+# CPU torch is selected with --torch-backend=cpu by the install scripts
+torch
+
+# RL
+gymnasium
+stable-baselines3
+tensorboard
+
+# ONNX
+onnx
+onnxruntime
+
+# viewer / recording
+pillow
+imageio
+imageio-ffmpeg
+
+# dev
+pytest
+ruff

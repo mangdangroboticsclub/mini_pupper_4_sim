@@ -1,0 +1,34 @@
+# GPU (CUDA) mode: mjlab / MuJoCo Warp parallel training, ONNX export, plus
+# everything in cpu.txt so the same venv can run the CPU sim path.
+# Versions come from constraints.txt.
+
+# mjlab stack
+mjlab
+mujoco
+mujoco-warp
+warp-lang
+rsl-rl-lib
+torch
+torchvision
+
+# ONNX
+onnx
+onnxruntime
+
+# numerics
+numpy
+scipy
+
+# recording / video
+imageio
+imageio-ffmpeg
+pillow
+
+# CPU-side RL
+gymnasium
+stable-baselines3
+tensorboard
+
+# dev
+pytest
+ruff

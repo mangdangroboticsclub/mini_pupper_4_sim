@@ -1,0 +1,14 @@
+# virtual environments created by scripts/install/
+.venv/
+.venv-*/
+
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+MUJOCO_LOG.TXT
+
+# training output
+runs/
+logs/
+outputs/
