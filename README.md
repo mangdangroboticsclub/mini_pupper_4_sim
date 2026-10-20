@@ -4,10 +4,12 @@ A Python project for simulating the Mini Pupper and training locomotion
 policies for it, on any machine. Training ends in one artifact: an ONNX
 policy the robot can run.
 
-> **Status:** scaffold. The Python environment (`requirements/`,
-> `scripts/install/`), the package layout under `src/mp4_sim/`, and these docs
-> are in place. Each module describes what it will contain; the simulator,
-> training, and export code is still to be added.
+> **Status:** the Python environment, the robot models (SKU1, SKU2), the
+> policy contract, and the BAM servo models are in place. The CPU and GPU
+> environments, training, and export code are still to be added.
+>
+> **The SKU2 model is provisional.** It will be regenerated from the corrected
+> SKU2 URDF; see [src/mp4_sim/robot/assets/README.md](src/mp4_sim/robot/assets/README.md).
 
 ## What it is
 
@@ -51,12 +53,27 @@ reasons behind them are in [docs/INSTALL.md](docs/INSTALL.md).
 
 ```
 src/mp4_sim/
-  contract.py       observation / action / manifest definition (single source)
-  robot/            robot models per SKU (assets/sku_1, assets/sku_2) and servo maps
-  actuators/        fitted servo models (params/) with NumPy and mjlab bindings
+  paths.py          asset locations and the file hash used for provenance
+  contract.py       observation / action definition shared with the robot
+  robot/
+    assets/         MJCF, URDF, meshes, servo maps per SKU (sku_1, sku_2)
+    sku.py          SKU registry (MP4_SIM_SKU selects one)
+    sku2.py         SKU2 model as trained: weighed masses, IMU sensors, mjlab config
+    kinematics.py   leg kinematics
+    mapping.py      servo id / direction / zero mapping
+    rig.py          ghost rig used when building models
+  actuators/
+    bam/            vendored BAM servo models (NumPy, MuJoCo, mjlab)
+    bam_servo.py    mjlab actuator wrapping BAM, as used on the robot
+    arms.py         actuator choices for training (stock, bam_t5ub06)
+    params/md01/    fitted servo parameters (t5ub06)
   cpu/              MuJoCo + Gymnasium environments, Stable-Baselines3 training
   gpu/              mjlab tasks, rsl_rl training on MuJoCo Warp
   export/           ONNX export, manifest embedding, verification
+cad/                raw CAD (SolidWorks URDF) exports the models are built from
+tools/
+  build_model.py    regenerate a SKU's MJCF, parts, and servo map from its URDF
+  fix_sku2_urdf.py  clean up the raw SKU2 export
 tests/
 requirements/
   constraints.txt   single pin set shared by both modes

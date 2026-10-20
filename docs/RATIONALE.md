@@ -34,9 +34,9 @@ language.
   This set exports ONNX that meets the contract, matches the MuJoCo build
   used when policies are scored, and has been run through train and export
   on Windows.
-- **`mujoco-warp` stays on 3.8.1.** Release 3.9.1 removed `ls_parallel`, which
-  the actuator bridge calls. Once the actuator code is in the tree, check it
-  on 3.8.1 before trusting training results (see
+- **`mujoco-warp` stays on 3.8.1.** That is the version the stack was verified
+  with; newer releases are untested. The actuator code passes its unit tests
+  on 3.8.1, but run a training job before trusting results (see
   [INSTALL.md](INSTALL.md#known-risks)).
 - **Servo fitting stays out.** Hardware tools (Dynamixel, ZMQ, Optuna, PyQt5)
   are separate from this project.

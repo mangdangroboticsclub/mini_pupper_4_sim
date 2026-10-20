@@ -1,0 +1,9 @@
+{
+ "total_kg": 0.45,
+ "module_kg": 0.06682,
+ "leg_kg": 0.0065,
+ "front_pair_kg": 0.1973,
+ "rear_pair_kg": 0.2578,
+ "base_com_x_m": -0.02313,
+ "source": "SKU2 weighed: 450 g total, a leg 6.5 g, a bare MD01 module 66.82 g, the front and rear foot pairs 197.3 / 257.8 g at the stand; the base COM x is solved for that rear share"
+}

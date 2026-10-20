@@ -6,6 +6,7 @@
 mujoco
 numpy
 scipy
+trimesh           # tools/build_model.py, tools/fix_sku2_urdf.py
 
 # CPU torch is selected with --torch-backend=cpu by the install scripts
 torch

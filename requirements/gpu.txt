@@ -18,6 +18,7 @@ onnxruntime
 # numerics
 numpy
 scipy
+trimesh           # tools/build_model.py, tools/fix_sku2_urdf.py
 
 # recording / video
 imageio

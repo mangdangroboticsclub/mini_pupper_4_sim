@@ -53,8 +53,8 @@ All versions live in `requirements/constraints.txt`.
 | `mujoco` | 3.14.0 | Same build used when policies are scored, so training physics match scoring physics |
 | `torch` | 2.9.1 | mjlab 1.3.0's ONNX export uses the legacy exporter (`dynamo=False`, opset 18), written for this torch line |
 | `mjlab` | 1.3.0 | Training framework and ONNX export |
-| `mujoco-warp` | 3.8.1 | Newest version that still has `ls_parallel`, which the actuator bridge uses |
-| `warp-lang` | 1.12.0 | `wp.context` was removed in 1.15 |
+| `mujoco-warp` | 3.8.1 | Version the train-and-export stack was verified with; mjlab only requires >= 3.7.0.1 |
+| `warp-lang` | 1.12.0 | Version the train-and-export stack was verified with; mjlab only requires >= 1.12.0 |
 | `rsl-rl-lib` | 5.0.1 | Pinned by mjlab 1.3.0 |
 | `onnx` / `onnxruntime` | 1.23.1 / 1.30.0 | Versions the export path was verified with |
 
@@ -64,8 +64,8 @@ mode.
 ## Known risks
 
 - **Actuator models on this MuJoCo line.** The fitted servo models were
-  exercised on `mujoco 3.7` and `mujoco-warp 3.7`. Once that code is in the
-  tree, check it on 3.14.0 / 3.8.1 before trusting training results.
+  exercised on `mujoco 3.7` and `mujoco-warp 3.7`. Their unit tests pass on
+  3.14.0 / 3.8.1, but run a training job before trusting results.
 - **Windows GPU training may need MSVC.** Gait code that compiles to a DLL
   needs `cl.exe`. If that code is added, install Visual Studio's "Desktop
   development with C++" workload. The installer leaves this to you.
