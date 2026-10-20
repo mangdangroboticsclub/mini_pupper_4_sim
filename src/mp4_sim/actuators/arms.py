@@ -95,8 +95,9 @@ def trained_arm(path) -> str | None:
     checkpoint)."""
     p = Path(path)
     for cfg in (p / "config.json", p.parent / "config.json"):
-        if cfg.is_file():
-            return json.loads(cfg.read_text())["task"]["arm"]
+        arm = json.loads(cfg.read_text()).get("task", {}).get("arm") if cfg.is_file() else None
+        if arm is not None:
+            return arm
     return None
 
 
