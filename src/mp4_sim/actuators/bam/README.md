@@ -26,4 +26,6 @@ hardware dependencies.
 Known difference: `mjlab.py`'s `_compute_friction_budget` adds the m6
 quadratic load-friction term without the opposite-sign condition that
 `Model.compute_frictions` in `model.py` applies. The GPU servo
-(`mp4_sim.actuators.bam_servo`) inherits this.
+(`mp4_sim.actuators.bam_servo`) inherits this, and the CPU servo bank
+(`mp4_sim.actuators.bank.friction_budget`) reproduces it so both backends
+train against the same friction.

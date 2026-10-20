@@ -64,8 +64,10 @@ src/mp4_sim/
     rig.py          ghost rig used when building models
   actuators/
     bam/            vendored BAM servo models (NumPy, MuJoCo, mjlab)
-    bam_servo.py    mjlab actuator wrapping BAM, as used on the robot
-    arms.py         actuator choices for training (stock, bam_t5ub06)
+    fits.py         fitted servo sets per role (t5ub06) and their command delays
+    bam_servo.py    GPU servo: mjlab actuator wrapping BAM
+    bank.py         CPU servo: the same BAM servo on plain MuJoCo
+    arms.py         actuator choices for GPU training (stock, bam_t5ub06)
     params/md01/    fitted servo parameters (t5ub06)
   cpu/              MuJoCo + Gymnasium environments, Stable-Baselines3 training
   gpu/              mjlab tasks, rsl_rl training on MuJoCo Warp

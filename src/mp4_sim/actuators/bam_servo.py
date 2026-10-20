@@ -2,8 +2,7 @@
 
 ``bam.mjlab``'s ``BamActuator`` drives joints only. This subclass keeps its control law, torque equation and
 friction budget (``compute_control``, ``compute_torque``, ``_compute_friction_budget``) and changes, for the SKU2 knee
-(a ``<fixed>`` tendon over the thigh and calf) and for parity with the CPU servo bank (``BamServoBank.update``,
-not yet in this package):
+(a ``<fixed>`` tendon over the thigh and calf) and for parity with the CPU servo bank (``bank.BamServoBank.update``):
 
 - **The servo's position and velocity** are ``actuator_length`` / ``actuator_velocity`` (the bank's read: the values
   of the previous step's forward pass), for joints and tendons alike.
@@ -16,8 +15,8 @@ not yet in this package):
   ``tendon_damping`` for tendons, per environment (``bam_servo_init`` expands all four fields). The rotor inertia goes
   on the joint or the tendon, and the tendon's XML damping is replaced.
 
-Not in this class (as in the bank): the fitted ``command_delay`` (the arm's actuator delay carries it) and the idle
-bridge's braking (a policy never disables torque).
+Not in this class: the fitted ``command_delay`` (the arm's actuator delay carries it; the CPU bank holds its own) and
+the idle bridge's braking (a policy never disables torque, nor does the bank).
 """
 from __future__ import annotations
 

@@ -20,8 +20,8 @@ from mjlab.actuator import BuiltinPositionActuatorCfg
 from mjlab.actuator.actuator import TransmissionType
 
 from .. import paths
+from .fits import PHYSICS_DT, T5UB06, command_delay_steps
 
-PHYSICS_DT = 0.001
 MAX_LAG_STEPS = 60          # the delay buffers' capacity (ms at 1 ms physics); lags are set per episode below it
 JOINT_TARGETS = (r".*_hip", r".*_thigh")
 KNEE_TARGETS = (r".*_knee_drive",)
@@ -58,18 +58,6 @@ def stock() -> Arm:
 BAM_ROLES = (("abd", JOINT_TARGETS[:1], TransmissionType.JOINT),
              ("hip", JOINT_TARGETS[1:], TransmissionType.JOINT),
              ("knee", KNEE_TARGETS, TransmissionType.TENDON))
-# T5 ub06: the abduction and the knee run the md01/id_3 set, the hip md01/id_2.
-T5UB06 = {"abd": paths.ACTUATOR_PARAMS / "md01" / "bam_t5ub06_id_3_m6.json",
-          "hip": paths.ACTUATOR_PARAMS / "md01" / "bam_t5ub06_id_2_m6.json",
-          "knee": paths.ACTUATOR_PARAMS / "md01" / "bam_t5ub06_id_3_m6.json"}
-
-
-def command_delay_steps(params_path) -> int:
-    """A set's fitted ``command_delay`` in physics steps: a command takes effect at the first 1 ms step at or after its
-    time + delay, i.e. the delay rounded up. T5 ub06: id_3 0.02 ms -> 1, id_2 4.98 ms -> 5."""
-    import math
-    ms = float(json.loads(Path(params_path).read_text())["command_delay"]) * 1000.0
-    return int(math.ceil(ms / (PHYSICS_DT * 1000.0) - 1e-9))
 
 
 def bam(name: str, params_json: dict, scales: tuple = (), vin_range: tuple | None = None,
