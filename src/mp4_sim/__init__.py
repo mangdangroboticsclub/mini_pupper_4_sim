@@ -9,7 +9,7 @@ Subpackages:
 - ``export``     ONNX export, manifest embedding, and verification
 
 ``contract`` defines the observation and action interface shared by both
-backends (see docs/POLICY_CONTRACT.md).
+backends (see docs/POLICY_CONTRACT.md); ``heading`` the robot's heading loop.
 """
 
 __version__ = "0.1.0"

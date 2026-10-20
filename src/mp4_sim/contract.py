@@ -1,15 +1,15 @@
 """The policy contract for SKU2: what the network sees and what its output does, in numpy.
 
-This module is the robot side's reference (the Pi runner imports it; it needs numpy only). The training environments
-implement the same arithmetic and must agree with it.
+This module is the robot side's reference (the robot-side program on the Mini Pupper's Raspberry Pi imports it; it
+needs numpy only). The training environments implement the same arithmetic and must agree with it.
 
 Coordinates. Per servo id 1..12 (FR, FL, RR, RL x abduction, hip, knee), the policy works in the servo's own angle in
-radians, relative to the stand: ``rel_i = sign_i * radians(servo_deg_i)``, where ``servo_deg`` is the angle
-minipupperesp's ``servo_write`` takes without the calibration offset (0 = the stand). In the MuJoCo model the abduction
+radians, relative to the stand: ``rel_i = sign_i * radians(servo_deg_i)``, where ``servo_deg`` is the angle the
+firmware's ``servo_write`` takes without the calibration offset (0 = the stand). In the MuJoCo model the abduction
 and hip are the ``*_hip`` and ``*_thigh`` joints and the knee is the ``*_knee_drive`` tendon (the shin's angle); the
 signs and the stand come from the servo mapping (``robot/assets/sku_2/sku2_contract.json``).
 
-The firmware's units (``minipupperesp`` ``servo_write``, main.c:2526; ``driver_board.c:175``; ``mp3link`` cli.py):
+The firmware's units (its ``servo_write`` and the servo board's angle report):
 ``tick = 511 + (int)((servo_deg + offset) * 10240 / 3100)``, ``dd = (int)(3100 - tick * 3100 / 1024)``, both in
 float32. The exact inverse for a measured AT32 angle is ``servo_deg = (DD0 - dd) / 10 - offset``, DD0 the dd of tick
 511 (convert with 1024, not 1023).
@@ -17,8 +17,11 @@ float32. The exact inverse for a measured AT32 angle is ``servo_deg = (DD0 - dd)
 Observation (45, float32): base angular velocity (3, rad/s, body frame, the gyro bias removed), gravity direction (3,
 -acc/|acc| in the body frame: (0, 0, -1) upright), command (3: vx, 0, 0 m/s; an omni policy: vx, vy m/s, wz rad/s, body
 frame), position (12, rel, rad), velocity (12,
-rad/s, ``VelocityFilter``), previous applied action (12). A stair policy appends three more
-(``assemble_stair_observation``): mode (0 walk, 3 climb), measured riser / 0.07, and (tread − 0.05) / 0.11.
+rad/s, ``VelocityFilter``), previous applied action (12). ``assemble_stair_observation`` builds a 48-value variant (the 45 plus mode, measured riser
+/ 0.07 and (tread − 0.05) / 0.11) for policies that request it; the shipped policies do not use it.
+
+A policy with a history of ``h`` steps observes ``obs_size(h)`` floats (``HistoryStacker``): each term's frames
+oldest to newest, the terms concatenated in order; after a reset every slot holds the first frame.
 
 Action (12): ``a`` -> clip to [-1, 1] -> ``scale * a`` (rel, rad) -> the band about the stand -> at most
 ``STEP_LIMIT_DEG`` from the previous applied target -> firmware ticks -> the dd sent. The previous action observed is
@@ -39,7 +42,7 @@ STATE_DT = 0.005                                # the ESP32's tick: one STATE fr
 CONTROL_DT = 0.020                              # the policy's step (50 Hz)
 STEP_LIMIT_DEG = 20.0                           # per policy step, the same in simulation and on the robot
 ABDUCTION = (0, 3, 6, 9)                        # indices of the abductions in servo order
-BAND_DEG = np.array([20.0 if i in ABDUCTION else 60.0 for i in range(12)])   # mp3link cli.py MAX_DEV_DEG
+BAND_DEG = np.array([20.0 if i in ABDUCTION else 60.0 for i in range(12)])   # the robot-side limit
 OBS_SIZE = 45
 STAIR_OBS_SIZE = 48                          # the 45, plus mode, probe riser, probe tread
 ACTION_SIZE = 12
@@ -98,7 +101,7 @@ class Contract:
         return np.degrees(np.asarray(rel, dtype=float)) * self.signs
 
     def rel_from_ticks(self, ticks) -> np.ndarray:
-        """A policy target that the firmware path turns into exactly ``ticks`` (the teacher's targets)."""
+        """A policy target that the firmware path turns into exactly ``ticks`` (e.g. a gait table's targets)."""
         return self.rel_from_servo_deg(self.servo_deg_of_tick(ticks))
 
     def rel_from_dd(self, dd) -> np.ndarray:
@@ -171,6 +174,39 @@ class VelocityFilter:
 def gravity_from_accel(acc_body) -> np.ndarray:
     acc = np.asarray(acc_body, dtype=float)
     return -acc / np.linalg.norm(acc)
+
+
+# The observation's terms (name, slice), in order: what a history stacks per term (mjlab's observation manager).
+OBS_TERMS = (("ang_vel", slice(0, 3)), ("gravity", slice(3, 6)), ("command", slice(6, 9)), ("pos", slice(9, 21)),
+             ("vel", slice(21, 33)), ("prev_action", slice(33, 45)))
+
+
+def obs_size(history: int = 1) -> int:
+    """The actor's input width with a history of ``history`` steps (0 or 1: none)."""
+    return OBS_SIZE * max(int(history), 1)
+
+
+class HistoryStacker:
+    """The actor's observation with a history of ``length`` steps, as mjlab builds it: each term's frames oldest to
+    newest, the terms concatenated in order; the first observation after a reset fills every slot."""
+
+    def __init__(self, length: int):
+        self.length = int(length)
+        self.terms = OBS_TERMS
+        self.frames: list | None = None
+
+    def reset(self) -> None:
+        self.frames = None
+
+    def __call__(self, obs) -> np.ndarray:
+        obs = np.asarray(obs, dtype=F32)
+        if self.frames is None:
+            self.frames = [obs] * self.length
+        else:
+            self.frames = self.frames[1:] + [obs]
+        h = np.stack(self.frames)                                   # (length, 45), oldest first
+        assert h.shape[1] == self.terms[-1][1].stop, h.shape
+        return np.concatenate([h[:, sl].reshape(-1) for _, sl in self.terms]).astype(F32)
 
 
 def assemble_observation(ang_vel, gravity, command, pos_rel, vel, prev_action) -> np.ndarray:
