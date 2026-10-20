@@ -7,15 +7,20 @@ made on the MjSpec at load time (the file is never edited):
   them) and the XML sensor are removed; with ``strip_visuals`` the mesh geoms (``contype = conaffinity = 0``) and the
   meshes too (masses are explicit ``<inertial>``s, so the dynamics do not change);
 - an IMU at site ``imu``: gyro ``imu_ang_vel``, velocimeter ``imu_lin_vel``, accelerometer ``imu_lin_acc``;
+- the legs' collision capsules are named ``<leg>_thigh_collision`` / ``<leg>_calf_collision`` (``LEG_COLLISION_GEOMS``);
 - the weighed masses (assets/sku_2/sku2_masses.json: each module
   66.82 g, each leg's thigh and calf scaled together to 6.5 g, the base takes the rest of 450 g, inertias scale with
-  mass, the base COM x set to the value solved for the measured 56.6 % rear share);
+  mass, the base COM x set to the value solved for the measured 56.6 % rear share), or another mass file
+  (``masses``: sku2_masses_478g.json is SKU2 with a Raspberry Pi heatsink, the terrain task's);
 - the feet get contact priority 1, so that their friction (randomised) is the one MuJoCo uses against the ground
-  (equal priorities take the larger of the two, and the ground's is 1.0);
-- on rough ground (``rough``), the trunk's boxes and the hip cans meet the terrain through small spheres instead
-  (``rough_ground_collision``);
-- on the stairs (``stairs``), the feet get a stiffer contact (``stair_foot_contact``), so a foot pushed against
-  a riser stays at its surface instead of creeping through the box.
+  (equal priorities take the larger of the two, and the ground's is 1.0); ``foot_solref`` sets their contact
+  (time constant, damping ratio), the one used for every foot-ground pair;
+- with ``self_collision``, the shins and feet collide with the base boxes (``leg_base_collisions``);
+- optional alternatives that no shipped task uses (the terrain tasks randomise the foot contact with
+  ``--foot-softness`` and keep the original collision geometry): with ``rough``, the trunk's boxes and the hip cans
+  meet the terrain through small spheres instead (``rough_ground_collision``); with ``stairs``, the feet get a
+  stiffer contact (``stair_foot_contact``), so a foot pushed against a riser stays at its surface instead of
+  creeping through the box.
 
 The stand (all twelve joints) comes from ``assets/sku_2/sku2_contract.json``: the servo mapping with SKU2's stand
 geometry corrected to the firmware's neutral pose (hip axes 70 mm above the feet).
@@ -23,6 +28,7 @@ geometry corrected to the firmware's neutral pose (hip axes 70 mm above the feet
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import mujoco
 import numpy as np
@@ -33,24 +39,36 @@ from ..contract import Contract
 LEGS = ("FR", "FL", "RR", "RL")
 FOOT_GEOMS = tuple(f"{leg}_foot" for leg in LEGS)
 FOOT_SITES = tuple(f"{leg}_foot" for leg in LEGS)
+LEG_COLLISION_GEOMS = tuple(f"{leg}_{part}_collision" for leg in LEGS for part in ("thigh", "calf"))
+# The contact bit that pairs the shins with the base (``leg_base_collisions``).
+SELF_COLLISION_BIT = 4
 BODY_CONTACT_BODIES = ("base",) + tuple(f"{leg}_hip" for leg in LEGS)   # the trunk and the motor cans
 # The base origin's height at the settled stand on the stock servos (71.9 mm); the start sits just above it.
 INIT_BASE_Z = 0.0725
-# The contact bit the rough-ground spheres collide on; the terrain's heightfield has it in its conaffinity, the robot's
-# other geoms (contype 1, conaffinity 2) do not, so the spheres meet the ground and nothing else.
+# The contact bit the optional rough-ground spheres collide on (``rough_ground_collision``); a terrain whose
+# heightfield has it in its conaffinity (``TERRAIN_CONAFFINITY``) meets them, the robot's other geoms (contype 1,
+# conaffinity 2) do not. No shipped task uses either.
 TRUNK_TERRAIN_BIT = 4
 TERRAIN_CONAFFINITY = 1 | TRUNK_TERRAIN_BIT
-# The feet's contact ``solref`` on the stairs (time constant s, damping ratio); MuJoCo's default is (0.02, 1). The
+# The optional stiffer foot contact ``solref`` (time constant s, damping ratio); MuJoCo's default is (0.02, 1). The
 # feet have priority 1, so this governs every foot-ground pair. At 0.02 a foot that a servo holds against a riser at
 # its 16 N limit creeps through the soft contact (the impedance leaves 5-10 % of the push unopposed) and is 8 mm past
 # the riser plane within 0.1 s, far enough to be pushed out of the box's top onto the tread; at 0.005 (five physics
-# steps) the same push is held at the riser's surface. Only the stairs task asks for it: the flat and rough runs, and
-# the clones exported from them, keep the contact they were trained and checked with.
+# steps) the same push is held at the riser's surface. No shipped task uses it: the terrain tasks randomise the foot
+# contact with ``--foot-softness`` (``foot_solref``) instead.
 STAIR_FOOT_SOLREF = (0.005, 1.0)
 
 
-def masses() -> dict:
-    return json.loads(paths.MASSES_JSON.read_text())
+def masses_path(masses=None):
+    """A mass file: None for sku2_masses.json, else a file name in assets/sku_2 or a path."""
+    if masses is None:
+        return paths.MASSES_JSON
+    p = paths.SKU2_DIR / masses
+    return p if p.is_file() else Path(masses)
+
+
+def masses(path=None) -> dict:
+    return json.loads(masses_path(path).read_text())
 
 
 def apply_masses(spec: mujoco.MjSpec, m: dict) -> dict:
@@ -82,7 +100,8 @@ def rough_ground_collision(spec: mujoco.MjSpec) -> None:
     their place, each spanning at most 4 x 4 cells: on the base, spheres of the lower box's thickness, bottoms flush
     with the box's bottom, in two rows of four (the upper box is only reachable past the tilt termination); in each
     hip, one sphere just inside the can (the body-contact sensor sees the spheres just the same); each thigh, two
-    capsules of half its length. The calves (51 mm) stay: at most 5 x 5 cells, within the limit."""
+    capsules of half its length. The calves (51 mm) stay: at most 5 x 5 cells, within the limit. Optional; no shipped
+    task uses it."""
     sphere = dict(type=mujoco.mjtGeom.mjGEOM_SPHERE, contype=TRUNK_TERRAIN_BIT, conaffinity=0, group=4, density=0.0,
                   rgba=[0.8, 0.2, 0.2, 0.4])
     like = ("conaffinity", "group", "density", "rgba", "friction", "condim", "priority", "margin", "solref", "solimp")
@@ -112,13 +131,37 @@ def rough_ground_collision(spec: mujoco.MjSpec) -> None:
         caps[0].contype = 0
 
 
+def leg_base_collisions(spec: mujoco.MjSpec) -> None:
+    """Let each shin and foot collide with the base boxes (the model has no self-collision: robot geoms are contype 1,
+    conaffinity 2). ``SELF_COLLISION_BIT`` on the base's conaffinity and the calves' contype pairs exactly those; the
+    thighs start on the base box and stay excluded. Terrain contacts are unchanged."""
+    for g in spec.body("base").geoms:
+        if g.contype or g.conaffinity:
+            g.conaffinity |= SELF_COLLISION_BIT
+    for leg in LEGS:
+        for g in spec.body(f"{leg}_calf").geoms:
+            if g.contype or g.conaffinity:
+                g.contype |= SELF_COLLISION_BIT
+
+
+def name_leg_collisions(spec: mujoco.MjSpec) -> None:
+    """Name the legs' collision capsules (the feet are named in the MJCF): ``<leg>_<thigh|calf>_collision``."""
+    for leg in LEGS:
+        for part in ("thigh", "calf"):
+            for k, g in enumerate(g for g in spec.body(f"{leg}_{part}").geoms
+                                  if (g.contype or g.conaffinity) and g.name not in FOOT_GEOMS):
+                g.name = f"{leg}_{part}_collision{k or ''}"
+
+
 def stair_foot_contact(spec: mujoco.MjSpec) -> None:
-    """A stiffer foot contact for the stairs (``STAIR_FOOT_SOLREF``): a riser is a wall, not a sponge."""
+    """A stiffer foot contact for stairs (``STAIR_FOOT_SOLREF``): a riser is a wall, not a sponge. Optional; no
+    shipped task uses it."""
     for g in FOOT_GEOMS:
         spec.geom(g).solref = list(STAIR_FOOT_SOLREF)
 
 
-def get_spec(strip_visuals: bool = True, rough: bool = False, stairs: bool = False) -> mujoco.MjSpec:
+def get_spec(strip_visuals: bool = True, rough: bool = False, stairs: bool = False, masses=None,
+             self_collision: bool = False, foot_solref: tuple | None = None) -> mujoco.MjSpec:
     spec = mujoco.MjSpec.from_file(str(paths.SKU2_XML))
     spec.delete(spec.body("g_base"))
     for key in list(spec.keys):
@@ -137,18 +180,23 @@ def get_spec(strip_visuals: bool = True, rough: bool = False, stairs: bool = Fal
                        ("imu_lin_vel", mujoco.mjtSensor.mjSENS_VELOCIMETER),
                        ("imu_lin_acc", mujoco.mjtSensor.mjSENS_ACCELEROMETER)):
         spec.add_sensor(name=name, type=kind, objtype=mujoco.mjtObj.mjOBJ_SITE, objname="imu")
+    name_leg_collisions(spec)
     for g in FOOT_GEOMS:
         spec.geom(g).priority = 1
+        if foot_solref is not None:
+            spec.geom(g).solref = list(foot_solref)
     if rough:
         rough_ground_collision(spec)
     if stairs:
         stair_foot_contact(spec)
-    apply_masses(spec, masses())
+    apply_masses(spec, json.loads(masses_path(masses).read_text()))
+    if self_collision:
+        leg_base_collisions(spec)
     return spec
 
 
 def robot_cfg(actuators: tuple, strip_visuals: bool = True, rough: bool = False,
-              stairs: bool = False):
+              stairs: bool = False, masses=None, self_collision: bool = False, foot_solref: tuple | None = None):
     from mjlab.entity import EntityArticulationInfoCfg, EntityCfg
 
     c = Contract.load()
@@ -156,11 +204,11 @@ def robot_cfg(actuators: tuple, strip_visuals: bool = True, rough: bool = False,
     return EntityCfg(
         init_state=EntityCfg.InitialStateCfg(pos=(0.0, 0.0, INIT_BASE_Z), joint_pos=joint_pos,
                                              joint_vel={".*": 0.0}),
-        spec_fn=lambda: get_spec(strip_visuals, rough, stairs),
+        spec_fn=lambda: get_spec(strip_visuals, rough, stairs, masses, self_collision, foot_solref),
         articulation=EntityArticulationInfoCfg(actuators=actuators),
     )
 
 
-def sources() -> dict:
+def sources(masses=None) -> dict:
     """Hashes of every input the model is built from (written into each run's config)."""
-    return {paths.rel(p): paths.sha256(p) for p in (paths.SKU2_XML, paths.SERVO_PROFILES, paths.MASSES_JSON)}
+    return {paths.rel(p): paths.sha256(p) for p in (paths.SKU2_XML, paths.SERVO_PROFILES, masses_path(masses))}

@@ -36,7 +36,7 @@ class MD01PwmActuator(VoltageControlledActuator):
 
     D term: BAM has none; the firmware's ``kd_position`` is part of the
     robot's actuator (kd 400). Its form is selected by :attr:`kd_form` from
-    the ramp probe in ``datasets/md01/id_3/unit_A/raw/probe`` and only scaled
+    a ramp probe on one MD01 servo and only scaled
     by the fit (``kd_ratio``):
 
     * ``"velocity"`` -- D = kd * KD_GAIN * kd_ratio * dq (stateless); this is
@@ -59,10 +59,9 @@ class MD01PwmActuator(VoltageControlledActuator):
     current.
     """
 
-    #: Duty per (rad/s) per unit kd_position. Measured on id_3 of unit A with
-    #: constant-velocity ramps at 0.5-4 rad/s in both directions
-    #: (``datasets/md01/id_3/unit_A/raw/probe/ramp_kd*.json``), pairing each
-    #: kd-400 segment with its kd-0 twin and correcting for the small speed
+    #: Duty per (rad/s) per unit kd_position. Measured on one MD01 servo with
+    #: constant-velocity ramps at 0.5-4 rad/s in both directions, pairing each
+    #: kd-400 segment with its kd-0 counterpart and correcting for the small speed
     #: difference between them -- the measurement lag is 5x this term, so an
     #: uncorrected difference is biased: 0.0115 duty/(rad/s) at kd 400, i.e.
     #: 2.87e-5 per unit kd, stable over four settle windows (2.79-2.89e-5);

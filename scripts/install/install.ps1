@@ -5,12 +5,12 @@
 .DESCRIPTION
       gpu mode  - mjlab / MuJoCo Warp parallel training, ONNX export, and the
                   CPU MuJoCo + Gymnasium path. Needs an NVIDIA GPU; torch is
-                  taken from the cu128 wheel index.
-      cpu mode  - MuJoCo + Gymnasium + Stable-Baselines3 training and ONNX
-                  export/runtime. No CUDA, no mjlab.
+                  taken from the cu130 wheel index.
+      cpu mode  - the CPU simulator, servo models and ONNX export/runtime.
+                  No CUDA, no mjlab.
 
-    Pins live in requirements\constraints.txt. Once mp4-sim has a
-    pyproject.toml it is installed editable as well.
+    Pins live in requirements\constraints.txt; mp4-sim itself is installed
+    editable.
 
 .PARAMETER Mode
     auto (default) | gpu | cpu.  auto picks gpu when nvidia-smi is on PATH.
@@ -57,7 +57,7 @@ if ($Mode -eq "auto") {
     $Mode = if (Get-Command nvidia-smi -ErrorAction SilentlyContinue) { "gpu" } else { "cpu" }
     Write-Host "[mp4-sim] auto-detected mode: $Mode"
 }
-$TorchBackend = if ($Mode -eq "gpu") { "cu128" } else { "cpu" }
+$TorchBackend = if ($Mode -eq "gpu") { "cu130" } else { "cpu" }
 
 $env:PYTHONUTF8 = "1"
 $env:WANDB_MODE = "disabled"   # mjlab pulls wandb in; keep it offline
@@ -81,6 +81,13 @@ if ($LASTEXITCODE -ne 0) { throw "uv pip install failed" }
 if ($DryRun) {
     Write-Host "[mp4-sim] dry run complete - nothing installed."
     exit 0
+}
+
+if ($Mode -eq "gpu") {
+    # mujoco_warp prints a warning per heightfield overflow from its GPU kernel; remove the warning (the physics is unchanged)
+    Write-Host "[mp4-sim] patching mujoco_warp ..."
+    & $Py -m mp4_sim.gpu.patch_warp
+    if ($LASTEXITCODE -ne 0) { throw "[mp4-sim] patching mujoco_warp failed (see above)" }
 }
 
 if (-not $SkipVerify) {

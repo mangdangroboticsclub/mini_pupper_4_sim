@@ -3,16 +3,20 @@ import hashlib
 from pathlib import Path
 
 PACKAGE = Path(__file__).resolve().parent
-REPO = PACKAGE.parents[1]
+REPO = PACKAGE.parents[1]     # the source checkout: assumes the editable install the installers make
 ASSETS = PACKAGE / "robot" / "assets"
 SKU2_DIR = ASSETS / "sku_2"
 SKU2_XML = SKU2_DIR / "pupper.xml"
 CONTRACT_JSON = SKU2_DIR / "sku2_contract.json"
 MASSES_JSON = SKU2_DIR / "sku2_masses.json"
+MASSES_478G_JSON = SKU2_DIR / "sku2_masses_478g.json"     # SKU2 with a Raspberry Pi heatsink (the terrain task's)
+NOISE_N1_JSON = SKU2_DIR / "noise_n1.json"
+NOISE_N2_JSON = SKU2_DIR / "noise_n2.json"
 IMU_MOUNT_JSON = SKU2_DIR / "imu_mount.json"
 SERVO_PROFILES = ASSETS / "servo_profiles.json"
 ACTUATOR_PARAMS = PACKAGE / "actuators" / "params"
 RUNS = REPO / "runs"
+POLICIES = REPO / "policies"
 
 
 TEXT_SUFFIXES = {".xml", ".json", ".c", ".h", ".py", ".csv", ".md", ".txt"}

@@ -1,25 +1,23 @@
 # Unified pin set for mp4-sim. Applied with `uv pip install -c` in both modes.
 #
-# mujoco==3.14.0 is the build used when policies are scored; training on the
-# same build keeps simulation and scoring physics identical.
-# torch 2.9.x matches mjlab 1.3.0's legacy ONNX exporter (dynamo=False, opset 18).
-# mujoco-warp 3.8.1 still has `ls_parallel` (removed in >=3.9.1), which the
-# actuator bridge calls.
+# The shipped policies were trained and evaluated on this set (MuJoCo 3.7,
+# MuJoCo Warp 3.7.0.1, torch 2.14); the fitted servo models were identified on
+# the same MuJoCo line. Change these only together with a re-evaluation.
 
 # --- core physics / GPU sim --------------------------------------------------
-mujoco==3.14.0
-mujoco-warp==3.8.1
-warp-lang==1.12.0
+mujoco==3.7.0
+mujoco-warp==3.7.0.1
+warp-lang==1.12.1
 mjlab==1.3.0
 rsl-rl-lib==5.0.1
 tensordict==0.14.2
 
 # --- torch (index is chosen by --torch-backend in the install scripts) --------
-torch==2.9.1
-torchvision==0.24.1
+torch==2.14.0
+torchvision==0.29.0
 
 # --- ONNX export + runtime ---------------------------------------------------
-onnx==1.23.1
+onnx==1.23.0
 onnx-ir==1.0.0
 onnxscript==0.7.2
 onnxruntime==1.30.0
@@ -27,11 +25,11 @@ onnxruntime==1.30.0
 # --- numerics ----------------------------------------------------------------
 numpy==2.5.3
 scipy==1.18.1
-trimesh==5.1.1
+trimesh==5.1.0
 
 # --- CPU RL path ---------------------------------------------------------------
 gymnasium>=1.0
 stable-baselines3>=2.3
-tensorboard>=2.20
+tensorboard==2.21.0
 
-protobuf>=5,<8
+protobuf==7.36.2

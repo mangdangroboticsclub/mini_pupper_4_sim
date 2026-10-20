@@ -32,6 +32,14 @@ def main() -> int:
         if mode == "gpu" and not torch.cuda.is_available():
             failed.append("torch.cuda")
 
+    if mode == "gpu" and "mujoco_warp" not in failed and "mp4_sim" not in failed:
+        from mp4_sim.gpu.patch_warp import is_patched
+
+        state = is_patched()
+        print(f"  mujoco_warp patched: {state}  (python -m mp4_sim.gpu.patch_warp)")
+        if not state:
+            failed.append("mujoco_warp patch")
+
     if "onnxruntime" not in failed:
         import onnxruntime as ort
 

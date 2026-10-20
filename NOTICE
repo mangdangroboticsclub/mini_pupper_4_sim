@@ -1,0 +1,13 @@
+mp4-sim
+Copyright 2026 MangDang
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This software includes or builds on:
+- BAM (Better Actuator Models) by Marc Duclusaud and Grégoire Passault (Rhoban), Apache License 2.0:
+  https://github.com/Rhoban/bam. A trimmed copy is in src/mp4_sim/actuators/bam/ with its own LICENSE; the MD01
+  servo parameters in src/mp4_sim/actuators/params/md01/ were fitted for this robot.
+- src/mp4_sim/gpu/algorithms.py: the PPO update is derived from RSL-RL (ETH Zurich, BSD 3-Clause):
+  https://github.com/leggedrobotics/rsl_rl
+- mjlab, MuJoCo and MuJoCo Warp (Apache License 2.0), NVIDIA Warp (Apache License 2.0), RSL-RL (BSD 3-Clause),
+  PyTorch (BSD-style), ONNX and ONNX Runtime (Apache License 2.0 / MIT).

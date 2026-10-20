@@ -1,8 +1,8 @@
 # Robot assets
 
 > **SKU2 URDF to be replaced.** `sku_2/urdf/sku_2_urdf_fixed.urdf` is a
-> repaired SolidWorks export. The mechanical team is producing an updated SKU2
-> URDF; when it lands, put it in `sku_2/urdf/`, regenerate with
+> repaired SolidWorks export. An updated SKU2 URDF will replace it; then put it
+> in `sku_2/urdf/`, regenerate with
 > `tools/build_model.py --sku sku_2`, and update `sku_2/sku2_masses.json` if
 > the new export carries measured masses.
 
@@ -25,16 +25,18 @@
 |---|---|
 | `sku2_contract.json` | Servo signs, the corrected stand (hip axes 70 mm above the feet), calibration offsets, firmware ticks |
 | `sku2_masses.json` | Weighed 450 g split: 66.82 g per motor module, 6.5 g per leg, base takes the rest, base COM x −23.13 mm |
+| `sku2_masses_478g.json` | The same with a Raspberry Pi heatsink fitted (478.66 g, the extra on the base); the terrain task's default |
 | `imu_mount.json` | Sensor-to-body rotation (`swap_xy`) |
-| `noise_n1.json`, `noise_n2.json` | Uniform observation noise profiles (N2 per element, N1 the older single width) |
+| `noise_n1.json`, `noise_n2.json` | Uniform observation noise profiles: `noise_n1.json` one half-width per channel, `noise_n2.json` one per element (the training default) |
 
 ## How SKU2 is loaded
 
 `pupper.xml` still carries SKU1's 360 g mass budget. `mp4_sim.robot.sku2.get_spec`
 reads it and, without editing the file, removes the ghost, keyframe, XML
 actuators and sensor; adds the IMU (`imu_ang_vel`, `imu_lin_vel`,
-`imu_lin_acc` on site `imu`); and applies `sku2_masses.json`. The stand comes
-from `sku2_contract.json`, not the keyframe.
+`imu_lin_acc` on site `imu`); and applies `sku2_masses.json` (or the mass file
+passed as `masses`; the terrain task passes `sku2_masses_478g.json`). The stand
+comes from `sku2_contract.json`, not the keyframe.
 
 ## Regenerating
 
@@ -49,7 +51,7 @@ invalidates it.
 
 ## Provenance
 
-Copied from `mpx-sim` at `cbb75fd` (models, URDFs, meshes, servo profiles,
-generator tools) and `mp3_walk_policy` at `fc44e3b` (SKU2 contract, masses,
-IMU mount, noise profiles). SKU2 `pupper.xml` sha256 (LF):
+Copied from the earlier Mini Pupper simulation project (models, URDFs, meshes,
+servo profiles, generator tools) and the walking-policy project (SKU2 contract,
+masses, IMU mount, noise profiles). SKU2 `pupper.xml` sha256 (LF):
 `7bd8ecc99c261936d04a03d41d17868ad573250d34739d85c809836e467db9b4`.

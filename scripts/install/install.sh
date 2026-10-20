@@ -3,8 +3,8 @@
 #
 #   gpu mode - mjlab / MuJoCo Warp parallel training, ONNX export, and the CPU
 #              MuJoCo + Gymnasium path. Needs an NVIDIA GPU; torch comes from
-#              the cu128 wheel index.
-#   cpu mode - MuJoCo + Gymnasium + SB3 training and ONNX export/runtime.
+#              the cu130 wheel index.
+#   cpu mode - the CPU simulator, servo models and ONNX export/runtime.
 #              No CUDA, no mjlab. Only mode on macOS.
 #
 # Usage:
@@ -27,7 +27,7 @@ while [[ $# -gt 0 ]]; do
     --python)      PYTHON="$2"; shift 2 ;;
     --dry-run)     DRY_RUN=1; shift ;;
     --skip-verify) SKIP_VERIFY=1; shift ;;
-    -h|--help)     sed -n '2,15p' "$0"; exit 0 ;;
+    -h|--help)     sed -n '2,14p' "$0"; exit 0 ;;
     *) echo "unknown arg: $1" >&2; exit 2 ;;
   esac
 done
@@ -53,7 +53,7 @@ fi
 # macOS torch wheels on PyPI are already CPU/MPS builds.
 TORCH_FLAGS=()
 if [[ "$OS" != "Darwin" ]]; then
-  if [[ "$MODE" == "gpu" ]]; then TORCH_FLAGS=(--torch-backend=cu128); else TORCH_FLAGS=(--torch-backend=cpu); fi
+  if [[ "$MODE" == "gpu" ]]; then TORCH_FLAGS=(--torch-backend=cu130); else TORCH_FLAGS=(--torch-backend=cpu); fi
 fi
 
 export PYTHONUTF8=1
@@ -74,6 +74,12 @@ uv pip install "${ARGS[@]}"
 
 if [[ $DRY_RUN -eq 1 ]]; then
   echo "[mp4-sim] dry run complete - nothing installed."; exit 0
+fi
+
+if [[ "$MODE" == "gpu" ]]; then
+  # mujoco_warp prints a warning per heightfield overflow from its GPU kernel; remove the warning (the physics is unchanged)
+  echo "[mp4-sim] patching mujoco_warp ..."
+  "$PY" -m mp4_sim.gpu.patch_warp
 fi
 
 if [[ $SKIP_VERIFY -eq 0 ]]; then

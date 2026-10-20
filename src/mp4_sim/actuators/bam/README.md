@@ -3,8 +3,8 @@
 Apache-2.0, see `LICENSE`. Copyright 2025 Marc Duclusaud & Grégoire Passault;
 `mangdang/actuator.py` additionally 2026 Mangdang.
 
-Source: the `bam` package of `mangdang-bam/bam` (branch `mangdang`), commit
-`13cea06dabd3d537cf160fe42339b349573674f4`.
+Source: the `bam` package of [BAM](https://github.com/Rhoban/bam), with
+MangDang's MD01 servo model added (`mangdang/`).
 
 Vendored: the model and MD01 actuator (`model.py`, `actuator.py`,
 `parameter.py`, `testbench.py`, `mangdang/`), the plain MuJoCo binding
