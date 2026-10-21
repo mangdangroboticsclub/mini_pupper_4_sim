@@ -1,7 +1,7 @@
 # mp4-sim
 
 Simulation and reinforcement-learning training for the Mini Pupper v4 quadruped (hardware variant SKU2; SKU1 is the
-earlier variant, also modelled here). It includes a GPU training recipe for walking on rough ground and climbing
+agile variant, also modelled here). It includes a GPU training recipe for walking on rough ground and climbing
 stairs, the trained policies, and export to an ONNX file the robot can run.
 
 > **The SKU2 model is provisional.** It will be regenerated from the corrected SKU2 URDF; see
