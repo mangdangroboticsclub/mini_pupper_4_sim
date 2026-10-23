@@ -16,6 +16,7 @@
 | `urdf/` | Repaired URDF that `tools/build_model.py` reads |
 | `meshes/` | CAD meshes referenced by the URDF |
 | `parts/` | Split meshes referenced by `pupper.xml` |
+| `display/` | The screen (bezel + panel meshes in the base frame, `display.json`): visual only, not in `pupper.xml`; `mp4_sim.robot.display.add_display` attaches it, `sku2.get_spec(strip_visuals=False)` already does |
 
 `servo_profiles.json` (shared) holds the stock position-servo profile.
 
@@ -44,6 +45,17 @@ comes from `sku2_contract.json`, not the keyframe.
 python tools/fix_sku2_urdf.py            # cad/sku_2/... SolidWorks export -> sku_2/urdf + meshes
 python tools/build_model.py --sku sku_2  # urdf + meshes -> pupper.xml, scene.xml, servo_map.json, parts/
 ```
+
+The screen comes from the SKU 1 SolidWorks assembly and is placed on both SKUs
+(SKU 2: centred on its export's placeholder `display_link` box):
+
+```
+python tools/export_display.py --assembly path/to/assembly.SLDASM   # Windows + SolidWorks: -> cad/sku_1/display/
+python tools/build_display.py                                       # -> sku_1/display/, sku_2/display/
+```
+
+It has no mass and no contacts, so regenerating it changes neither
+`pupper.xml` nor the contract.
 
 `sku2_contract.json` is derived from the servo map and records the hash of the
 `pupper.xml` and `servo_map.json` it was built from. Regenerating either

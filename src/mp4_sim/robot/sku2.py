@@ -5,7 +5,8 @@ made on the MjSpec at load time (the file is never edited):
 
 - the ghost robot (``g_base``), the ``stand`` keyframe, the twelve XML position actuators (the arm's actuators replace
   them) and the XML sensor are removed; with ``strip_visuals`` the mesh geoms (``contype = conaffinity = 0``) and the
-  meshes too (masses are explicit ``<inertial>``s, so the dynamics do not change);
+  meshes too (masses are explicit ``<inertial>``s, so the dynamics do not change); without it the screen is added
+  (``display.add_display``: visual only, from ``assets/sku_2/display/``);
 - an IMU at site ``imu``: gyro ``imu_ang_vel``, velocimeter ``imu_lin_vel``, accelerometer ``imu_lin_acc``;
 - the legs' collision capsules are named ``<leg>_thigh_collision`` / ``<leg>_calf_collision`` (``LEG_COLLISION_GEOMS``);
 - the weighed masses (assets/sku_2/sku2_masses.json: each module
@@ -35,6 +36,7 @@ import numpy as np
 
 from .. import paths
 from ..contract import Contract
+from .display import add_display
 
 LEGS = ("FR", "FL", "RR", "RL")
 FOOT_GEOMS = tuple(f"{leg}_foot" for leg in LEGS)
@@ -176,6 +178,8 @@ def get_spec(strip_visuals: bool = True, rough: bool = False, stairs: bool = Fal
                 spec.delete(g)
         for mesh in list(spec.meshes):
             spec.delete(mesh)
+    else:
+        add_display(spec, "sku_2")
     for name, kind in (("imu_ang_vel", mujoco.mjtSensor.mjSENS_GYRO),
                        ("imu_lin_vel", mujoco.mjtSensor.mjSENS_VELOCIMETER),
                        ("imu_lin_acc", mujoco.mjtSensor.mjSENS_ACCELEROMETER)):

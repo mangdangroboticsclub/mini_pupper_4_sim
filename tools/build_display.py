@@ -1,0 +1,158 @@
+"""
+build_display.py - place the screen on each SKU, as a visual-only overlay.
+
+    python tools/build_display.py
+
+Reads ``cad/sku_1/display/`` (written by ``tools/export_display.py``) and writes,
+for every SKU,
+
+    src/mp4_sim/robot/assets/<sku>/display/display_bezel.stl
+    src/mp4_sim/robot/assets/<sku>/display/display_panel.stl
+    src/mp4_sim/robot/assets/<sku>/display/display.json
+
+with the meshes in the SKU's base frame (x forward, y left, z up, metres).
+``mp4_sim.robot.display`` attaches them to the base as massless, non-colliding
+geoms. They are deliberately *not* in ``pupper.xml``: the screen changes
+nothing the physics sees, and ``pupper.xml`` is hashed into SKU 2's contract.
+
+WHERE IT GOES
+  * SKU 1   the assembly is y up and faces -x, so the base frame is the
+            assembly's (-x, z, y), shifted by ASSEMBLY_ORIGIN. The result is
+            checked against the display build_model.py cuts out of SKU 1's
+            base_link.STL (everything past x = 62 mm): the same screen, in the
+            same place.
+  * SKU 2   its export has only a placeholder box for the display
+            (display_link, 10 mm thick, flush with the front of the base).
+            The SKU 1 screen is moved, at its own tilt, so that its centre is
+            the box's centre.
+
+Dependencies: trimesh, scipy (both in the mp4-sim environment).
+"""
+import json
+import os
+import sys
+
+import numpy as np
+import trimesh
+from scipy.spatial import cKDTree
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, os.pardir))
+CAD = os.path.join(ROOT, "cad", "sku_1", "display")
+ASSETS = os.path.join(ROOT, "src", "mp4_sim", "robot", "assets")
+sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.join(ROOT, "src"))
+
+import fix_sku2_urdf  # noqa: E402
+from mp4_sim.paths import sha256  # noqa: E402
+
+#: base frame <- assembly frame: x forward = -x_asm, y left = z_asm, z up = y_asm
+ASSEMBLY_TO_BASE = np.array([[-1.0, 0.0, 0.0],
+                             [0.0, 0.0, 1.0],
+                             [0.0, 1.0, 0.0]])
+#: where the assembly's origin lands in SKU 1's base frame, m. Fitted once by ICP
+#: of the assembly's body and four servos onto base_link.STL and the hip modules
+#: at the zero pose (median 0.82 mm, 90 % 1.43 mm; the free rotation came out
+#: 0.06 deg from ASSEMBLY_TO_BASE). The old display alone is a slightly
+#: different part, so it checks the result rather than fixing it.
+ASSEMBLY_ORIGIN = np.array([-0.001985, -1.039504, -0.007114])
+#: build_model.base_parts_sku1's cut: SKU 1's base_link.STL parts past this x are the display
+SKU1_DISPLAY_X = 0.062
+#: how far (median, m) the placed screen may sit from the display it replaces
+TOL = 1.5e-3
+
+#: part -> build_model.COLORS entry it is drawn in
+PARTS = {"display_bezel": ("yellow", (0.96, 0.76, 0.05, 1)),
+         "display_panel": ("black", (0.07, 0.07, 0.08, 1))}
+
+
+def distance_to_old_display(parts):
+    """How far the placed SKU 1 screen sits from the display SKU 1's base mesh carries (median, 90 %; m)."""
+    base = trimesh.load(os.path.join(ASSETS, "sku_1", "meshes", "base_link.STL"))
+    old = trimesh.util.concatenate([p for p in base.split(only_watertight=False)
+                                    if p.bounds[0][0] > SKU1_DISPLAY_X])
+    target = np.asarray(trimesh.sample.sample_surface(old, 20000, seed=1)[0])
+    placed = trimesh.util.concatenate(parts.values())
+    source = np.asarray(trimesh.sample.sample_surface(placed, 20000, seed=2)[0])
+    d, _ = cKDTree(target).query(source)
+    return float(np.median(d)), float(np.quantile(d, 0.9))
+
+
+def sku2_placeholder_centre():
+    """The centre of fix_sku2_urdf.py's display_link box, in SKU 2's base frame."""
+    f = fix_sku2_urdf
+    links, joints = f.read_urdf(os.path.join(f.EXPORT, "urdf", "sku_2Full_assem_simplified_urdf.urdf"))
+    W = f.world_frames(joints, links)
+    hip_cad = {k: joints[f"hip_{k}_link"]["xyz"] for k in f.LEGS if k != f.BROKEN_HIP}
+    hip_cad[f.BROKEN_HIP] = np.array([hip_cad["fr"][0], hip_cad["bl"][1], hip_cad["bl"][2]])
+    centre = np.mean([f.BODY @ p for p in hip_cad.values()], axis=0)
+    centre[2] = 0.0
+    box = trimesh.load(os.path.join(f.EXPORT, "meshes", "display_link.STL"))
+    v = trimesh.transform_points(box.vertices, f.frame(f.BODY, -centre) @ W["display_link"])
+    return (v.min(0) + v.max(0)) / 2
+
+
+def write(sku, parts, placement):
+    out = os.path.join(ASSETS, sku, "display")
+    os.makedirs(out, exist_ok=True)
+    entries = []
+    for name, mesh in parts.items():
+        mesh.export(os.path.join(out, name + ".stl"))
+        material, rgba = PARTS[name]
+        entries.append({"mesh": name, "file": name + ".stl", "material": material, "rgba": list(rgba)})
+    lo, hi = trimesh.util.concatenate(parts.values()).bounds
+    info = {
+        "about": ("The screen: visual only (no mass, no contacts), attached to the base by "
+                  "mp4_sim.robot.display. Generated by tools/build_display.py - not in pupper.xml."),
+        "body": "base",
+        "parts": entries,
+        "bounds_m": [[round(float(v), 6) for v in lo], [round(float(v), 6) for v in hi]],
+        "placement": placement,
+        "sources": {os.path.basename(p): sha256(p) for p in
+                    sorted(os.path.join(CAD, n) for n in os.listdir(CAD))},
+    }
+    with open(os.path.join(out, "display.json"), "w", newline="\n") as fh:   # the arena hashes it byte for byte
+        json.dump(info, fh, indent=1)
+        fh.write("\n")
+    print(f"  {sku}: {np.round(lo * 1000, 1)} .. {np.round(hi * 1000, 1)} mm -> {out}")
+
+
+def main():
+    raw = {name: trimesh.load(os.path.join(CAD, name + ".stl")) for name in PARTS}
+
+    sku1 = {}
+    for name, mesh in raw.items():
+        m = mesh.copy()
+        m.vertices = m.vertices @ ASSEMBLY_TO_BASE.T + ASSEMBLY_ORIGIN
+        sku1[name] = m
+    median, p90 = distance_to_old_display(sku1)
+    print(f"SKU 1: screen to the display in base_link.STL: median {median * 1000:.2f} mm, "
+          f"90% {p90 * 1000:.2f} mm")
+    if median > TOL:
+        raise SystemExit("the screen does not land on the display SKU 1's base mesh carries")
+    write("sku_1", sku1, {
+        "method": "assembly axes -> base axes, origin fitted to SKU 1's base and hip modules",
+        "rotation": ASSEMBLY_TO_BASE.tolist(),
+        "translation_m": ASSEMBLY_ORIGIN.tolist(),
+        "to_old_display_median_mm": round(median * 1000, 3),
+    })
+
+    target = sku2_placeholder_centre()
+    lo, hi = trimesh.util.concatenate(sku1.values()).bounds
+    shift = target - (lo + hi) / 2
+    print(f"SKU 2: placeholder centre {np.round(target * 1000, 2)} mm, "
+          f"SKU 1 screen moved {np.round(shift * 1000, 2)} mm")
+    sku2 = {}
+    for name, mesh in sku1.items():
+        m = mesh.copy()
+        m.vertices = m.vertices + shift
+        sku2[name] = m
+    write("sku_2", sku2, {
+        "method": "the SKU 1 screen, centred on fix_sku2_urdf.py's display_link placeholder box",
+        "from_sku_1_m": [round(float(v), 7) for v in shift],
+        "placeholder_centre_m": [round(float(v), 7) for v in target],
+    })
+
+
+if __name__ == "__main__":
+    main()
