@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="sku_1_urdf_fixed">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.00496398423144198 -5.0621595029991E-05 -0.00206625375179828"
+        rpy="0 0 0" />
+      <mass
+        value="0.0726465308624653" />
+      <inertia
+        ixx="2.41621717023681E-05"
+        ixy="-5.8417120299684E-08"
+        ixz="4.16144529616988E-07"
+        iyy="2.79645662903078E-05"
+        iyz="6.92033262710323E-08"
+        izz="4.99071283407967E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.290196078431373 0.290196078431373 0.290196078431373 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="back_left_hip_link">
+    <inertial>
+      <origin
+        xyz="0.00305744443150837 0.000222214751456361 0.000996471894261407"
+        rpy="0 0 0" />
+      <mass
+        value="0.0124677376171557" />
+      <inertia
+        ixx="2.6987511484477E-06"
+        ixy="6.3120172720824E-09"
+        ixz="-4.9818226293527E-09"
+        iyy="1.5522758241876E-06"
+        iyz="2.10702966587289E-08"
+        izz="1.71891367182065E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_left_hip_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_left_hip_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="back_left_hip_joint"
+    type="continuous">
+    <origin
+      xyz="-0.0485379712102766 0.0315 -0.000640070655818904"
+      rpy="1.57079632679492 0 -1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="back_left_hip_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="back_left_leg_upper_link">
+    <inertial>
+      <origin
+        xyz="-0.0110738834408631 0.00922280300784723 0.00437324371424017"
+        rpy="0 0 0" />
+      <mass
+        value="0.00602206858235455" />
+      <inertia
+        ixx="9.42862207137003E-07"
+        ixy="7.85646977227919E-07"
+        ixz="-3.38240972987883E-08"
+        iyy="1.08848243186827E-06"
+        iyz="2.96085616243984E-08"
+        izz="1.99129110527177E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_left_leg_upper_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_left_leg_upper_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="back_left_leg_upper_joint"
+    type="continuous">
+    <origin
+      xyz="-0.014075 0 0"
+      rpy="3.14159265358979 1.5707963267949 0" />
+    <parent
+      link="back_left_hip_link" />
+    <child
+      link="back_left_leg_upper_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="back_left_leg_lower_link">
+    <inertial>
+      <origin
+        xyz="0.0175518235224843 0.0154920055415367 -3.45620111211198E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.00154005060824208" />
+      <inertia
+        ixx="3.28098598403197E-07"
+        ixy="-3.46723430226373E-07"
+        ixz="-7.31739865468247E-13"
+        iyy="3.97627286679862E-07"
+        iyz="1.99730878396278E-12"
+        izz="7.22930703121138E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_left_leg_lower_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_left_leg_lower_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="back_left_leg_lower_joint"
+    type="continuous">
+    <origin
+      xyz="-0.0353553390593275 0.0353553390593272 0.00165000000000008"
+      rpy="0 0 0" />
+    <parent
+      link="back_left_leg_upper_link" />
+    <child
+      link="back_left_leg_lower_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="back_right_hip_link">
+    <inertial>
+      <origin
+        xyz="-0.0030574450199654 -0.000222215404517131 0.000996472506800475"
+        rpy="0 0 0" />
+      <mass
+        value="0.0124677370317722" />
+      <inertia
+        ixx="2.69875104218929E-06"
+        ixy="6.31201743863199E-09"
+        ixz="4.98182458836211E-09"
+        iyy="1.55227579545072E-06"
+        iyz="-2.10703546341593E-08"
+        izz="1.71891359454341E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_right_hip_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_right_hip_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="back_right_hip_joint"
+    type="continuous">
+    <origin
+      xyz="-0.0485379712102776 -0.0315 -0.000640070655819214"
+      rpy="1.57079632679486 0 -1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="back_right_hip_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="back_right_leg_upper_link">
+    <inertial>
+      <origin
+        xyz="-0.0110738930036364 0.00922279555823726 -0.00637323512556383"
+        rpy="0 0 0" />
+      <mass
+        value="0.00602207689488744" />
+      <inertia
+        ixx="9.42862497013192E-07"
+        ixy="7.85647032990484E-07"
+        ixz="3.38242609462842E-08"
+        iyy="1.08848347278599E-06"
+        iyz="-2.96084742203583E-08"
+        izz="1.99129240025097E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_right_leg_upper_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_right_leg_upper_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="back_riht_leg_upper_joint"
+    type="continuous">
+    <origin
+      xyz="0.012475000000001 0 0"
+      rpy="3.14159265358979 1.5707963267949 0" />
+    <parent
+      link="back_right_hip_link" />
+    <child
+      link="back_right_leg_upper_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="back_right_leg_lower_link">
+    <inertial>
+      <origin
+        xyz="0.01755392673974 0.0154933841056359 -4.56848645788432E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.001540216201182" />
+      <inertia
+        ixx="3.28209613992177E-07"
+        ixy="-3.46801591296134E-07"
+        ixz="1.50431450328922E-12"
+        iyy="3.97717180407244E-07"
+        iyz="7.54118475812418E-13"
+        izz="7.23131341630728E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_right_leg_lower_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.250980392156863 0.250980392156863 0.250980392156863 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/back_right_leg_lower_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="back_right_leg_lower_joint"
+    type="continuous">
+    <origin
+      xyz="-0.0353553390593271 0.0353553390593277 -0.00365000000000002"
+      rpy="0 0 0" />
+    <parent
+      link="back_right_leg_upper_link" />
+    <child
+      link="back_right_leg_lower_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="front_left_hip_link">
+    <inertial>
+      <origin
+        xyz="0.00305744502015474 -0.000222215404137747 -0.000996472507378332"
+        rpy="0 0 0" />
+      <mass
+        value="0.0124677370316866" />
+      <inertia
+        ixx="2.69875104224051E-06"
+        ixy="-6.31201745868781E-09"
+        ixz="4.98182458343731E-09"
+        iyy="1.55227579536224E-06"
+        iyz="2.10703546918531E-08"
+        izz="1.71891359468569E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_left_hip_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_left_hip_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="front_left_hip_joint"
+    type="continuous">
+    <origin
+      xyz="0.0485379712102769 0.0315 -0.000640070655821553"
+      rpy="1.57079632679489 0 -1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_left_hip_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="front_left_leg_upper_link">
+    <inertial>
+      <origin
+        xyz="-0.0110738834408634 0.00922280300784568 0.00637324371424015"
+        rpy="0 0 0" />
+      <mass
+        value="0.00602206858235454" />
+      <inertia
+        ixx="9.42862207137011E-07"
+        ixy="7.85646977227916E-07"
+        ixz="-3.38240972987894E-08"
+        iyy="1.08848243186826E-06"
+        iyz="2.96085616244001E-08"
+        izz="1.99129110527177E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_left_leg_upper_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_left_leg_upper_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="front_left_leg_upper_joint"
+    type="continuous">
+    <origin
+      xyz="-0.012475000000001 0 0"
+      rpy="3.14159265358979 1.5707963267949 0" />
+    <parent
+      link="front_left_hip_link" />
+    <child
+      link="front_left_leg_upper_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="front_left_leg_lower_link">
+    <inertial>
+      <origin
+        xyz="0.0175518235224844 0.0154920055415367 -3.45620111211198E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.00154005060824208" />
+      <inertia
+        ixx="3.28098598403198E-07"
+        ixy="-3.46723430226373E-07"
+        ixz="-7.3173986542427E-13"
+        iyy="3.97627286679861E-07"
+        iyz="1.99730878397545E-12"
+        izz="7.22930703121137E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_left_leg_lower_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_left_leg_lower_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="front_left_leg_lower_joint"
+    type="continuous">
+    <origin
+      xyz="-0.0353553390593277 0.0353553390593258 0.00365000000000005"
+      rpy="0 0 0" />
+    <parent
+      link="front_left_leg_upper_link" />
+    <child
+      link="front_left_leg_lower_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="front_right_hip_link">
+    <inertial>
+      <origin
+        xyz="-0.00305744498667448 0.000222215421459244 -0.000996472537526515"
+        rpy="0 0 0" />
+      <mass
+        value="0.0124677370664804" />
+      <inertia
+        ixx="2.69875104934409E-06"
+        ixy="-6.31201732882992E-09"
+        ixz="-4.98182482839076E-09"
+        iyy="1.55227580126152E-06"
+        iyz="-2.10703517281045E-08"
+        izz="1.71891359584839E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_right_hip_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_right_hip_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="front_right_hip_joint"
+    type="continuous">
+    <origin
+      xyz="0.0485379712102765 -0.0315 -0.000640070655819475"
+      rpy="1.57079632679486 0 -1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_right_hip_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="front_right_leg_upper_link">
+    <inertial>
+      <origin
+        xyz="-0.011073893003636 0.0092227955582375 -0.00637323512556381"
+        rpy="0 0 0" />
+      <mass
+        value="0.00602207689488744" />
+      <inertia
+        ixx="9.42862497013235E-07"
+        ixy="7.85647032990491E-07"
+        ixz="3.38242609462842E-08"
+        iyy="1.08848347278595E-06"
+        iyz="-2.96084742203597E-08"
+        izz="1.99129240025097E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_right_leg_upper_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_right_leg_upper_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="front_right_leg_upper_joint"
+    type="continuous">
+    <origin
+      xyz="0.012475000000001 0 0"
+      rpy="3.14159265358979 1.5707963267949 0" />
+    <parent
+      link="front_right_hip_link" />
+    <child
+      link="front_right_leg_upper_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="front_right_leg_lower_link">
+    <inertial>
+      <origin
+        xyz="0.0175539267397405 0.0154933841056352 -4.56848645788432E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.001540216201182" />
+      <inertia
+        ixx="3.28209613992149E-07"
+        ixy="-3.46801591296131E-07"
+        ixz="1.50431450344318E-12"
+        iyy="3.97717180407272E-07"
+        iyz="7.54118475947073E-13"
+        izz="7.23131341630728E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_right_leg_lower_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.250980392156863 0.250980392156863 0.250980392156863 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://sku_1_urdf_fixed/meshes/front_right_leg_lower_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="front_right_leg_lower_joint"
+    type="continuous">
+    <origin
+      xyz="-0.0353553390593261 0.0353553390593286 -0.00364999999999994"
+      rpy="0 0 0" />
+    <parent
+      link="front_right_leg_upper_link" />
+    <child
+      link="front_right_leg_lower_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+</robot>
