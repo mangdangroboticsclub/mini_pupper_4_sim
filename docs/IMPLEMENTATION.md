@@ -39,8 +39,8 @@ PYTHONPATH=src python3 -m mp4_isaac.stage
 
 `stage.py` reads
 
-- `mp4-sim/src/mp4_sim/robot/assets/sku_2/urdf/sku_2_urdf_fixed.urdf`
-- `.../sku_2/display/display.json`
+- `assets/sku_2/urdf/sku_2_urdf_fixed.urdf`
+- `assets/sku_2/display/display.json`
 
 and writes `.cache/urdf/sku_2_with_display.urdf` with the robot name `sku_2`
 (the importer uses that name for the USD directory). It then resolves every
@@ -152,7 +152,7 @@ one joint `back_riht_leg_upper_joint`.
 python -m mp4_isaac.play --video --vx 0.15 --seconds 3
 ```
 
-This runs `mp4-sim/policies/flat_omni`. Servo angles go through
+This runs `assets/policies/flat_omni`. Servo angles go through
 `mp4_sim.robot.mapping.ServoMap` onto the CAD hinges, and the clip is
 `.cache/flat_omni.mp4`. A 0.15 m/s forward command stayed upright and covered
 0.29 m in 3 s. The hold is a plain PD (`--stiffness 1.5 --armature 5e-4`).
