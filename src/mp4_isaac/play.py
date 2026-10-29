@@ -1,9 +1,10 @@
-"""Run an mp4-sim ONNX policy on the Isaac SKU2.
+"""Run the flat_omni ONNX policy on the Isaac SKU2.
 
-The policy's joints are firmware servo angles. ``mp4_sim.robot.mapping.ServoMap``
-turns those into the CAD hinge angles this articulation uses, and back. The knee
-is still the URDF calf hinge: the map already folds the servo's shin angle into
-that hinge. Run from the Isaac virtualenv:
+The policy's joints are firmware servo angles. ``ServoMap`` turns those into the
+CAD hinge angles, and ``PupperBamActuator`` reads the knee back as the tendon
+coordinate the servo was trained on. Masses are the weighed SKU2 budget, applied
+after spawn. Physics is 1 ms. The velocity filter still sees a sample every 5 ms.
+Run from the Isaac virtualenv:
 
     python -m mp4_isaac.play --video
 """
@@ -26,15 +27,22 @@ from isaaclab.app import add_launcher_args, launch_simulation
 
 import numpy as np
 
-from mp4_sim.contract import ActionDecoder, Contract, HistoryStacker, VelocityFilter, assemble_observation
+from mp4_sim.contract import (
+    STATE_DT,
+    ActionDecoder,
+    Contract,
+    HistoryStacker,
+    VelocityFilter,
+    assemble_observation,
+)
 from mp4_sim.robot.kinematics import LEG_ORDER
 from mp4_sim.robot.mapping import ServoMap
 
-from .paths import CACHE, interface_usd
+from .masses import apply_masses
+from .paths import CACHE, PHYSICS_DT, contract_json, interface_usd, policy_path, servo_map_json
+from .servos import PupperBamActuatorCfg
 
-POLICY = CACHE.parents[1] / "mp4-sim" / "policies" / "flat_omni" / "policy.onnx"
-# CACHE is mp4-isaac/.cache, parents[1] is Haris. POLICY path:
-# CACHE = repo/.cache, repo = mp4-isaac, parent = Haris. So parents[1] is Haris. Good.
+POLICY = policy_path()
 
 URDF_PREFIX = {"FR": "front_right", "FL": "front_left", "RR": "back_right", "RL": "back_left"}
 URDF_PART = (("hip", "hip_joint"), ("thigh", "leg_upper_joint"), ("calf", "leg_lower_joint"))
@@ -49,9 +57,11 @@ parser.add_argument("--settle", type=float, default=0.4, help="Hold the stand be
 parser.add_argument("--vx", type=float, default=0.15, help="Forward speed command, m/s.")
 parser.add_argument("--vy", type=float, default=0.0)
 parser.add_argument("--wz", type=float, default=0.0)
-parser.add_argument("--stiffness", type=float, default=1.5)
-parser.add_argument("--damping", type=float, default=0.08)
-parser.add_argument("--armature", type=float, default=5.0e-4)
+parser.add_argument(
+    "--heatsink",
+    action="store_true",
+    help="Use the 478.66 g SKU2 budget (Raspberry Pi heatsink). Default is 450 g.",
+)
 parser.add_argument(
     "--video",
     nargs="?",
@@ -67,14 +77,13 @@ args_cli = parser.parse_args()
 import torch
 
 import isaaclab.sim as sim_utils
-from isaaclab.actuators import ImplicitActuatorCfg
 from isaaclab.assets import ArticulationCfg, AssetBaseCfg
 from isaaclab.physics import PhysicsCfg
 from isaaclab.scene import InteractiveSceneCfg
 from isaaclab.utils import configclass, instantiate
 
 SPAWN_Z = 0.12
-MAP = ServoMap()
+MAP = ServoMap(servo_map_json())
 STAND_Q = MAP.stand_joint_angles()
 STAND = {name: float(value) for name, value in zip(URDF_JOINTS, STAND_Q)}
 
@@ -100,15 +109,7 @@ class PlaySceneCfg(InteractiveSceneCfg):
         prim_path="{ENV_REGEX_NS}/Robot",
         spawn=sim_utils.UsdFileCfg(usd_path=usd_path(), make_uninstanceable=True),
         init_state=ArticulationCfg.InitialStateCfg(pos=(0.0, 0.0, SPAWN_Z), joint_pos=STAND, joint_vel={".*": 0.0}),
-        actuators={
-            "joints": ImplicitActuatorCfg(
-                joint_names_expr=[".*"],
-                stiffness=args_cli.stiffness,
-                damping=args_cli.damping,
-                armature=args_cli.armature,
-                joint_effort_limit=1.2,
-            )
-        },
+        actuators={"servos": PupperBamActuatorCfg(physics_dt=PHYSICS_DT)},
     )
 
 
@@ -233,7 +234,7 @@ def main() -> None:
     session, obs_name, manifest = load_policy(args_cli.policy)
     if int(manifest.get("history", 1)) != 1 or not manifest["omni"]:
         raise SystemExit(f"this runner expects flat_omni (history 1, omni); got {manifest.get('history')} {manifest['omni']}")
-    contract = Contract.load()
+    contract = Contract.load(contract_json())
     decoder = ActionDecoder(contract, manifest["action_scale_rad"])
     history = HistoryStacker(1)
     velocity = VelocityFilter()
@@ -244,7 +245,14 @@ def main() -> None:
     with launch_simulation(cfg=PhysicsCfg(), launcher_args=args_cli) as physics_cfg:
         if args_cli.video:
             physics_cfg.load_visual_shapes = True
-        sim_cfg = sim_utils.SimulationCfg(dt=0.005, device=args_cli.device, physics=physics_cfg)
+        # The BAM law is an explicit Lab actuator. Newton's native actuators only
+        # run implicit PD and a few built-in explicit models.
+        sim_cfg = sim_utils.SimulationCfg(
+            dt=PHYSICS_DT,
+            device=args_cli.device,
+            physics=physics_cfg,
+            use_newton_actuators=False,
+        )
         if args_cli.video:
             sim_cfg.visualizer_cfgs = [_viewer_cfg()]
         sim = sim_utils.SimulationContext(sim_cfg)
@@ -253,9 +261,18 @@ def main() -> None:
         robot = scene["robot"]
         sim.reset()
         scene.update(sim.get_physics_dt())
+        apply_masses(robot, "sku_2", heatsink=args_cli.heatsink)
         index = _indices(robot)
         dt = sim.get_physics_dt()
+        # Reset leaves the hinges at the CAD zero. The servo law is stiff enough
+        # that a step from zero to the stand runs the joints away.
+        posed = _tensor(robot.data.joint_pos).clone()
+        posed[0, index] = torch.as_tensor(STAND_Q, dtype=posed.dtype, device=posed.device)
+        robot.write_joint_position_to_sim_index(position=posed)
+        robot.write_joint_velocity_to_sim_index(velocity=torch.zeros_like(posed))
+        scene.update(dt)
         control_every = max(1, int(round(float(manifest["control_dt"]) / dt)))
+        sample_every = max(1, int(round(STATE_DT / dt)))
         settle_steps = int(round(args_cli.settle / dt))
         policy_steps = int(round(args_cli.seconds / dt))
         stand = _targets(robot, index, STAND_Q)
@@ -267,7 +284,8 @@ def main() -> None:
         for step in range(1, settle_steps + policy_steps + 1):
             q, _qd = _read_model_joints(robot, index)
             rel = _rel(q, contract)
-            velocity.push(rel)
+            if (step - 1) % sample_every == 0:
+                velocity.push(rel)
             if step == settle_steps + 1:
                 decoder.reset()
                 history.reset()
@@ -286,7 +304,7 @@ def main() -> None:
             if args_cli.video and step % video_stride == 0:
                 frames.append(_rgb(sim))
             if not np.isfinite(q).all():
-                print("FAIL state is not finite")
+                print(f"FAIL state is not finite at t={step * dt:.4f}s")
                 raise SystemExit(1)
 
         pos = _root(robot)
