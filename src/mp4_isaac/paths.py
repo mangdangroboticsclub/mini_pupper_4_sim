@@ -1,4 +1,8 @@
-"""Locations of the SKU2 source assets and of the files this package generates."""
+"""Locations of this package's robot assets and of the files it generates.
+
+The CAD, the screen, the weighed masses, the servo fits, and the flat_omni
+policy live under ``assets/`` in this repo. Nothing here reads a sibling checkout.
+"""
 
 from __future__ import annotations
 
@@ -6,11 +10,14 @@ from pathlib import Path
 
 PACKAGE = Path(__file__).resolve().parent
 REPO = PACKAGE.parents[1]
-WORKSPACE = REPO.parent
 
-MP4_SIM = WORKSPACE / "mp4-sim"
-ASSETS = MP4_SIM / "src" / "mp4_sim" / "robot" / "assets"
+ASSETS = REPO / "assets"
 SKUS = ("sku_1", "sku_2")
+ROLES = ("abd", "hip", "knee")
+# One physics step. The T5 ub06 command delays are a few milliseconds, and MuJoCo
+# integrates the same servos at this rate.
+PHYSICS_DT = 0.001
+_FIT = {"abd": "bam_t5ub06_id_3_m6.json", "hip": "bam_t5ub06_id_2_m6.json", "knee": "bam_t5ub06_id_3_m6.json"}
 
 CACHE = REPO / ".cache"
 USD_DIR = CACHE / "usd"
@@ -41,6 +48,30 @@ def urdf_path(sku: str = "sku_2") -> Path:
 
 def display_json(sku: str = "sku_2") -> Path:
     return asset_dir(sku) / "display" / "display.json"
+
+
+def contract_json(sku: str = "sku_2") -> Path:
+    sku = require_sku(sku)
+    if sku != "sku_2":
+        raise ValueError("only sku_2 has a servo contract")
+    return asset_dir(sku) / "sku2_contract.json"
+
+
+def servo_map_json(sku: str = "sku_2") -> Path:
+    return asset_dir(sku) / "servo_map.json"
+
+
+def fit_json(role: str) -> Path:
+    """The T5 ub06 m6 fit for one servo role: abd, hip, or knee."""
+    try:
+        name = _FIT[role]
+    except KeyError:
+        raise ValueError(f"unknown servo role {role!r}") from None
+    return ASSETS / "actuators" / name
+
+
+def policy_path() -> Path:
+    return ASSETS / "policies" / "flat_omni" / "policy.onnx"
 
 
 def staged_urdf(sku: str = "sku_2") -> Path:
