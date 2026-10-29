@@ -5,8 +5,8 @@ simulation stack, starting from the CAD URDF. The asset that comes out is a
 USD articulation with the CAD meshes, the CAD inertias, the screen, and twelve
 leg joints. It is the robot you can open, spawn, and build on inside Isaac Lab.
 
-`mp4-sim` stays the source of the files. This folder does not copy meshes, and
-it does not regenerate the MuJoCo model.
+The robot files live in this repo under `assets/` (`sku_1`, `sku_2`, the T5 ub06
+fits, and `policies/flat_omni`). This package does not regenerate the MuJoCo model.
 
 ## What went wrong last time
 
@@ -61,7 +61,7 @@ renderer is a separate requirement and stays out of scope on this machine.
 
 ## Source assets
 
-All of these already live under `mp4-sim/src/mp4_sim/robot/assets/sku_2/`.
+All of these live under `assets/sku_2/`.
 
 | Input | Role |
 |---|---|
@@ -157,7 +157,7 @@ mp4-isaac/
   pyproject.toml
   scripts/install.sh
   src/mp4_isaac/
-    paths.py      where mp4-sim's SKU2 files and this cache live
+    paths.py      where this repo's robot assets and the cache live
     stage.py      write the URDF the importer reads, and check every mesh
     convert.py    Isaac Lab UrdfConverter -> .cache/usd
     inspect.py    report the staged URDF and, after conversion, the USD prims
