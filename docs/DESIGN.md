@@ -6,20 +6,16 @@ USD articulation with the CAD meshes, the CAD inertias, the screen, and twelve
 leg joints. It is the robot you can open, spawn, and build on inside Isaac Lab.
 
 The robot files live in this repo under `assets/` (`sku_1`, `sku_2`, the T5 ub06
-fits, and `policies/flat_omni`). This package does not regenerate the MuJoCo model.
+fits, and `policies/flat_omni`). The MuJoCo XML there supplies colours, the
+screen, and the weighed-mass notes. Conversion reads the CAD URDF.
 
-## What went wrong last time
+## Approach
 
-`mp4-sim-isaac` started from the compiled MuJoCo model and rebuilt a PhysX
-twin of it: a USD authored from MJCF bodies, a knee rotor plus a fixed tendon
-for each leg, BAM servo models, and the policy observation contract. That
-package was written for Isaac Sim 5.1 / Isaac Lab 2.3 and never simulated
-anything. The Windows build on that machine could not start Kit.
-
-Reconstructing MuJoCo features that PhysX does not have (a tendon that carries
-the servo armature) is the wrong first step when the goal is a faithful robot
-in the NVIDIA stack. The CAD URDF is already the description NVIDIA's importer
-is built to read.
+The CAD URDF is the description NVIDIA's importer reads. This package stages
+that URDF (the CAD links plus the screen) and converts it to a layered USD.
+The articulation is the CAD's thirteen links and twelve leg joints. Joint
+drives stay at zero so an actuator can own them later. Knee tendons and extra
+rotor joints stay out of the asset.
 
 ## Stack
 
@@ -48,9 +44,9 @@ support Isaac Sim's RTX renderer under WSL2, and this machine cannot host it:
 | GPU | GeForce RTX 2060, 6 GB | 16 GB, supported RTX |
 | Driver seen by WSL | 576.83 (CUDA 12.9) | 580.65.06 or newer for the Lab 3 CUDA 13 wheels |
 
-The C: drive has about 16 GB free, so a Kit install does not fit there either.
-The Python environment lives on the Linux filesystem (`/home/afreez/.venvs/mp4-isaac`),
-which has the space.
+`scripts/install.sh` and `scripts/install.ps1` create the virtualenv at `.venv`
+in this repository. Pass a directory, or set `MP4_ISAAC_VENV`, to install it
+somewhere else.
 
 Newton and PyTorch need CUDA for simulation and training. Warp 1.17 ships its
 own CUDA 12.9 toolkit and already sees the RTX 2060 on this driver. The Lab 3
@@ -65,9 +61,9 @@ All of these live under `assets/sku_2/`.
 
 | Input | Role |
 |---|---|
-| `urdf/sku_2_urdf_fixed.urdf` | The repaired SolidWorks export. 13 links, 12 continuous joints, metres, x forward, y left, z up. This is the URDF `tools/build_model.py` reads. |
+| `urdf/sku_2_urdf_fixed.urdf` | The repaired SolidWorks export. 13 links, 12 continuous joints, metres, x forward, y left, z up. This is the URDF the importer reads. |
 | `meshes/*.STL` | One visual mesh and one collision mesh per link, referenced as `package://sku_2_urdf_fixed/meshes/<link>.STL`. |
-| `display/display.json` plus `display_bezel.stl` and `display_panel.stl` | The screen. Visual only. Meshes are already in the base frame. `mp4_sim.robot.display` attaches them to MuJoCo the same way; they are not in the URDF. |
+| `display/display.json` plus `display_bezel.stl` and `display_panel.stl` | The screen. Visual only. Meshes are already in the base frame, and they are not in the URDF. Staging adds them. |
 | `servo_map.json`, `sku2_contract.json`, `sku2_masses.json` | Left unread by the importer. They describe the MuJoCo joint convention, the firmware stand, and the weighed 450 g budget. |
 
 The package directory the importer needs is the `sku_2` folder itself.
@@ -76,8 +72,8 @@ The package directory the importer needs is the `sku_2` folder itself.
 
 SKU1 and the raw CAD export
 (`cad/sku_2/sku_2Full_assem_simplified_urdf/`) stay out. The raw export does
-not share SKU1's link names or body frame; `tools/fix_sku2_urdf.py` is what
-produces the URDF this importer consumes.
+not share SKU1's link names or body frame. The repaired URDF under `urdf/`
+is what the importer consumes.
 
 ## Staging
 
@@ -137,14 +133,13 @@ Out, on purpose:
   carries the exporter's plastic masses. Replacing them is a later edit to the
   USD inertias, once the visual asset is known to be right.
 - The MuJoCo stand pose. `sku2_contract.json` stores angles in the MJCF joint
-  convention. `build_model.py` rewrites joint axes (`axis_sign` in
-  `servo_map.json`) and drives each knee through a tendon
-  (`q_knee_servo = -axis_thigh q_thigh - axis_knee q_calf`). Those angles are
-  not URDF joint positions. The USD zero pose is the SolidWorks assembly,
-  which `servo_map.json` records as a thigh at about −45° and a shin at about
-  45°.
-- Knee tendons, rotor joints, BAM servos, observation noise, and the policy
-  contract. Those belonged to the MuJoCo-to-PhysX port.
+  convention. `servo_map.json` records `axis_sign`, and each knee is a tendon
+  coordinate (`q_knee_servo = -axis_thigh q_thigh - axis_knee q_calf`). Those
+  angles are not URDF joint positions. The USD zero pose is the SolidWorks
+  assembly, which `servo_map.json` records as a thigh at about −45° and a
+  shin at about 45°.
+- Knee tendons, rotor joints, observation noise, and the policy contract.
+  The USD is the CAD articulation. Actuator gains are applied at spawn.
 - SKU1.
 
 ## Layout
@@ -156,6 +151,7 @@ mp4-isaac/
   docs/IMPLEMENTATION.md
   pyproject.toml
   scripts/install.sh
+  scripts/install.ps1
   src/mp4_isaac/
     paths.py      where this repo's robot assets and the cache live
     stage.py      write the URDF the importer reads, and check every mesh
@@ -164,5 +160,5 @@ mp4-isaac/
   .cache/         generated URDF and USD; not source
 ```
 
-The environment is not inside this tree. `scripts/install.sh` creates it at
-`/home/afreez/.venvs/mp4-isaac`.
+`scripts/install.sh` and `scripts/install.ps1` create the virtualenv at `.venv`
+in this tree unless you pass another directory or set `MP4_ISAAC_VENV`.

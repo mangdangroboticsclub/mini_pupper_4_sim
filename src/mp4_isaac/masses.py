@@ -1,9 +1,9 @@
 """Weighed rigid-body masses, written onto the articulation after spawn.
 
-The USD keeps the SolidWorks plastic. MuJoCo applies ``sku2_masses.json`` (or
-the 478 g heatsink file) in ``mp4_sim.robot.sku2.apply_masses`` without editing
-``pupper.xml``. This is the same split, on the Isaac bodies. SKU1 has no mass
-file; its 360 g model is the ``<inertial>`` set already in ``sku_1/pupper.xml``.
+The USD keeps the SolidWorks plastic. This writes ``sku2_masses.json`` (or
+the 478 g heatsink file) onto the Isaac bodies and leaves ``pupper.xml``
+unchanged. SKU1 has no mass file; its 360 g model is the ``<inertial>`` set
+already in ``sku_1/pupper.xml``.
 """
 
 from __future__ import annotations

@@ -5,12 +5,19 @@ Lab. Conversion is the step that needs the NVIDIA packages.
 
 ## 1. Environment
 
-Ubuntu 24.04 in this WSL VM, Python 3.12, `uv`. The virtualenv is
-`/home/afreez/.venvs/mp4-isaac` so the wheels stay off the nearly full C: drive.
+Python 3.12 and `uv`. The virtualenv defaults to `.venv` in this repository.
 
 ```bash
 bash scripts/install.sh
+bash scripts/install.sh /path/to/venv
 ```
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\install.ps1
+powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -Venv D:\venvs\mp4-isaac
+```
+
+`MP4_ISAAC_VENV` selects the directory when you do not pass one. The bash script activates `bin/python`. The PowerShell script installs into `Scripts\python.exe` and does not need the virtualenv to be activated. Isaac Lab 3 lists Windows 11 for that path.
 
 The script:
 
@@ -21,13 +28,12 @@ The script:
    rest of the stack. The command is the one in the Isaac Lab 3.0 install
    guide (`--torch-backend cu130`).
 4. Replaces that torch with `2.11.0+cu128` and `torchvision==0.26.0+cu128`.
-   The published wheel's CUDA 13 build does not load on this driver's CUDA 12.9.
+   The published wheel's CUDA 13 build does not load on a CUDA 12.9 driver.
    Re-running the script keeps the CUDA 12.8 build, because that install comes
    last.
 5. Installs this package in editable mode.
 
-`OMNI_KIT_ACCEPT_EULA=YES` is exported for any Kit prompt. This install does
-not request the `isaacsim` extra, so Kit should not start.
+The script does not request the `isaacsim` extra, so Kit should not start.
 
 ## 2. Stage the URDF
 
@@ -152,9 +158,8 @@ one joint `back_riht_leg_upper_joint`.
 python -m mp4_isaac.play --video --vx 0.15 --seconds 3
 ```
 
-This runs `assets/policies/flat_omni`. Servo angles go through
-`mp4_sim.robot.mapping.ServoMap` onto the CAD hinges, and the clip is
-`.cache/flat_omni.mp4`. A 0.15 m/s forward command stayed upright and covered
+This runs `assets/policies/flat_omni`. Servo angles are mapped onto the CAD
+hinges, and the clip is `.cache/flat_omni.mp4`. A 0.15 m/s forward command stayed upright and covered
 0.29 m in 3 s. The hold is a plain PD (`--stiffness 1.5 --armature 5e-4`).
 The MuJoCo task's stiffer servo flips this model.
 

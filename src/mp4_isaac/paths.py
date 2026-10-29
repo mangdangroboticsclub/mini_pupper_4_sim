@@ -6,6 +6,7 @@ live under ``assets/`` in this repo. Nothing here reads a sibling checkout.
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 PACKAGE = Path(__file__).resolve().parent
@@ -108,4 +109,5 @@ DISPLAY_JSON = display_json("sku_2")
 ROS_PACKAGE = ros_package("sku_2")
 STAGED_URDF = staged_urdf("sku_2")
 
-VENV = Path.home() / ".venvs" / "mp4-isaac"
+# Default from scripts/install.sh. A path argument or MP4_ISAAC_VENV overrides it.
+VENV = Path(os.environ.get("MP4_ISAAC_VENV", REPO / ".venv")).expanduser()

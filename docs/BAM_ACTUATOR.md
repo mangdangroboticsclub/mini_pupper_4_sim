@@ -19,7 +19,7 @@ single Coulomb coefficient. The variants are cumulative:
 
 Isaac Lab's implicit actuator hands a constant friction and a viscous damping
 to the solver. That is m1. The SKU2 policies were trained on m6
-(`bam_t5ub06` in `mp4_sim.actuators.fits`). m6's budget depends on the motor
+(`assets/actuators/bam_t5ub06_id_*_m6.json`). m6's budget depends on the motor
 torque and on the external load at that step, so it cannot be a pair of
 numbers written once into the joint.
 
@@ -30,8 +30,8 @@ the SolidWorks plastic. A stiff servo on that inertia is what flipped the
 robot.
 
 SKU2's budget is `sku2_masses.json` (450 g) or `sku2_masses_478g.json` (the
-heatsink, 478.66 g, the terrain task's default). `mp4_sim.robot.sku2.apply_masses`
-already defines the split. Repeat it on the Isaac bodies after spawn:
+heatsink, 478.66 g, the terrain task's default). `src/mp4_isaac/masses.py`
+applies that split to the Isaac bodies after spawn:
 
 | MuJoCo body | Isaac link | Mass |
 |---|---|---|
@@ -46,26 +46,24 @@ CAD mass, about the existing centre of mass. Then set the base centre of
 mass x to `base_com_x_m` (−23.13 mm). The screen is merged into the base and
 has no mass of its own.
 
-SKU1 has no separate mass file. Its MuJoCo model was generated at 360 g with
-65.5 g on each hip module (`tools/build_model.py`). Read those body masses
-and inertias out of `sku_1/pupper.xml` and write the same numbers onto the
-matching links. Do not apply the SKU2 budget to SKU1.
+SKU1 has no separate mass file. Its MuJoCo model in `sku_1/pupper.xml` is
+360 g with 65.5 g on each hip module. Read those body masses and inertias
+out of that file and write the same numbers onto the matching links. Keep
+the SKU2 budget on SKU2.
 
 Leave the URDF alone. The budget is chosen at spawn, the way MuJoCo chooses
 `sku2_masses.json` versus `sku2_masses_478g.json` without editing `pupper.xml`.
 
 ## The actuator Isaac should run
 
-`isaac_bam_actuators` is already the right shape. `BamActuator` is an
-explicit `ActuatorBase`: `is_implicit_model` stays false, `compute` fills
+`PupperBamActuator` in `src/mp4_isaac/servos.py` is an explicit
+`ActuatorBase`: `is_implicit_model` stays false, `compute` fills
 `joint_efforts`, and it clears `joint_positions` and `joint_velocities` so
-the solver does not also run a PD. `BamFrictionModel` is the torch port of
-BAM's `compute_frictions`, including m6. The motor object is the firmware
-law.
+the solver does not also run a PD. Friction is BAM m6. The motor object is
+the firmware law.
 
-Use that class. Do not reimplement m6 inside `mp4-isaac`, and do not turn
-stiffness and damping on an `ImplicitActuatorCfg` up until the walk looks
-right. Those two numbers are m1.
+Keep stiffness and damping at zero. Those two numbers on an
+`ImplicitActuatorCfg` are m1.
 
 The fits to load are the ones the policies used, not the pendulum files
 shipped beside `md01i`:
@@ -95,8 +93,8 @@ inertia and the joints run away.
 
 ## What one step computes
 
-Per environment and per servo, matching `BamActuator.compute` and BAM's own
-step:
+Per environment and per servo, matching `PupperBamActuator.compute` and BAM's
+own step:
 
 1. The firmware law turns the position target into a duty or a current.
 2. The motor law turns that into `motor_torque` (back-EMF included).
@@ -124,15 +122,15 @@ friction clip and the delay quantisation.
 MuJoCo puts the knee servo on a fixed tendon. The tendon coordinate is the
 shin angle, `c_thigh * q_thigh + c_calf * q_calf`, and the servo's armature
 and friction sit on that coordinate. The calf hinge itself is passive.
-`ServoMap` is the same relationship, already used to aim `flat_omni` at the
-CAD hinges.
+`sku2_contract.json` stores those coefficients, and `flat_omni` aims at the
+CAD hinges through the same map.
 
-Isaac has no tendon transmission on an actuator. Do not add the rotor joint
-the old PhysX port used. Keep one coordinate inside the actuator:
+Isaac has no tendon transmission on an actuator. The actuator keeps one
+coordinate:
 
 - Position and velocity that `md01vp` and m6 see are the servo angle and its
-  rate, from `ServoMap.joint_to_servo` on the thigh and calf (and the hip
-  joint alone for the other two roles).
+  rate: thigh and calf combined with those coefficients (and the hip joint
+  alone for the other two roles).
 - The scalar effort comes back through the same linear map: torque on the
   thigh and torque on the calf equal the servo torque times that row of the
   map. Abduction and hip apply their torque to one joint.
@@ -155,10 +153,8 @@ load = armature * (v - v_prev) / dt - motor_torque_prev
 ```
 
 `v` is the servo velocity. This is the load the rotor dynamics imply. It
-lags one step, which is the same lag the previous Isaac port accepted. Check
-it on the stand: holding friction and the breakaway when a joint starts to
-move should look like the MuJoCo `bam_servo` under the same hold, not like a
-joint that is either glued or frictionless.
+lags one step. Check it on the stand: holding friction and the breakaway
+when a joint starts to move should match a BAM servo under the same hold.
 
 If that residual is wrong because the link inertia dominates the armature,
 the next measurement is the generalized force at the joint from the
@@ -169,9 +165,8 @@ friction term on the link while that comparison is open.
 
 The T5 ub06 fits carry `command_delay`: about 5 ms on the hip (`id_2`) and
 about 1 ms on abduction and knee (`id_3`), rounded up to physics steps.
-`BamActuator` currently prints that value and does not apply it. The buffer
-belongs in the actuator: a command becomes the firmware target on the step
-where its delay has elapsed. The motor law itself stays stateless.
+`PupperBamActuator` holds the command for that many steps, then hands it to
+the firmware law. The motor law itself stays stateless.
 
 The 8–19 ms sensing-to-command chain delay is not in the fit. MuJoCo puts it
 on the action term, once per episode. Leave it there when a task exists.
@@ -180,16 +175,14 @@ compared on purpose.
 
 ## What has to be checked before it is trusted
 
-`isaac_bam_actuators` was written against Isaac Lab 2.3's `ActuatorBase`.
-Lab 3 still has the same `compute(control_action, joint_pos, joint_vel)`
-signature and still defaults `is_implicit_model` to false, but the
-constructor's effort-limit fields moved. Port the cfg onto Lab 3's
-`ActuatorBaseCfg` (`joint_effort_limit`, not a solver PD). The offline
-pytest suite (friction, motors, no Isaac) should stay green; it does not
-prove the Lab 3 wiring.
+`PupperBamActuator` follows Isaac Lab 3's `ActuatorBase`: the same
+`compute(control_action, joint_pos, joint_vel)` signature, `is_implicit_model`
+false, and `ActuatorBaseCfg` effort limits (`joint_effort_limit`, not a
+solver PD). An offline check of friction and the motor law does not prove
+the Lab 3 wiring.
 
-Then, in Newton, one servo at a time, same position command as MuJoCo's
-`bam_servo`:
+Then, in Newton, one servo at a time, with the same position command the
+policies were trained against:
 
 - Position, velocity, and motor torque over a short move, before the leg is
   attached. A single-joint rig with the JSON armature.
