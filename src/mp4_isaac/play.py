@@ -70,6 +70,13 @@ parser.add_argument(
     help="Use the 478.66 g SKU2 budget (Raspberry Pi heatsink). Default is 450 g.",
 )
 parser.add_argument(
+    "--blender",
+    nargs="?",
+    const="auto",
+    default=None,
+    help="Also write an animated glTF. With no path, writes .cache/<policy>_crowd.glb.",
+)
+parser.add_argument(
     "--video",
     nargs="?",
     const="auto",
@@ -95,6 +102,9 @@ if args_cli.crowd < 1:
 if args_cli.video == "auto":
     suffix = "_crowd" if args_cli.crowd > 1 else ""
     args_cli.video = str(CACHE / f"{POLICY_NAME}{suffix}.mp4")
+if args_cli.blender == "auto":
+    suffix = "_crowd" if args_cli.crowd > 1 else ""
+    args_cli.blender = str(CACHE / f"{POLICY_NAME}{suffix}.glb")
 COURSE = build_course(args_cli.terrain, lanes=args_cli.crowd if args_cli.terrain == "stairs" else 1)
 SPAWN = (COURSE.spawn[0], COURSE.spawn[1], COURSE.spawn[2] + 0.12)
 
@@ -124,7 +134,7 @@ class PlaySceneCfg(InteractiveSceneCfg):
     floor = AssetBaseCfg(
         prim_path="/World/Floor",
         spawn=sim_utils.CuboidCfg(
-            size=(12.0, 8.0, 0.10) if args_cli.terrain == "stairs" and args_cli.crowd > 1 else (
+            size=(20.0, 10.0, 0.10) if args_cli.terrain == "stairs" and args_cli.crowd > 1 else (
                 (8.0, 4.0, 0.10) if args_cli.terrain != "flat" else (6.0, 6.0, 0.10)
             ),
             collision_props=sim_utils.UsdPhysicsCollisionCfg(),
@@ -132,7 +142,11 @@ class PlaySceneCfg(InteractiveSceneCfg):
                 diffuse_color=(0.72, 0.80, 0.90) if args_cli.terrain == "stairs" and args_cli.crowd > 1 else (0.45, 0.45, 0.45)
             ),
         ),
-        init_state=AssetBaseCfg.InitialStateCfg(pos=(1.5, 0.0, -0.05) if args_cli.terrain != "flat" else (0.0, 0.0, -0.05)),
+        init_state=AssetBaseCfg.InitialStateCfg(
+            pos=(2.5, 0.0, -0.05) if args_cli.terrain == "stairs" and args_cli.crowd > 1 else (
+                (1.5, 0.0, -0.05) if args_cli.terrain != "flat" else (0.0, 0.0, -0.05)
+            )
+        ),
     )
     robot: ArticulationCfg = ArticulationCfg(
         prim_path="{ENV_REGEX_NS}/Robot",
@@ -349,6 +363,10 @@ def main() -> None:
         target = _fill_targets(robot, index, stand)
         frames = []
         video_stride = max(1, int(round((1.0 / 30.0) / dt)))
+        motion_t: list[float] = []
+        motion_root: list[np.ndarray] = []
+        motion_quat: list[np.ndarray] = []
+        motion_q: list[np.ndarray] = []
         start_xy = _roots(robot)[:, :2].copy()
 
         for step in range(1, settle_steps + policy_steps + 1):
@@ -382,8 +400,14 @@ def main() -> None:
             scene.write_data_to_sim()
             sim.step()
             scene.update(dt)
-            if args_cli.video and step % video_stride == 0:
-                frames.append(_rgb(sim))
+            if step % video_stride == 0:
+                if args_cli.video:
+                    frames.append(_rgb(sim))
+                if args_cli.blender:
+                    motion_t.append(step * dt)
+                    motion_root.append(_roots(robot).copy())
+                    motion_quat.append(_tensor(robot.data.root_quat_w).detach().cpu().numpy().copy())
+                    motion_q.append(_read_model_joints(robot, index).copy())
             if not np.isfinite(q).all():
                 print(f"FAIL state is not finite at t={step * dt:.4f}s")
                 raise SystemExit(1)
@@ -400,6 +424,17 @@ def main() -> None:
             )
         if args_cli.video and frames:
             _write_video(args_cli.video, frames, 30)
+        if args_cli.blender and motion_t:
+            from .export_blender import write_motion
+
+            write_motion(
+                Path(args_cli.blender),
+                np.asarray(motion_t) - motion_t[0],
+                np.stack(motion_root),
+                np.stack(motion_quat),
+                np.stack(motion_q),
+                URDF_JOINTS,
+            )
         if float(pos[:, 2].min()) < 0.03:
             print("FAIL a base is on the floor")
             raise SystemExit(1)
