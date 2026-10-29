@@ -28,6 +28,7 @@ if any(arg == "--video" or arg.startswith("--video=") for arg in sys.argv[1:]):
 
 from isaaclab.app import add_launcher_args, launch_simulation
 
+from .masses import apply_masses
 from .paths import CACHE, interface_usd, require_sku
 
 parser = argparse.ArgumentParser(description="Drop SKU2 in Newton and check the articulation.")
@@ -43,6 +44,11 @@ parser.add_argument(
 parser.add_argument("--stiffness", type=float, default=0.2, help="Implicit PD stiffness, N m/rad.")
 parser.add_argument("--damping", type=float, default=0.02, help="Implicit PD damping, N m s/rad.")
 parser.add_argument("--armature", type=float, default=1.0e-4, help="Joint armature, kg m^2.")
+parser.add_argument(
+    "--heatsink",
+    action="store_true",
+    help="SKU2 only: use the 478.66 g budget. Default is 450 g. SKU1 stays the 360 g model.",
+)
 parser.add_argument("--physics", default="newton_mjwarp", choices=["newton_mjwarp"])
 add_launcher_args(parser)
 parser.set_defaults(visualizer=["none"])
@@ -249,6 +255,7 @@ def main() -> None:
         robot = scene["robot"]
         sim.reset()
         scene.update(sim.get_physics_dt())
+        apply_masses(robot, require_sku(args_cli.sku), heatsink=args_cli.heatsink)
         _report(robot, "reset")
         dt = sim.get_physics_dt()
         steps = max(1, int(round(args_cli.seconds / dt)))
