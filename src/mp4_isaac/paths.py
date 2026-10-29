@@ -1,7 +1,7 @@
 """Locations of this package's robot assets and of the files it generates.
 
-The CAD, the screen, the weighed masses, the servo fits, and the flat_omni
-policy live under ``assets/`` in this repo. Nothing here reads a sibling checkout.
+The CAD, the screen, the weighed masses, the servo fits, and the policies
+live under ``assets/`` in this repo. Nothing here reads a sibling checkout.
 """
 
 from __future__ import annotations
@@ -70,8 +70,23 @@ def fit_json(role: str) -> Path:
     return ASSETS / "actuators" / name
 
 
-def policy_path() -> Path:
-    return ASSETS / "policies" / "flat_omni" / "policy.onnx"
+def policies() -> tuple[str, ...]:
+    root = ASSETS / "policies"
+    names = sorted(path.name for path in root.iterdir() if (path / "policy.onnx").is_file())
+    if not names:
+        raise FileNotFoundError(f"no policies under {root}")
+    return tuple(names)
+
+
+def policy_path(name: str = "flat_omni") -> Path:
+    """A policy directory name, or a path to an ``.onnx`` file."""
+    path = Path(name)
+    if path.suffix == ".onnx":
+        return path
+    folder = ASSETS / "policies" / name / "policy.onnx"
+    if not folder.is_file():
+        raise FileNotFoundError(f"no policy {name!r}; available: {', '.join(policies())}")
+    return folder
 
 
 def staged_urdf(sku: str = "sku_2") -> Path:
