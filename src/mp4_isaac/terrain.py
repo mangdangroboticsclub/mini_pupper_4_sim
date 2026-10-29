@@ -130,7 +130,7 @@ def _pit(cx: float, cy: float, *, steps: int, riser: float, tread: float, platfo
     return boxes
 
 
-def _flight(x0: float, *, steps: int, riser: float, tread: float, width: float, landing: float) -> list[Box]:
+def _flight(x0: float, *, steps: int, riser: float, tread: float, width: float, landing: float, y: float = 0.0) -> list[Box]:
     """A narrow straight climb: ``steps`` risers, then a landing, drops at the sides."""
     rises = np.full(steps, riser)
     treads = np.full(steps - 1, tread)
@@ -140,7 +140,7 @@ def _flight(x0: float, *, steps: int, riser: float, tread: float, width: float, 
     for i, top in enumerate(tops):
         x_a, x_b = float(edges[i]), float(edges[i + 1])
         shade = 0.45 + 0.12 * (i % 2)
-        boxes.append(Box(((x_a + x_b) / 2, 0.0, top / 2), (x_b - x_a, width, top), (shade, 0.34, 0.28)))
+        boxes.append(Box(((x_a + x_b) / 2, y, top / 2), (x_b - x_a, width, top), (shade, 0.34, 0.28)))
     return boxes
 
 
@@ -180,18 +180,20 @@ def _obstacles(rng: np.random.Generator, x0: float, length: float, width: float,
     return boxes
 
 
-CROWD_GAP = (0.42, 0.36)  # metres between grid rows (x) and columns (y)
-# The crowd stair field: one blue tread per rank, deep enough for a robot, the riser the policy climbs.
-FIELD_TREAD = 0.42
-FIELD_RISER = 0.035
-FIELD_GAP_Y = 0.40
-FIELD_BLUES = (
-    (0.30, 0.52, 0.78),
-    (0.18, 0.36, 0.64),
-    (0.40, 0.60, 0.84),
-    (0.22, 0.42, 0.70),
-    (0.48, 0.66, 0.88),
+CROWD_GAP = (0.42, 0.36)  # metres between grid rows (x) and columns (y) on flat ground
+# One playground tile: 1.08 x 0.55 m, four nested steps, 70 mm of tread each side, a 0.20 m top.
+# The spawn is on the ground, 0.15 m before the first riser. Riser height follows the playground rows.
+TILE_X = 1.08
+TILE_Y = 0.55
+STAIR_CENTER_X = 0.46
+LEVELS = ((0.62, 0.42), (0.48, 0.416), (0.34, 0.412), (0.20, 0.408))
+STEP_COLORS = (
+    (0.121569, 0.305882, 0.54902),
+    (0.184314, 0.419608, 0.709804),
+    (0.290196, 0.545098, 0.839216),
+    (0.498039, 0.690196, 0.917647),
 )
+RISERS_MM = (15, 30, 20, 35, 25, 40, 20, 15, 30, 20, 35, 25, 40, 20, 15, 30)
 
 
 def crowd_layout(n: int) -> tuple[np.ndarray, int, int]:
@@ -216,10 +218,9 @@ def crowd_layout(n: int) -> tuple[np.ndarray, int, int]:
 
 
 def stair_formation(n: int) -> tuple[np.ndarray, int, int]:
-    """Where each robot stands on the blue stair field: ``(x, y, surface z)``.
+    """Spawn points on the playground grid, on the ground, facing +X: ``(x, y, surface z)``.
 
-    A crowd is a filled rectangle, four across when there are enough robots, so the
-    ranks recede up the stairs. The front rank is the lowest step.
+    Tiles are 1.08 m apart in X and 0.55 m apart in Y, the same pitch as ``stair_field.usda``.
     """
     n = max(1, int(n))
     cols = 4 if n >= 8 else max(1, int(np.ceil(np.sqrt(n))))
@@ -227,26 +228,29 @@ def stair_formation(n: int) -> tuple[np.ndarray, int, int]:
     points = []
     for row in range(rows):
         count = min(cols, n - row * cols)
-        top = (row + 1) * FIELD_RISER
         for col in range(count):
-            y = (col - (cols - 1) / 2.0) * FIELD_GAP_Y
-            x = 0.10 + (row + 0.5) * FIELD_TREAD
-            points.append((x, y, top))
+            y = (col - (cols - 1) / 2.0) * TILE_Y
+            x = row * TILE_X
+            points.append((x, y, 0.0))
     return np.asarray(points, dtype=float), rows, cols
 
 
-def _stair_field(rows: int, cols: int) -> list[Box]:
-    """Blue treads covering the formation, plus a few more steps ahead of the lead rank."""
-    width = (cols - 1) * FIELD_GAP_Y + 0.36
+def _playground_stairs(slots: np.ndarray) -> list[Box]:
+    """The playground up-and-over stair: four nested slabs, 70 mm of tread on each side.
+
+    Walking +X climbs four risers onto the 0.20 m top, then down four risers to the floor.
+    The riser is the playground value for that row (15 mm on the first row).
+    """
     boxes = []
-    for step in range(rows + 3):
-        top = (step + 1) * FIELD_RISER
-        x = 0.10 + (step + 0.5) * FIELD_TREAD
-        boxes.append(Box(
-            (x, 0.0, top / 2),
-            (FIELD_TREAD, width, top),
-            FIELD_BLUES[step % len(FIELD_BLUES)],
-        ))
+    for x, y, _z in slots:
+        riser = RISERS_MM[int(round(float(x) / TILE_X)) % len(RISERS_MM)] / 1000.0
+        for level, (length, width) in enumerate(LEVELS, start=1):
+            height = level * riser
+            boxes.append(Box(
+                (float(x) + STAIR_CENTER_X, float(y), height / 2),
+                (length, width, height),
+                STEP_COLORS[level - 1],
+            ))
     return boxes
 
 
@@ -275,8 +279,8 @@ def build(name: str, seed: int = 4, lanes: int = 1) -> Course:
             ],
         )
     if name == "stairs":
-        # One robot climbs the narrow flight. A crowd stands on a field of blue treads,
-        # one rank per step, the way the formation recedes up the stairs.
+        # One robot climbs the narrow flight. A crowd uses the playground tile:
+        # each robot starts on the ground and walks up and over its own four-step stair.
         lanes = max(1, int(lanes))
         if lanes == 1:
             return Course(
@@ -291,12 +295,11 @@ def build(name: str, seed: int = 4, lanes: int = 1) -> Course:
                 + _pit(0.45, 0.70, steps=3, riser=0.018, tread=0.07, platform=0.24)
                 + _pyramid(0.45, -0.70, steps=3, riser=0.018, tread=0.07, platform=0.24, color=(0.50, 0.36, 0.28)),
             )
-        slots, rows, cols = stair_formation(lanes)
-        span_y = (cols - 1) * FIELD_GAP_Y
-        # Beside the front rank, about as high as the body, looking up the field.
-        eye = (float(slots[0, 0]) + 0.05, -(span_y / 2 + 0.55), 0.10)
-        look = (float(slots[min(len(slots) - 1, cols * 2), 0]), 0.0, 0.06)
-        return Course("stairs", (0.0, 0.0, 0.0), eye, look, boxes=_stair_field(rows, cols))
+        slots, _rows, cols = stair_formation(lanes)
+        span_y = (cols - 1) * TILE_Y
+        eye = (-0.35, -(span_y / 2 + 1.05), 0.28)
+        look = (0.55, 0.0, 0.04)
+        return Course("stairs", (0.0, 0.0, 0.0), eye, look, boxes=_playground_stairs(slots))
     raise ValueError(f"unknown terrain {name!r}; expected flat, rough, or stairs")
 
 
