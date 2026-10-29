@@ -3,7 +3,7 @@
 The Mini Pupper v4 (SKU2) as an Isaac Lab USD asset, imported from the CAD URDF.
 
 The CAD URDFs, part meshes, screen, weighed masses, servo fits, and the
-`flat_omni` policy live in `assets/`. This package stages a URDF the NVIDIA
+policies (`flat_omni`, `rough_terrain`, `stairs`) live in `assets/`. This package stages a URDF the NVIDIA
 importer can resolve (CAD links plus the screen) and converts it with Isaac Lab
 3.0's standalone URDF importer. No Kit install.
 
