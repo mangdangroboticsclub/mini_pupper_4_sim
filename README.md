@@ -2,9 +2,10 @@
 
 The Mini Pupper v4 (SKU2) as an Isaac Lab USD asset, imported from the CAD URDF.
 
-`mp4-sim` keeps the URDF, the meshes, and the screen. This package stages a URDF
-the NVIDIA importer can resolve (CAD links plus the screen) and converts it with
-Isaac Lab 3.0's standalone URDF importer. No Kit install, no copy of the meshes.
+The CAD URDFs, part meshes, screen, weighed masses, servo fits, and the
+`flat_omni` policy live in `assets/`. This package stages a URDF the NVIDIA
+importer can resolve (CAD links plus the screen) and converts it with Isaac Lab
+3.0's standalone URDF importer. No Kit install.
 
 The design and the steps are in [docs/DESIGN.md](docs/DESIGN.md) and
 [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md).
