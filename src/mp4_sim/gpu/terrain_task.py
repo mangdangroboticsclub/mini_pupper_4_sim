@@ -48,7 +48,7 @@ from . import terrain as terrain_mod
 from .env_cfg import TaskOptions, make_env_cfg
 from .mdp import _foot_site_ids
 
-FOOT_R = 0.0049
+FOOT_R = 0.0055          # the foot sphere in sku_2/pupper.xml (fitted to the shin tip)
 
 
 def _fresh_raycasts() -> None:

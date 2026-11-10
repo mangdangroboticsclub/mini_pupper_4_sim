@@ -33,7 +33,7 @@ WHAT IT FIXES IN THE EXPORTED URDF
                 "back_riht" typo is gone
   * contacts    the exporter's collision meshes are replaced with simple
                 shapes: a body box, the four motor cans, the shins, and a
-                sphere on each foot tip (fitted to the mesh: r = 4.9 mm)
+                sphere on each foot tip (centre and radius fitted to the shin)
 
 THE KNEE
   The knee motor sits in the hip module and drives the shin through a rod,
@@ -274,18 +274,37 @@ def hip_parts(prefix, leg):
             (save(bracket, f"{leg}_hip_bracket"), "yellow")]
 
 
+#: Thighs whose every piece is shown. A piece that is not listed here is
+#: dropped when it is the knee rod (under 10 mm wide and over 40 mm long).
+KEEP_ALL_THIGH_PIECES = {"front_right", "front_left", "back_right", "back_left"}
+
+
+def _principal_extents(p):
+    """Sizes of a piece along its own principal axes, smallest first."""
+    v = p.vertices - p.vertices.mean(0)
+    _, _, vt = np.linalg.svd(v, full_matrices=False)
+    return np.sort(np.ptp(v @ vt.T, axis=0))
+
+
 def thigh_parts(prefix, leg):
-    ps = sorted(split(os.path.join(MESHES, f"{prefix}_leg_upper_link.STL")),
-                key=lambda p: -len(p.faces))
-    # [0] main plate, [1] second plate, [2] the 2 mm knee rod (left out)
+    """Biggest piece is the main plate. A piece centred on the hip axis is the
+    servo horn. Everything else (the second plate, the bar) stays with the thigh."""
+    ps = [p for p in split(os.path.join(MESHES, f"{prefix}_leg_upper_link.STL"))
+          if prefix in KEEP_ALL_THIGH_PIECES
+          or not (_principal_extents(p)[1] < 0.010 and _principal_extents(p)[2] > 0.040)]
+    ps.sort(key=lambda p: -p.area)
+    on_axis = lambda p: np.linalg.norm(p.bounds.mean(0)[:2]) < 0.008
+    horn = [p for p in ps[1:] if on_axis(p)]
+    rest = [p for p in ps[1:] if not on_axis(p)]
     return [(save(ps[:1], f"{leg}_thigh_a"), "yellow"),
-            (save(ps[1:2], f"{leg}_thigh_b"), "dark")]
+            (save(horn, f"{leg}_thigh_horn"), "black"),
+            (save(rest, f"{leg}_thigh_b"), "dark")]
 
 
 def calf_parts(prefix, leg):
     m = trimesh.load(os.path.join(MESHES, f"{prefix}_leg_lower_link.STL"))
     save([m], f"{leg}_calf")
-    # foot tip: rounded end, fitted centre 55.25 mm along the shin, r 4.9 mm
+    # foot tip: rounded end of the shin. The current meshes sit at 59.75 mm.
     v = m.vertices[:, :2]
     far = v[np.argmax(np.linalg.norm(v, axis=1))]
     u = far / np.linalg.norm(far)

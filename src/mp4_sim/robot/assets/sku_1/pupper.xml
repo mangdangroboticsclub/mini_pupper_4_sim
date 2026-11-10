@@ -52,24 +52,28 @@
     <mesh name="FL_hip_motor" file="FL_hip_motor.stl"/>
     <mesh name="FL_thigh_a" file="FL_thigh_a.stl"/>
     <mesh name="FL_thigh_b" file="FL_thigh_b.stl"/>
+    <mesh name="FL_thigh_horn" file="FL_thigh_horn.stl"/>
     <mesh name="FR_calf" file="FR_calf.stl"/>
     <mesh name="FR_hip_bracket" file="FR_hip_bracket.stl"/>
     <mesh name="FR_hip_flange" file="FR_hip_flange.stl"/>
     <mesh name="FR_hip_motor" file="FR_hip_motor.stl"/>
     <mesh name="FR_thigh_a" file="FR_thigh_a.stl"/>
     <mesh name="FR_thigh_b" file="FR_thigh_b.stl"/>
+    <mesh name="FR_thigh_horn" file="FR_thigh_horn.stl"/>
     <mesh name="RL_calf" file="RL_calf.stl"/>
     <mesh name="RL_hip_bracket" file="RL_hip_bracket.stl"/>
     <mesh name="RL_hip_flange" file="RL_hip_flange.stl"/>
     <mesh name="RL_hip_motor" file="RL_hip_motor.stl"/>
     <mesh name="RL_thigh_a" file="RL_thigh_a.stl"/>
     <mesh name="RL_thigh_b" file="RL_thigh_b.stl"/>
+    <mesh name="RL_thigh_horn" file="RL_thigh_horn.stl"/>
     <mesh name="RR_calf" file="RR_calf.stl"/>
     <mesh name="RR_hip_bracket" file="RR_hip_bracket.stl"/>
     <mesh name="RR_hip_flange" file="RR_hip_flange.stl"/>
     <mesh name="RR_hip_motor" file="RR_hip_motor.stl"/>
     <mesh name="RR_thigh_a" file="RR_thigh_a.stl"/>
     <mesh name="RR_thigh_b" file="RR_thigh_b.stl"/>
+    <mesh name="RR_thigh_horn" file="RR_thigh_horn.stl"/>
     <mesh name="base_body" file="base_body.stl"/>
     <mesh name="base_detail" file="base_detail.stl"/>
     <mesh name="base_frame" file="base_frame.stl"/>
@@ -95,15 +99,16 @@
           <inertial pos="-0.0110739 0.0092228 -0.00637324" mass="0.00573557" fullinertia="8.98005e-07 1.0367e-06 1.89655e-06 7.48269e-07 3.2215e-08 -2.81998e-08"/>
           <joint name="FR_thigh" class="thigh" axis="0 0 1"/>
           <geom class="visual" mesh="FR_thigh_a" material="yellow"/>
+          <geom class="visual" mesh="FR_thigh_horn" material="black"/>
           <geom class="visual" mesh="FR_thigh_b" material="dark"/>
           <geom class="collision" type="capsule" size="0.004" fromto="0 0 0 -0.0353553 0.0353553 -0.00365"/>
           <body name="FR_calf" pos="-0.0353553 0.0353553 -0.00365" quat="1 0 0 0">
             <inertial pos="0.0175539 0.0154934 -4.56849e-08" mass="0.00146694" fullinertia="3.12595e-07 3.78795e-07 6.88728e-07 -3.30302e-07 1.43275e-12 7.1824e-13"/>
             <joint name="FR_calf" class="knee" axis="0 0 -1"/>
             <geom class="visual" mesh="FR_calf" material="dark"/>
-            <geom class="collision" type="capsule" size="0.0032" fromto="0 0 0 0.0312541 0.0312541 0"/>
-            <geom class="foot" name="FR_foot" type="sphere" size="0.0049" pos="0.0390676 0.0390676 0"/>
-            <site name="FR_foot" pos="0.0390676 0.0390676 0" size="0.003"/>
+            <geom class="collision" type="capsule" size="0.0032" fromto="0 0 0 0.0337997 0.0337997 0"/>
+            <geom class="foot" name="FR_foot" type="sphere" size="0.0055" pos="0.0422496 0.0422496 0"/>
+            <site name="FR_foot" pos="0.0422496 0.0422496 0" size="0.003"/>
           </body>
         </body>
       </body>
@@ -118,15 +123,16 @@
           <inertial pos="-0.0110739 0.0092228 0.00637324" mass="0.00573556" fullinertia="8.98005e-07 1.0367e-06 1.89655e-06 7.48269e-07 -3.22149e-08 2.81999e-08"/>
           <joint name="FL_thigh" class="thigh" axis="0 0 -1"/>
           <geom class="visual" mesh="FL_thigh_a" material="yellow"/>
+          <geom class="visual" mesh="FL_thigh_horn" material="black"/>
           <geom class="visual" mesh="FL_thigh_b" material="dark"/>
           <geom class="collision" type="capsule" size="0.004" fromto="0 0 0 -0.0353553 0.0353553 0.00365"/>
           <body name="FL_calf" pos="-0.0353553 0.0353553 0.00365" quat="1 0 0 0">
             <inertial pos="0.0175518 0.015492 -3.4562e-08" mass="0.00146678" fullinertia="3.12489e-07 3.7871e-07 6.88537e-07 -3.30228e-07 -6.96927e-13 1.90228e-12"/>
             <joint name="FL_calf" class="knee" axis="0 0 1"/>
             <geom class="visual" mesh="FL_calf" material="dark"/>
-            <geom class="collision" type="capsule" size="0.0032" fromto="0 0 0 0.0312541 0.0312541 0"/>
-            <geom class="foot" name="FL_foot" type="sphere" size="0.0049" pos="0.0390676 0.0390676 0"/>
-            <site name="FL_foot" pos="0.0390676 0.0390676 0" size="0.003"/>
+            <geom class="collision" type="capsule" size="0.0032" fromto="0 0 0 0.0337997 0.0337997 0"/>
+            <geom class="foot" name="FL_foot" type="sphere" size="0.0055" pos="0.0422496 0.0422496 0"/>
+            <site name="FL_foot" pos="0.0422496 0.0422496 0" size="0.003"/>
           </body>
         </body>
       </body>
@@ -141,15 +147,16 @@
           <inertial pos="-0.0110739 0.0092228 -0.00637324" mass="0.00573557" fullinertia="8.98005e-07 1.0367e-06 1.89655e-06 7.48269e-07 3.2215e-08 -2.81998e-08"/>
           <joint name="RR_thigh" class="thigh" axis="0 0 1"/>
           <geom class="visual" mesh="RR_thigh_a" material="yellow"/>
+          <geom class="visual" mesh="RR_thigh_horn" material="black"/>
           <geom class="visual" mesh="RR_thigh_b" material="dark"/>
           <geom class="collision" type="capsule" size="0.004" fromto="0 0 0 -0.0353553 0.0353553 -0.00365"/>
           <body name="RR_calf" pos="-0.0353553 0.0353553 -0.00365" quat="1 0 0 0">
             <inertial pos="0.0175539 0.0154934 -4.56849e-08" mass="0.00146694" fullinertia="3.12595e-07 3.78795e-07 6.88728e-07 -3.30302e-07 1.43275e-12 7.1824e-13"/>
             <joint name="RR_calf" class="knee" axis="0 0 -1"/>
             <geom class="visual" mesh="RR_calf" material="dark"/>
-            <geom class="collision" type="capsule" size="0.0032" fromto="0 0 0 0.0312541 0.0312541 0"/>
-            <geom class="foot" name="RR_foot" type="sphere" size="0.0049" pos="0.0390676 0.0390676 0"/>
-            <site name="RR_foot" pos="0.0390676 0.0390676 0" size="0.003"/>
+            <geom class="collision" type="capsule" size="0.0032" fromto="0 0 0 0.0337997 0.0337997 0"/>
+            <geom class="foot" name="RR_foot" type="sphere" size="0.0055" pos="0.0422496 0.0422496 0"/>
+            <site name="RR_foot" pos="0.0422496 0.0422496 0" size="0.003"/>
           </body>
         </body>
       </body>
@@ -164,15 +171,16 @@
           <inertial pos="-0.0110739 0.0092228 0.00437324" mass="0.00573556" fullinertia="8.98005e-07 1.0367e-06 1.89655e-06 7.48269e-07 -3.22149e-08 2.81999e-08"/>
           <joint name="RL_thigh" class="thigh" axis="0 0 -1"/>
           <geom class="visual" mesh="RL_thigh_a" material="yellow"/>
+          <geom class="visual" mesh="RL_thigh_horn" material="black"/>
           <geom class="visual" mesh="RL_thigh_b" material="dark"/>
           <geom class="collision" type="capsule" size="0.004" fromto="0 0 0 -0.0353553 0.0353553 0.00165"/>
           <body name="RL_calf" pos="-0.0353553 0.0353553 0.00165" quat="1 0 0 0">
             <inertial pos="0.0175518 0.015492 -3.4562e-08" mass="0.00146678" fullinertia="3.12489e-07 3.7871e-07 6.88537e-07 -3.30228e-07 -6.96927e-13 1.90228e-12"/>
             <joint name="RL_calf" class="knee" axis="0 0 1"/>
             <geom class="visual" mesh="RL_calf" material="dark"/>
-            <geom class="collision" type="capsule" size="0.0032" fromto="0 0 0 0.0312541 0.0312541 0"/>
-            <geom class="foot" name="RL_foot" type="sphere" size="0.0049" pos="0.0390676 0.0390676 0"/>
-            <site name="RL_foot" pos="0.0390676 0.0390676 0" size="0.003"/>
+            <geom class="collision" type="capsule" size="0.0032" fromto="0 0 0 0.0337997 0.0337997 0"/>
+            <geom class="foot" name="RL_foot" type="sphere" size="0.0055" pos="0.0422496 0.0422496 0"/>
+            <site name="RL_foot" pos="0.0422496 0.0422496 0" size="0.003"/>
           </body>
         </body>
       </body>
@@ -193,6 +201,7 @@
           <inertial pos="-0.0110739 0.0092228 -0.00637324" mass="0.0001" fullinertia="1.56568e-08 1.80749e-08 3.30665e-08 1.30461e-08 5.61671e-10 -4.91665e-10"/>
           <joint name="g_FR_thigh" class="gjoint" axis="0 0 1"/>
           <geom class="ghost" mesh="FR_thigh_a" material="ghost"/>
+          <geom class="ghost" mesh="FR_thigh_horn" material="ghost"/>
           <geom class="ghost" mesh="FR_thigh_b" material="ghost"/>
           <body name="g_FR_calf" pos="-0.0353553 0.0353553 -0.00365" quat="1 0 0 0" gravcomp="1">
             <inertial pos="0.0175539 0.0154934 -4.56849e-08" mass="0.0001" fullinertia="2.13093e-08 2.58222e-08 4.695e-08 -2.25164e-08 9.7669e-14 4.89619e-14"/>
@@ -211,6 +220,7 @@
           <inertial pos="-0.0110739 0.0092228 0.00637324" mass="0.0001" fullinertia="1.56568e-08 1.80749e-08 3.30666e-08 1.30461e-08 -5.61669e-10 4.91668e-10"/>
           <joint name="g_FL_thigh" class="gjoint" axis="0 0 -1"/>
           <geom class="ghost" mesh="FL_thigh_a" material="ghost"/>
+          <geom class="ghost" mesh="FL_thigh_horn" material="ghost"/>
           <geom class="ghost" mesh="FL_thigh_b" material="ghost"/>
           <body name="g_FL_calf" pos="-0.0353553 0.0353553 0.00365" quat="1 0 0 0" gravcomp="1">
             <inertial pos="0.0175518 0.015492 -3.4562e-08" mass="0.0001" fullinertia="2.13044e-08 2.58191e-08 4.6942e-08 -2.25138e-08 -4.7514e-14 1.29691e-13"/>
@@ -229,6 +239,7 @@
           <inertial pos="-0.0110739 0.0092228 -0.00637324" mass="0.0001" fullinertia="1.56568e-08 1.80749e-08 3.30665e-08 1.30461e-08 5.61671e-10 -4.91665e-10"/>
           <joint name="g_RR_thigh" class="gjoint" axis="0 0 1"/>
           <geom class="ghost" mesh="RR_thigh_a" material="ghost"/>
+          <geom class="ghost" mesh="RR_thigh_horn" material="ghost"/>
           <geom class="ghost" mesh="RR_thigh_b" material="ghost"/>
           <body name="g_RR_calf" pos="-0.0353553 0.0353553 -0.00365" quat="1 0 0 0" gravcomp="1">
             <inertial pos="0.0175539 0.0154934 -4.56849e-08" mass="0.0001" fullinertia="2.13093e-08 2.58222e-08 4.695e-08 -2.25164e-08 9.7669e-14 4.89619e-14"/>
@@ -247,6 +258,7 @@
           <inertial pos="-0.0110739 0.0092228 0.00437324" mass="0.0001" fullinertia="1.56568e-08 1.80749e-08 3.30666e-08 1.30461e-08 -5.61669e-10 4.91668e-10"/>
           <joint name="g_RL_thigh" class="gjoint" axis="0 0 -1"/>
           <geom class="ghost" mesh="RL_thigh_a" material="ghost"/>
+          <geom class="ghost" mesh="RL_thigh_horn" material="ghost"/>
           <geom class="ghost" mesh="RL_thigh_b" material="ghost"/>
           <body name="g_RL_calf" pos="-0.0353553 0.0353553 0.00165" quat="1 0 0 0" gravcomp="1">
             <inertial pos="0.0175518 0.015492 -3.4562e-08" mass="0.0001" fullinertia="2.13044e-08 2.58191e-08 4.6942e-08 -2.25138e-08 -4.7514e-14 1.29691e-13"/>
@@ -295,6 +307,6 @@
     <framequat name="body_quat" objtype="site" objname="imu"/>
   </sensor>
   <keyframe>
-    <key name="stand" qpos="0 0 0.07502976 1 0 0 0 0 0.1304188 0.1318099 0 -0.1304188 -0.1318099 0 0.1304188 0.1318099 0 -0.1304188 -0.1318099 0 0 0.07502976 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" ctrl="0 0.1304188 0.001391089 0 -0.1304188 0.001391089 0 0.1304188 0.001391089 0 -0.1304188 0.001391089"/>
+    <key name="stand" qpos="0 0 0.07874931 1 0 0 0 0 0.1304188 0.1318099 0 -0.1304188 -0.1318099 0 0.1304188 0.1318099 0 -0.1304188 -0.1318099 0 0 0.07874931 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" ctrl="0 0.1304188 0.001391089 0 -0.1304188 0.001391089 0 0.1304188 0.001391089 0 -0.1304188 0.001391089"/>
   </keyframe>
 </mujoco>

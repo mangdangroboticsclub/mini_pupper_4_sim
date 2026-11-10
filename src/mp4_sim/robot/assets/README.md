@@ -4,7 +4,10 @@
 > repaired SolidWorks export. An updated SKU2 URDF will replace it; then put it
 > in `sku_2/urdf/`, regenerate with
 > `tools/build_model.py --sku sku_2`, and update `sku_2/sku2_masses.json` if
-> the new export carries measured masses.
+> the new export carries measured masses. The leg meshes (both SKUs) and the
+> SKU 1 body mesh are the newer CAD: the shin tip is 59.75 mm from the knee,
+> and `sku2_contract.json` is solved again for that length so the hip axes
+> stay 70 mm above the feet.
 
 ## Per SKU
 
@@ -66,4 +69,4 @@ invalidates it.
 Copied from the earlier Mini Pupper simulation project (models, URDFs, meshes,
 servo profiles, generator tools) and the walking-policy project (SKU2 contract,
 masses, IMU mount, noise profiles). SKU2 `pupper.xml` sha256 (LF):
-`7bd8ecc99c261936d04a03d41d17868ad573250d34739d85c809836e467db9b4`.
+`d004eb9887b72ba1ea39e8935234290317f7ccf59040009557ed4789c31c927f`.
