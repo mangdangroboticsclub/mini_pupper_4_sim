@@ -84,6 +84,13 @@ The heading loop is a PI controller that turns the heading error into the yaw-ra
 input and output layout, the history order and the heading loop a robot-side program must compute are in
 [docs/POLICY_CONTRACT.md](docs/POLICY_CONTRACT.md).
 
+## Policies on the robot
+
+The walking and get-up policies that run on the Mini Pupper v4 (SKU2), with the program that runs them on the robot,
+the firmware and the training recipes, are in the
+[`sku2-policies` branch of mini_pupper_4_recovery](https://github.com/mangdang-bam/mini_pupper_4_recovery/tree/sku2-policies).
+The masses, joint limits and calibration measured on the robot for them are in [data/sku2_measured/](data/sku2_measured/).
+
 ## Training
 
 `sh scripts/recipes/stairs.sh [LAST_STEP]` runs the six steps in order and skips finished ones; `LAST_STEP=1` stops
