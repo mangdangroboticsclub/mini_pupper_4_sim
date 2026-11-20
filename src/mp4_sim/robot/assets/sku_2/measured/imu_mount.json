@@ -17,8 +17,6 @@
    -1.0
   ]
  ],
- "log": "imu_tilt.npz",
- "log_sha256": "153252dfb6b83354f1bf57505d87e2a168b1ab70ab996151a1de2d96b91185ad",
  "analysis": {
   "gravity_nose": [
    0.518,

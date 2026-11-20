@@ -71,7 +71,7 @@
   "vel[10]",
   "vel[11]"
  ],
- "method": "One uniform half-width per element: max(the clean floor the training ramp starts from, sqrt(3) x max(sensor floor, in-motion excess)). Sensor floor: the IMU at rest with the motors off (60 s) and on the armed floor stand, the joints on the armed stand, still 1 s blocks only. In-motion excess: along the firmware's in-place trot replayed open loop in both actuator models, each channel at 20 ms split by a Hann-windowed spectrum into the gait's harmonics (+-0.25 Hz around k x 2.78 Hz, k = 1..9) and the rest; the excess is sqrt(max(0, off_robot^2 - off_sim^2)) on the rest, the larger of the two models; cross-checked against a closed-loop walk of stock_v3_s4 at 0.10 m/s (where the two estimates differ by more than x2, the larger). Each element's excess is capped so that the noise cannot make the simulated observation wider than the robot's on that walk. The harmonic excess (body motion that differs on the robot) is not injected.",
+ "method": "One uniform half-width per element: max(the clean floor the training ramp starts from, sqrt(3) x max(sensor floor, in-motion excess)). Sensor floor: the IMU at rest with the motors off (60 s) and on the armed floor stand, the joints on the armed stand, still 1 s blocks only. In-motion excess: along the firmware's in-place trot replayed open loop in both actuator models, each channel at 20 ms split by a Hann-windowed spectrum into the gait's harmonics (+-0.25 Hz around k x 2.78 Hz, k = 1..9) and the rest; the excess is sqrt(max(0, off_robot^2 - off_sim^2)) on the rest, the larger of the two models; cross-checked against a closed-loop walk at 0.10 m/s (where the two estimates differ by more than x2, the larger). Each element's excess is capped so that the noise cannot make the simulated observation wider than the robot's on that walk. The harmonic excess (body motion that differs on the robot) is not injected.",
  "sensor_floor_sd": [
   0.005031,
   0.004267,
@@ -168,7 +168,8 @@
   0.0,
   0.0
  ],
- "validation_stock_v3_s4_walk": {
+ "imu_mount": "swap_xy",
+ "validation_walk": {
   "real_sd": [
    0.6886600255966187,
    0.6492199897766113,
@@ -233,7 +234,7 @@
    3.4327099323272705,
    4.39939022064209
   ],
-  "sim_with_n2_sd": [
+  "sim_with_noise_sd": [
    0.73277,
    0.66292,
    0.23243,
@@ -265,6 +266,5 @@
    3.43347,
    4.39952
   ]
- },
- "imu_mount": "swap_xy"
+ }
 }

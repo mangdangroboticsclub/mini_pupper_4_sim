@@ -1,0 +1,12 @@
+{
+ "robot": "sku1",
+ "total_kg": 0.4134,
+ "module_kg": 0.06682,
+ "leg_kg": 0.0065,
+ "front_pair_kg": 0.183019,
+ "rear_pair_kg": 0.230381,
+ "base_com_x_m": -0.0116143,
+ "base_com_y_m": 0.0060266,
+ "base_com_dz_m": -0.0170817,
+ "source": "weighed (battery, foot caps and display in, lidar off, the robot holding its stand): total 413.4 g; level on scales front/rear 185.1/233.0 g (left/right 210.8/195.6 g); rear raised on a 43.5 mm block front/rear 311.1/101.1 g. The whole robot's centre of mass from these (base frame, at the contract's stand, the feet's contact points from robot/assets/sku_1/pupper.xml with the 5.5 mm foot sphere): x -4.30 mm, y +1.74 mm, z -6.92 mm (65.93 mm above the floor). A servo module 66.82 g and a leg's thigh and calf 6.5 g as on the SKU2; the base's centre of mass (base_com_*) solved so that the model at the contract's stand has the measured whole-robot centre of mass. The lidar with its mount weighs 47.2 g (not included)."
+}

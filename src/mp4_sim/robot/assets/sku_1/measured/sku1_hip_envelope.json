@@ -1,0 +1,2934 @@
+{
+ "about": "The get-up decoder's hip envelope, from hand traces with the servos limp (each leg's own and its partner's mirrored): per leg the hip joint's bounds (model rad) as a piecewise-linear function of the abduction joint (model rad), one 2-deg abduction column per row inside the robust abduction range, each column written at both edges of its cell (piecewise constant). A side is open (+-10 = not limited: the track clamp acts) where the thigh's run from the stand reached its potentiometer's track end (within 4 deg), and always at straight abduction; elsewhere it is capped at the traced stop less 3 deg. Then a cap at every thigh stop marked by hand (the leg's own, and the partner's mirrored unless the leg's own trace went past it), and a repair where the clamp jumped more than 5 deg between columns. 'report' lists, per leg and side, the free interval, the columns that stopped short of the track end, and the decision for each column.",
+ "frame": "model joints: *_hip (abduction) -> *_thigh (hip), rad absolute",
+ "options": {
+  "bin_deg": 2.0,
+  "margin_deg": 3.0,
+  "gap_thigh_deg": 10.0,
+  "gap_abd_deg": 10.0,
+  "min_bin": 2,
+  "rule": "free_interval",
+  "track_tol_deg": 4.0,
+  "run_gap_deg": 10.0,
+  "min_slice": 200,
+  "robust_min_samples": 50
+ },
+ "envelope": {
+  "FR": {
+   "abd": [
+    -0.3839549821462325,
+    -0.34908330369138585,
+    -0.34904839710634594,
+    -0.31417671865149926,
+    -0.31414181206645936,
+    -0.2792701336116127,
+    -0.2792352270265728,
+    -0.24436354857172607,
+    -0.2443286419866862,
+    -0.20945696353183949,
+    -0.2094220569467996,
+    -0.1745503784919529,
+    -0.17451547190691302,
+    -0.1396437934520663,
+    -0.1396088868670264,
+    -0.10473720841217972,
+    -0.10470230182713983,
+    -0.06983062337229314,
+    -0.06979571678725324,
+    -0.03492403833240653,
+    -0.03488913174736665,
+    -1.745329251994331e-05,
+    1.745329251994331e-05,
+    0.03488913174736665,
+    0.03492403833240653,
+    0.06979571678725324,
+    0.06983062337229314,
+    0.10470230182713983,
+    0.10473720841217972,
+    0.1396088868670264,
+    0.1396437934520663,
+    0.17451547190691302,
+    0.1745503784919529,
+    0.2094220569467996,
+    0.20945696353183949,
+    0.2443286419866862,
+    0.24436354857172607,
+    0.2792352270265728,
+    0.2792701336116127,
+    0.31414181206645936,
+    0.31417671865149926,
+    0.34904839710634594,
+    0.34908330369138585,
+    0.3839549821462325,
+    0.3839898887312725,
+    0.4188615671861191,
+    0.4188964737711591,
+    0.4537681522260057,
+    0.45380305881104566,
+    0.48867473726589233
+   ],
+   "lo": [
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0
+   ],
+   "hi": [
+    0.6251734474058649,
+    0.6251734474058649,
+    0.6391360814218195,
+    0.6391360814218195,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    0.9236247494968953,
+    0.9236247494968953,
+    0.9742392978047308,
+    0.9742392978047308
+   ]
+  },
+  "FL": {
+   "abd": [
+    -0.48867473726589233,
+    -0.45380305881104566,
+    -0.4537681522260057,
+    -0.4188964737711591,
+    -0.4188615671861191,
+    -0.3839898887312725,
+    -0.3839549821462325,
+    -0.34908330369138585,
+    -0.34904839710634594,
+    -0.31417671865149926,
+    -0.31414181206645936,
+    -0.2792701336116127,
+    -0.2792352270265728,
+    -0.24436354857172607,
+    -0.2443286419866862,
+    -0.20945696353183949,
+    -0.2094220569467996,
+    -0.1745503784919529,
+    -0.17451547190691302,
+    -0.1396437934520663,
+    -0.1396088868670264,
+    -0.10473720841217972,
+    -0.10470230182713983,
+    -0.06983062337229314,
+    -0.06979571678725324,
+    -0.03492403833240653,
+    -0.03488913174736665,
+    -1.745329251994331e-05,
+    1.745329251994331e-05,
+    0.03488913174736665,
+    0.03492403833240653,
+    0.06979571678725324,
+    0.06983062337229314,
+    0.10470230182713983,
+    0.10473720841217972,
+    0.1396088868670264,
+    0.1396437934520663,
+    0.17451547190691302,
+    0.1745503784919529,
+    0.2094220569467996,
+    0.20945696353183949,
+    0.2443286419866862,
+    0.24436354857172607,
+    0.2792352270265728,
+    0.2792701336116127,
+    0.31414181206645936,
+    0.31417671865149926,
+    0.34904839710634594,
+    0.34908330369138585,
+    0.3839549821462325
+   ],
+   "lo": [
+    -0.9742392978047308,
+    -0.9742392978047308,
+    -0.9236247494968953,
+    -0.9236247494968953,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -0.6827693127216778,
+    -0.6827693127216778,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -0.6914959589816495,
+    -0.6914959589816495,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -0.7124399100055814,
+    -0.7124399100055814,
+    -0.7019679344936154,
+    -0.7019679344936154,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -0.6391360814218195,
+    -0.6391360814218195,
+    -0.5536149480740974,
+    -0.5536149480740974
+   ],
+   "hi": [
+    2.3383956224805065,
+    2.3383956224805065,
+    2.3383956224805065,
+    2.3383956224805065,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0
+   ]
+  },
+  "RR": {
+   "abd": [
+    -0.5235813223057789,
+    -0.48870964385093224,
+    -0.48867473726589233,
+    -0.45380305881104566,
+    -0.4537681522260057,
+    -0.4188964737711591,
+    -0.4188615671861191,
+    -0.3839898887312725,
+    -0.3839549821462325,
+    -0.34908330369138585,
+    -0.34904839710634594,
+    -0.31417671865149926,
+    -0.31414181206645936,
+    -0.2792701336116127,
+    -0.2792352270265728,
+    -0.24436354857172607,
+    -0.2443286419866862,
+    -0.20945696353183949,
+    -0.2094220569467996,
+    -0.1745503784919529,
+    -0.17451547190691302,
+    -0.1396437934520663,
+    -0.1396088868670264,
+    -0.10473720841217972,
+    -0.10470230182713983,
+    -0.06983062337229314,
+    -0.06979571678725324,
+    -0.03492403833240653,
+    -0.03488913174736665,
+    -1.745329251994331e-05,
+    1.745329251994331e-05,
+    0.03488913174736665,
+    0.03492403833240653,
+    0.06979571678725324,
+    0.06983062337229314,
+    0.10470230182713983,
+    0.10473720841217972,
+    0.1396088868670264,
+    0.1396437934520663,
+    0.17451547190691302,
+    0.1745503784919529,
+    0.2094220569467996,
+    0.20945696353183949,
+    0.2443286419866862,
+    0.24436354857172607,
+    0.2792352270265728,
+    0.2792701336116127,
+    0.31414181206645936,
+    0.31417671865149926,
+    0.34904839710634594,
+    0.34908330369138585,
+    0.3839549821462325,
+    0.3839898887312725,
+    0.4188615671861191
+   ],
+   "lo": [
+    -2.35584891500045,
+    -2.35584891500045,
+    -2.35584891500045,
+    -2.35584891500045,
+    -2.35584891500045,
+    -2.35584891500045,
+    -2.4082087925602798,
+    -2.4082087925602798,
+    -2.409954121812274,
+    -2.409954121812274,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -1.9160259434978788,
+    -1.9160259434978788,
+    -10.0,
+    -10.0,
+    -1.926497919009845,
+    -1.926497919009845,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -1.9439512115297881,
+    -1.9439512115297881,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -1.9579138455457428,
+    -1.9579138455457428,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -1.938715223773805,
+    -1.938715223773805
+   ],
+   "hi": [
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0
+   ]
+  },
+  "RL": {
+   "abd": [
+    -0.4188615671861191,
+    -0.3839898887312725,
+    -0.3839549821462325,
+    -0.34908330369138585,
+    -0.34904839710634594,
+    -0.31417671865149926,
+    -0.31414181206645936,
+    -0.2792701336116127,
+    -0.2792352270265728,
+    -0.24436354857172607,
+    -0.2443286419866862,
+    -0.20945696353183949,
+    -0.2094220569467996,
+    -0.1745503784919529,
+    -0.17451547190691302,
+    -0.1396437934520663,
+    -0.1396088868670264,
+    -0.10473720841217972,
+    -0.10470230182713983,
+    -0.06983062337229314,
+    -0.06979571678725324,
+    -0.03492403833240653,
+    -0.03488913174736665,
+    -1.745329251994331e-05,
+    1.745329251994331e-05,
+    0.03488913174736665,
+    0.03492403833240653,
+    0.06979571678725324,
+    0.06983062337229314,
+    0.10470230182713983,
+    0.10473720841217972,
+    0.1396088868670264,
+    0.1396437934520663,
+    0.17451547190691302,
+    0.1745503784919529,
+    0.2094220569467996,
+    0.20945696353183949,
+    0.2443286419866862,
+    0.24436354857172607,
+    0.2792352270265728,
+    0.2792701336116127,
+    0.31414181206645936,
+    0.31417671865149926,
+    0.34904839710634594,
+    0.34908330369138585,
+    0.3839549821462325,
+    0.3839898887312725,
+    0.4188615671861191,
+    0.4188964737711591,
+    0.4537681522260057,
+    0.45380305881104566,
+    0.48867473726589233,
+    0.48870964385093224,
+    0.5235813223057789
+   ],
+   "lo": [
+    -2.30418018782441,
+    -2.30418018782441,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0,
+    -10.0
+   ],
+   "hi": [
+    1.938715223773805,
+    1.938715223773805,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    1.9579138455457428,
+    1.9579138455457428,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    1.9299885775138335,
+    1.9299885775138335,
+    1.9439512115297881,
+    1.9439512115297881,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    1.926497919009845,
+    1.926497919009845,
+    10.0,
+    10.0,
+    1.9160259434978788,
+    1.9160259434978788,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    2.457078011616121,
+    2.457078011616121,
+    10.0,
+    10.0,
+    2.4082087925602798,
+    2.4082087925602798,
+    2.35584891500045,
+    2.35584891500045,
+    2.35584891500045,
+    2.35584891500045,
+    1.8776286999540037,
+    1.8776286999540037
+   ]
+  }
+ },
+ "report": {
+  "FR": {
+   "interval": {
+    "lo": {
+     "abd": [
+      -21.0,
+      25.0
+     ],
+     "reaching_columns": [
+      -21.0,
+      -19.0,
+      -17.0,
+      -15.0,
+      -13.0,
+      -11.0,
+      -5.0,
+      -3.0,
+      -1.0,
+      1.0,
+      3.0,
+      5.0,
+      7.0,
+      9.0,
+      11.0,
+      13.0,
+      15.0,
+      17.0,
+      19.0,
+      21.0,
+      23.0,
+      25.0
+     ]
+    },
+    "hi": {
+     "abd": [
+      -21.0,
+      27.0
+     ],
+     "reaching_columns": [
+      -21.0,
+      -19.0,
+      -17.0,
+      -15.0,
+      -13.0,
+      -11.0,
+      -9.0,
+      -7.0,
+      -5.0,
+      -3.0,
+      -1.0,
+      1.0,
+      3.0,
+      5.0,
+      7.0,
+      9.0,
+      11.0,
+      13.0,
+      15.0,
+      17.0,
+      19.0,
+      21.0,
+      23.0,
+      25.0,
+      27.0
+     ]
+    }
+   },
+   "short_columns": [
+    {
+     "abd": -9.0,
+     "side": "lo",
+     "samples": 7970,
+     "reached_deg": -144.5,
+     "short_of_cut_deg": 6.7,
+     "kt_near_extreme": [
+      -1.7,
+      6.5
+     ],
+     "near_extreme_passes": 2
+    },
+    {
+     "abd": -7.0,
+     "side": "lo",
+     "samples": 5959,
+     "reached_deg": -146.5,
+     "short_of_cut_deg": 4.7,
+     "kt_near_extreme": [
+      -0.5,
+      8.3
+     ],
+     "near_extreme_passes": 1
+    }
+   ],
+   "unconfirmed_caps": [],
+   "decisions": {
+    "-21": {
+     "lo": [
+      "capped",
+      -25.3,
+      "stop marker (FR pass 1, mark 3) extreme -28.3 (the fit: open)",
+      "marker (own)"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-19": {
+     "lo": [
+      "capped",
+      -26.1,
+      "stop marker (FR pass 1, mark 5) extreme -29.1 (the fit: open)",
+      "marker (own)"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-17": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-15": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-13": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-11": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-9": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 7 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-7": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 5 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-5": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-3": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-1": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+1": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+3": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+5": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+7": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+9": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+11": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+13": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+15": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+17": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+19": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+21": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+23": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+25": {
+     "lo": [
+      "capped",
+      -42.4,
+      "stop marker (FR pass 1, mark 11) extreme -45.4 (the fit: open)",
+      "marker (own)"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+27": {
+     "lo": [
+      "capped",
+      -45.3,
+      "stop marker (FR pass 3, mark 3) extreme -48.3 (the fit's -45.5 looser)",
+      "marker (own)"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    }
+   }
+  },
+  "FL": {
+   "interval": {
+    "lo": {
+     "abd": [
+      -21.0,
+      25.0
+     ],
+     "reaching_columns": [
+      -21.0,
+      -19.0,
+      -17.0,
+      -15.0,
+      -13.0,
+      -11.0,
+      -9.0,
+      -7.0,
+      -5.0,
+      -3.0,
+      -1.0,
+      1.0,
+      3.0,
+      5.0,
+      7.0,
+      9.0,
+      11.0,
+      13.0,
+      15.0,
+      17.0,
+      19.0,
+      21.0,
+      23.0,
+      25.0
+     ]
+    },
+    "hi": {
+     "abd": [
+      -21.0,
+      23.0
+     ],
+     "reaching_columns": [
+      -21.0,
+      -19.0,
+      -17.0,
+      -15.0,
+      -13.0,
+      -11.0,
+      -9.0,
+      -7.0,
+      -5.0,
+      -3.0,
+      -1.0,
+      1.0,
+      3.0,
+      5.0,
+      7.0,
+      9.0,
+      11.0,
+      13.0,
+      15.0,
+      17.0,
+      19.0,
+      21.0,
+      23.0
+     ]
+    }
+   },
+   "short_columns": [],
+   "unconfirmed_caps": [
+    {
+     "abd": 25.0,
+     "side": "hi",
+     "samples": 24269,
+     "reached_deg": 147.5,
+     "cap_deg": 144.5,
+     "near_extreme_passes": 1,
+     "kt_near_extreme": [
+      -89.6,
+      -82.7
+     ]
+    },
+    {
+     "abd": 27.0,
+     "side": "lo",
+     "samples": 6787,
+     "reached_deg": -48.5,
+     "cap_deg": -45.5,
+     "near_extreme_passes": 0,
+     "kt_near_extreme": [
+      -79.8,
+      38.4
+     ]
+    },
+    {
+     "abd": 27.0,
+     "side": "hi",
+     "samples": 6787,
+     "reached_deg": 147.5,
+     "cap_deg": 144.5,
+     "near_extreme_passes": 0,
+     "kt_near_extreme": null
+    }
+   ],
+   "decisions": {
+    "-21": {
+     "lo": [
+      "capped",
+      -21.2,
+      "stop marker (FL pass 1, mark 5) extreme -24.2 (the fit: open)",
+      "marker (own)"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-19": {
+     "lo": [
+      "capped",
+      -26.1,
+      "stop marker (FR pass 1, mark 5) mirrored from FR extreme -29.1 (the fit: open)",
+      "marker (mirrored)"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-17": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-15": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-13": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-11": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-9": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-7": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-5": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-3": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-1": {
+     "lo": [
+      "capped",
+      -29.7,
+      "stop marker (FL pass 3, mark 1) extreme -32.7 (the fit: open)",
+      "marker (own)"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+1": {
+     "lo": [
+      "capped",
+      -30.3,
+      "stop marker (FL pass 1, mark 4) extreme -33.3 (the fit: open)",
+      "marker (own)"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+3": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+5": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+7": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+9": {
+     "lo": [
+      "capped",
+      -29.1,
+      "stop marker (FL pass 3, mark 3) extreme -32.1 (the fit: open)",
+      "marker (own)"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+11": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+13": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+15": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+17": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+19": {
+     "lo": [
+      "capped",
+      -28.6,
+      "stop marker (FL pass 3, mark 6) extreme -31.6 (the fit: open)",
+      "marker (own)"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+21": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+23": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+25": {
+     "lo": [
+      "capped",
+      -42.4,
+      "stop marker (FR pass 1, mark 11) mirrored from FR extreme -45.4 (the fit: open)",
+      "marker (mirrored)"
+     ],
+     "hi": [
+      "capped",
+      144.5,
+      "traced edge +147.5 (own; unconfirmed, 1 own pass(es) near it)",
+      "traced edge (own)"
+     ]
+    },
+    "+27": {
+     "lo": [
+      "capped",
+      -45.3,
+      "stop marker (FR pass 3, mark 3) mirrored from FR extreme -48.3 (the fit's -45.5 looser)",
+      "marker (mirrored)"
+     ],
+     "hi": [
+      "capped",
+      144.5,
+      "traced edge +147.5 (mirrored; own reached -2.7; AT THE SOURCE'S TRACK END: no contact; unconfirmed, 0 own pass(es) near it)",
+      "traced edge (mirrored)"
+     ]
+    }
+   }
+  },
+  "RR": {
+   "interval": {
+    "lo": {
+     "abd": [
+      -23.0,
+      29.0
+     ],
+     "reaching_columns": [
+      -23.0,
+      -21.0,
+      -17.0,
+      -13.0,
+      -11.0,
+      -9.0,
+      -7.0,
+      -3.0,
+      -1.0,
+      1.0,
+      3.0,
+      7.0,
+      9.0,
+      11.0,
+      13.0,
+      15.0,
+      19.0,
+      21.0,
+      27.0,
+      29.0
+     ]
+    },
+    "hi": {
+     "abd": [
+      -23.0,
+      21.0
+     ],
+     "reaching_columns": [
+      -23.0,
+      -21.0,
+      -13.0,
+      -11.0,
+      -9.0,
+      -1.0,
+      1.0,
+      3.0,
+      7.0,
+      9.0,
+      11.0,
+      13.0,
+      15.0,
+      19.0,
+      21.0
+     ]
+    }
+   },
+   "short_columns": [
+    {
+     "abd": -19.0,
+     "side": "lo",
+     "samples": 291,
+     "reached_deg": -39.5,
+     "short_of_cut_deg": 89.0,
+     "kt_near_extreme": [
+      -45.6,
+      -45.5
+     ],
+     "near_extreme_passes": 2
+    },
+    {
+     "abd": -19.0,
+     "side": "hi",
+     "samples": 291,
+     "reached_deg": 110.5,
+     "short_of_cut_deg": 61.0,
+     "kt_near_extreme": [
+      -99.9,
+      -98.0
+     ],
+     "near_extreme_passes": 1
+    },
+    {
+     "abd": -17.0,
+     "side": "hi",
+     "samples": 3264,
+     "reached_deg": 102.5,
+     "short_of_cut_deg": 69.0,
+     "kt_near_extreme": [
+      -99.8,
+      -98.3
+     ],
+     "near_extreme_passes": 1
+    },
+    {
+     "abd": -15.0,
+     "side": "lo",
+     "samples": 1948,
+     "reached_deg": -88.5,
+     "short_of_cut_deg": 40.0,
+     "kt_near_extreme": [
+      24.8,
+      29.1
+     ],
+     "near_extreme_passes": 1
+    },
+    {
+     "abd": -15.0,
+     "side": "hi",
+     "samples": 1948,
+     "reached_deg": 80.5,
+     "short_of_cut_deg": 91.0,
+     "kt_near_extreme": [
+      -103.0,
+      -102.1
+     ],
+     "near_extreme_passes": 1
+    },
+    {
+     "abd": -7.0,
+     "side": "hi",
+     "samples": 3142,
+     "reached_deg": 167.5,
+     "short_of_cut_deg": 4.0,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -5.0,
+     "side": "lo",
+     "samples": 2927,
+     "reached_deg": -112.5,
+     "short_of_cut_deg": 16.0,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 1
+    },
+    {
+     "abd": -5.0,
+     "side": "hi",
+     "samples": 2927,
+     "reached_deg": 165.5,
+     "short_of_cut_deg": 6.0,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -3.0,
+     "side": "hi",
+     "samples": 9263,
+     "reached_deg": 167.5,
+     "short_of_cut_deg": 4.0,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": 5.0,
+     "side": "lo",
+     "samples": 6990,
+     "reached_deg": -113.5,
+     "short_of_cut_deg": 15.0,
+     "kt_near_extreme": [
+      25.5,
+      26.6
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": 5.0,
+     "side": "hi",
+     "samples": 6990,
+     "reached_deg": 157.5,
+     "short_of_cut_deg": 14.0,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": 17.0,
+     "side": "lo",
+     "samples": 2082,
+     "reached_deg": -124.5,
+     "short_of_cut_deg": 4.0,
+     "kt_near_extreme": [
+      -2.3,
+      -2.2
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": 17.0,
+     "side": "hi",
+     "samples": 2082,
+     "reached_deg": 167.5,
+     "short_of_cut_deg": 4.0,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": 23.0,
+     "side": "lo",
+     "samples": 2419,
+     "reached_deg": -103.5,
+     "short_of_cut_deg": 25.0,
+     "kt_near_extreme": [
+      5.4,
+      6.3
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": 25.0,
+     "side": "lo",
+     "samples": 652,
+     "reached_deg": -87.5,
+     "short_of_cut_deg": 41.0,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 2
+    }
+   ],
+   "unconfirmed_caps": [
+    {
+     "abd": 23.0,
+     "side": "hi",
+     "samples": 2419,
+     "reached_deg": 151.5,
+     "cap_deg": 148.5,
+     "near_extreme_passes": 1,
+     "kt_near_extreme": [
+      -26.9,
+      -22.4
+     ]
+    },
+    {
+     "abd": 25.0,
+     "side": "hi",
+     "samples": 652,
+     "reached_deg": 148.5,
+     "cap_deg": 145.5,
+     "near_extreme_passes": 1,
+     "kt_near_extreme": [
+      -21.6,
+      -17.8
+     ]
+    },
+    {
+     "abd": 27.0,
+     "side": "hi",
+     "samples": 4467,
+     "reached_deg": 148.5,
+     "cap_deg": 145.5,
+     "near_extreme_passes": 1,
+     "kt_near_extreme": [
+      -17.1,
+      -4.7
+     ]
+    }
+   ],
+   "decisions": {
+    "-23": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      121.6,
+      "stop marker (RR pass 1, mark 10) extreme +124.6 (the fit: open)",
+      "marker (own)"
+     ]
+    },
+    "-21": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-19": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 89 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 61 deg short)",
+      "interval"
+     ]
+    },
+    "-17": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 69 deg short)",
+      "interval"
+     ]
+    },
+    "-15": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 40 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 91 deg short)",
+      "interval"
+     ]
+    },
+    "-13": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      122.7,
+      "stop marker (RR pass 2, mark 4) extreme +125.7 (the fit: open)",
+      "marker (own)"
+     ]
+    },
+    "-11": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-9": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-7": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 4 deg short)",
+      "interval"
+     ]
+    },
+    "-5": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 16 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 6 deg short)",
+      "interval"
+     ]
+    },
+    "-3": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 4 deg short)",
+      "interval"
+     ]
+    },
+    "-1": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+1": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+3": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      121.9,
+      "stop marker (RR pass 3, mark 1) extreme +124.9 (the fit: open)",
+      "marker (own)"
+     ]
+    },
+    "+5": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 15 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 14 deg short)",
+      "interval"
+     ]
+    },
+    "+7": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+9": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      120.9,
+      "stop marker (RR pass 1, mark 3) extreme +123.9 (the fit: open)",
+      "marker (own)"
+     ]
+    },
+    "+11": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+13": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      120.3,
+      "stop marker (RR pass 2, mark 2) extreme +123.3 (the fit: open)",
+      "marker (own)"
+     ]
+    },
+    "+15": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+17": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 4 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 4 deg short)",
+      "interval"
+     ]
+    },
+    "+19": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+21": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      148.6,
+      "stop marker (RR pass 1, mark 18) extreme +151.6 (the fit: open)",
+      "marker (own)"
+     ]
+    },
+    "+23": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 25 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      148.5,
+      "traced edge +151.5 (own; unconfirmed, 1 own pass(es) near it)",
+      "traced edge (own)"
+     ]
+    },
+    "+25": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 41 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      145.5,
+      "traced edge +148.5 (own; unconfirmed, 1 own pass(es) near it)",
+      "traced edge (own)"
+     ]
+    },
+    "+27": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      145.5,
+      "traced edge +148.5 (own; unconfirmed, 1 own pass(es) near it)",
+      "traced edge (own)"
+     ]
+    },
+    "+29": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      145.5,
+      "traced edge +148.5 (own; confirmed, 4 own pass(es) near it)",
+      "traced edge (own)"
+     ]
+    }
+   }
+  },
+  "RL": {
+   "interval": {
+    "lo": {
+     "abd": [
+      -21.0,
+      29.0
+     ],
+     "reaching_columns": [
+      -21.0,
+      -7.0,
+      -1.0,
+      1.0,
+      7.0,
+      9.0,
+      11.0,
+      13.0,
+      15.0,
+      17.0,
+      19.0,
+      21.0,
+      27.0,
+      29.0
+     ]
+    },
+    "hi": {
+     "abd": [
+      -23.0,
+      21.0
+     ],
+     "reaching_columns": [
+      -23.0,
+      -7.0,
+      -5.0,
+      -3.0,
+      -1.0,
+      1.0,
+      7.0,
+      9.0,
+      11.0,
+      13.0,
+      15.0,
+      17.0,
+      19.0,
+      21.0
+     ]
+    }
+   },
+   "short_columns": [
+    {
+     "abd": -21.0,
+     "side": "hi",
+     "samples": 8372,
+     "reached_deg": 167.5,
+     "short_of_cut_deg": 3.6,
+     "kt_near_extreme": [
+      -86.9,
+      -85.8
+     ],
+     "near_extreme_passes": 1
+    },
+    {
+     "abd": -19.0,
+     "side": "lo",
+     "samples": 291,
+     "reached_deg": -39.5,
+     "short_of_cut_deg": 89.4,
+     "kt_near_extreme": [
+      -45.6,
+      -45.5
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -19.0,
+     "side": "hi",
+     "samples": 291,
+     "reached_deg": 110.5,
+     "short_of_cut_deg": 60.6,
+     "kt_near_extreme": [
+      -99.9,
+      -98.0
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -17.0,
+     "side": "lo",
+     "samples": 3057,
+     "reached_deg": -124.5,
+     "short_of_cut_deg": 4.4,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -17.0,
+     "side": "hi",
+     "samples": 3057,
+     "reached_deg": 102.5,
+     "short_of_cut_deg": 68.6,
+     "kt_near_extreme": [
+      -99.8,
+      -98.3
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -15.0,
+     "side": "lo",
+     "samples": 1948,
+     "reached_deg": -88.5,
+     "short_of_cut_deg": 40.4,
+     "kt_near_extreme": [
+      24.8,
+      29.1
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -15.0,
+     "side": "hi",
+     "samples": 1948,
+     "reached_deg": 80.5,
+     "short_of_cut_deg": 90.6,
+     "kt_near_extreme": [
+      -103.0,
+      -102.1
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -13.0,
+     "side": "lo",
+     "samples": 6735,
+     "reached_deg": -124.5,
+     "short_of_cut_deg": 4.4,
+     "kt_near_extreme": [
+      -4.3,
+      27.5
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -13.0,
+     "side": "hi",
+     "samples": 6735,
+     "reached_deg": 167.5,
+     "short_of_cut_deg": 3.6,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -11.0,
+     "side": "lo",
+     "samples": 1935,
+     "reached_deg": -102.5,
+     "short_of_cut_deg": 26.4,
+     "kt_near_extreme": [
+      -41.1,
+      -14.8
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -11.0,
+     "side": "hi",
+     "samples": 1935,
+     "reached_deg": 166.5,
+     "short_of_cut_deg": 4.6,
+     "kt_near_extreme": [
+      -95.2,
+      -77.6
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -9.0,
+     "side": "lo",
+     "samples": 1858,
+     "reached_deg": -70.5,
+     "short_of_cut_deg": 58.4,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -9.0,
+     "side": "hi",
+     "samples": 1858,
+     "reached_deg": 166.5,
+     "short_of_cut_deg": 4.6,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -5.0,
+     "side": "lo",
+     "samples": 3055,
+     "reached_deg": -112.5,
+     "short_of_cut_deg": 16.4,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": -3.0,
+     "side": "lo",
+     "samples": 9345,
+     "reached_deg": -124.5,
+     "short_of_cut_deg": 4.4,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": 3.0,
+     "side": "lo",
+     "samples": 12119,
+     "reached_deg": -124.5,
+     "short_of_cut_deg": 4.4,
+     "kt_near_extreme": [
+      27.2,
+      27.6
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": 3.0,
+     "side": "hi",
+     "samples": 12119,
+     "reached_deg": 167.5,
+     "short_of_cut_deg": 3.6,
+     "kt_near_extreme": [
+      -86.9,
+      -85.8
+     ],
+     "near_extreme_passes": 0
+    },
+    {
+     "abd": 5.0,
+     "side": "lo",
+     "samples": 6995,
+     "reached_deg": -113.5,
+     "short_of_cut_deg": 15.4,
+     "kt_near_extreme": [
+      25.5,
+      26.6
+     ],
+     "near_extreme_passes": 1
+    },
+    {
+     "abd": 5.0,
+     "side": "hi",
+     "samples": 6995,
+     "reached_deg": 157.5,
+     "short_of_cut_deg": 13.6,
+     "kt_near_extreme": [
+      40.2,
+      41.9
+     ],
+     "near_extreme_passes": 1
+    },
+    {
+     "abd": 23.0,
+     "side": "lo",
+     "samples": 795,
+     "reached_deg": -103.5,
+     "short_of_cut_deg": 25.4,
+     "kt_near_extreme": [
+      5.4,
+      6.3
+     ],
+     "near_extreme_passes": 1
+    },
+    {
+     "abd": 25.0,
+     "side": "lo",
+     "samples": 678,
+     "reached_deg": -87.5,
+     "short_of_cut_deg": 41.4,
+     "kt_near_extreme": null,
+     "near_extreme_passes": 0
+    }
+   ],
+   "unconfirmed_caps": [
+    {
+     "abd": -23.0,
+     "side": "lo",
+     "samples": 23454,
+     "reached_deg": -124.5,
+     "cap_deg": -121.5,
+     "near_extreme_passes": 0,
+     "kt_near_extreme": [
+      -11.0,
+      28.8
+     ]
+    },
+    {
+     "abd": 23.0,
+     "side": "hi",
+     "samples": 795,
+     "reached_deg": 151.5,
+     "cap_deg": 148.5,
+     "near_extreme_passes": 0,
+     "kt_near_extreme": [
+      -26.9,
+      -22.4
+     ]
+    },
+    {
+     "abd": 25.0,
+     "side": "hi",
+     "samples": 678,
+     "reached_deg": 148.5,
+     "cap_deg": 145.5,
+     "near_extreme_passes": 0,
+     "kt_near_extreme": [
+      -21.6,
+      -17.8
+     ]
+    },
+    {
+     "abd": 27.0,
+     "side": "hi",
+     "samples": 4997,
+     "reached_deg": 148.5,
+     "cap_deg": 145.5,
+     "near_extreme_passes": 0,
+     "kt_near_extreme": [
+      -17.1,
+      -16.4
+     ]
+    },
+    {
+     "abd": 29.0,
+     "side": "hi",
+     "samples": 25751,
+     "reached_deg": 148.5,
+     "cap_deg": 145.5,
+     "near_extreme_passes": 0,
+     "kt_near_extreme": [
+      -88.8,
+      -15.0
+     ]
+    }
+   ],
+   "decisions": {
+    "-23": {
+     "lo": [
+      "capped",
+      -121.5,
+      "traced edge -124.5 (mirrored; own reached -82.1; AT THE SOURCE'S TRACK END: no contact; unconfirmed, 0 own pass(es) near it)",
+      "traced edge (mirrored)"
+     ],
+     "hi": [
+      "capped",
+      121.6,
+      "stop marker (RR pass 1, mark 10) mirrored from RR extreme +124.6 (the fit: open)",
+      "marker (mirrored)"
+     ]
+    },
+    "-21": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 4 deg short)",
+      "interval"
+     ]
+    },
+    "-19": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 89 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 61 deg short)",
+      "interval"
+     ]
+    },
+    "-17": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 4 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 69 deg short)",
+      "interval"
+     ]
+    },
+    "-15": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 40 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 91 deg short)",
+      "interval"
+     ]
+    },
+    "-13": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 4 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      122.7,
+      "stop marker (RR pass 2, mark 4) mirrored from RR extreme +125.7 (the fit: open)",
+      "marker (mirrored)"
+     ]
+    },
+    "-11": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 26 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 5 deg short)",
+      "interval"
+     ]
+    },
+    "-9": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 58 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 5 deg short)",
+      "interval"
+     ]
+    },
+    "-7": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-5": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 16 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-3": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 4 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "-1": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+1": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      121.1,
+      "stop marker (RL pass 3, mark 1) extreme +124.1 (the fit: open)",
+      "marker (own)"
+     ]
+    },
+    "+3": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 4 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      121.9,
+      "stop marker (RR pass 3, mark 1) mirrored from RR extreme +124.9 (the fit: open)",
+      "marker (mirrored)"
+     ]
+    },
+    "+5": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 15 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 14 deg short)",
+      "interval"
+     ]
+    },
+    "+7": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+9": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      120.9,
+      "stop marker (RL pass 3, mark 4) extreme +123.9 (the fit: open)",
+      "marker (own)"
+     ]
+    },
+    "+11": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+13": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      120.3,
+      "stop marker (RR pass 2, mark 2) mirrored from RR extreme +123.3 (the fit: open)",
+      "marker (mirrored)"
+     ]
+    },
+    "+15": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+17": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+19": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      151.3,
+      "stop marker (RR pass 3, mark 3) mirrored from RR extreme +154.3 (the fit: open)",
+      "marker (mirrored)"
+     ]
+    },
+    "+21": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ]
+    },
+    "+23": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 25 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      148.5,
+      "traced edge +151.5 (mirrored; own reached 121.0; unconfirmed, 0 own pass(es) near it)",
+      "traced edge (mirrored)"
+     ]
+    },
+    "+25": {
+     "lo": [
+      "open",
+      null,
+      "open: inside the free interval (run stopped 41 deg short)",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      145.5,
+      "traced edge +148.5 (mirrored; own reached 121.0; unconfirmed, 0 own pass(es) near it)",
+      "traced edge (mirrored)"
+     ]
+    },
+    "+27": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      145.5,
+      "traced edge +148.5 (mirrored; own reached 121.1; unconfirmed, 0 own pass(es) near it)",
+      "traced edge (mirrored)"
+     ]
+    },
+    "+29": {
+     "lo": [
+      "open",
+      null,
+      "open: the leg's own run reached the cut",
+      "interval"
+     ],
+     "hi": [
+      "capped",
+      118.1,
+      "stop marker (RL pass 1, mark 8) extreme +121.1 (the fit's +145.5 looser)",
+      "marker (own)"
+     ]
+    }
+   }
+  }
+ }
+}
