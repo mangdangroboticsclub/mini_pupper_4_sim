@@ -1,13 +1,13 @@
-"""Robot models for each SKU.
+"""Robot models.
 
-- ``sku``         SKU registry and where each SKU's files live
-- ``sku2``        SKU2 as an mjlab entity: ``pupper.xml`` with the weighed masses and IMU sensors applied
+- ``model``       a robot (``mp4_sim.robots``) as a MuJoCo spec or an mjlab entity: ``pupper.xml`` with the weighed
+                  masses, the calibrated stand, IMU sensors, feet and optional joint limits
+- ``sku``         the model folders by SKU name, for the tools below
 - ``kinematics``  firmware leg kinematics and joint order
 - ``mapping``     servo angles <-> model joint angles (``servo_map.json``)
 - ``rig``         actuator addressing for the viewer scene (robot + ghost)
 
-Model files live in ``assets/<sku>/``: the MJCF (``pupper.xml``), the viewer
-scene, the meshes, the URDF, and the servo map. SKU2 also carries the policy
-contract data, the weighed masses, the IMU mount, and the observation noise
-profiles. See ``assets/README.md``.
+Model files live in ``assets/<sku>/``: the MJCF (``pupper.xml``), the viewer scene, the meshes (``parts/``), the URDF
+and its meshes, the servo map, and ``measured/``: the calibration, masses, joint limits, IMU mount and sensor noise
+measured on the robot. See ``assets/README.md``.
 """

@@ -18,7 +18,7 @@ The command latency is applied here too: each role's fitted ``command_delay`` (`
 Usage::
 
     models = load_models(fits.T5UB06)
-    spec = sku2.get_spec()
+    spec = model.get_spec()          # mp4_sim.robot.model
     add_servos(spec, models)
     m = spec.compile(); m.opt.timestep = fits.PHYSICS_DT
     d = mujoco.MjData(m)
