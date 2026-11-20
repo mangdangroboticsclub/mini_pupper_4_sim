@@ -70,6 +70,11 @@ flowchart LR
 
 ## Policies
 
+These three policies were trained on an earlier SKU2 model (the earlier legs and masses) and are kept for simulation
+work; the walking and get-up policies for the current robot are in the
+[`sku2-policies` branch of mini_pupper_4_recovery](https://github.com/mangdang-bam/mini_pupper_4_recovery/tree/sku2-policies)
+(see [Policies on the robot](#policies-on-the-robot)).
+
 Each folder in `policies/` holds `policy.onnx` (with its manifest), `fixture.npz` (reference inputs and outputs for
 `export.verify`) and `config.json` (how it was trained). In CPU mode the policies can be checked with
 `export.verify`; training and evaluation need the GPU install.
