@@ -6,13 +6,13 @@ import numpy as np
 import pytest
 
 from mp4_sim.actuators import bank, fits
-from mp4_sim.contract import Contract
-from mp4_sim.robot import sku2
+from mp4_sim.calibration import Contract
+from mp4_sim.robot import model
 
 
 def _robot(extra_lag_steps=0):
     models = bank.load_models(fits.T5UB06)
-    spec = sku2.get_spec()
+    spec = model.get_spec()
     bank.add_servos(spec, models)
     spec.worldbody.add_geom(name="floor", type=mujoco.mjtGeom.mjGEOM_PLANE, size=[1, 1, 0.1])
     m = spec.compile()
@@ -21,7 +21,7 @@ def _robot(extra_lag_steps=0):
     c = Contract.load()
     for name, q in zip(c.joint_order, c.stand_joint_rad):
         d.qpos[m.joint(name).qposadr[0]] = q
-    d.qpos[2] = sku2.INIT_BASE_Z
+    d.qpos[2] = model.init_base_z()
     mujoco.mj_forward(m, d)
     b = bank.BamServoBank(m, d, models, extra_lag_steps=extra_lag_steps)
     ids = [m.actuator(n).id for n in fits.SERVO_TARGETS]

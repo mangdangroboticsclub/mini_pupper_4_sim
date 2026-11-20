@@ -218,7 +218,7 @@ def test_load_log_survives_a_batch_and_does_not_keep_stale_values():
 
 
 def test_kd_gain_matches_the_bench_measurement():
-    """0.0115 duty per rad/s at kd 400 (ramp probe, 2026-09-22)."""
+    """0.0115 duty per rad/s at kd 400 (measured on the bench with a slow ramp on one servo)."""
     model = make_model(kd_form="velocity", kd_gain=MD01PwmActuator.KD_GAIN)
     act = model.actuator
     act.load_log({**LOG_META, "at32_kd_position": 400.0})

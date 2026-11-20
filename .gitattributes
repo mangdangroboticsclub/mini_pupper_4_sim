@@ -1,0 +1,6 @@
+# Text files whose exact bytes are hashed (mp4_sim.robots, mp4_sim.limits): no line-ending conversion on checkout, so a
+# Windows clone keeps the recorded hashes. (.xml, .json and the other suffixes in mp4_sim.paths.TEXT_SUFFIXES are
+# hashed with LF line endings whatever the checkout.)
+SHA256SUMS -text
+*.obj -text
+*.sha256 -text

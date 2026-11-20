@@ -8,7 +8,7 @@ __pycache__/
 .ruff_cache/
 MUJOCO_LOG.TXT
 
-# training output
+# local output
 runs/
 logs/
 outputs/

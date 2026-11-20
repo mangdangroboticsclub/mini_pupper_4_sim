@@ -3,11 +3,11 @@
     Create the mp4-sim Python virtual environment (Windows).
 
 .DESCRIPTION
-      gpu mode  - mjlab / MuJoCo Warp parallel training, ONNX export, and the
-                  CPU MuJoCo + Gymnasium path. Needs an NVIDIA GPU; torch is
+      gpu mode  - the mjlab / MuJoCo Warp simulation environments, plus
+                  everything in cpu mode. Needs an NVIDIA GPU; torch is
                   taken from the cu130 wheel index.
-      cpu mode  - the CPU simulator, servo models and ONNX export/runtime.
-                  No CUDA, no mjlab.
+      cpu mode  - the robot models, calibration, joint limits and servo
+                  models on plain MuJoCo. No CUDA, no mjlab.
 
     Pins live in requirements\constraints.txt; mp4-sim itself is installed
     editable.
@@ -86,7 +86,7 @@ if ($DryRun) {
 if ($Mode -eq "gpu") {
     # mujoco_warp prints a warning per heightfield overflow from its GPU kernel; remove the warning (the physics is unchanged)
     Write-Host "[mp4-sim] patching mujoco_warp ..."
-    & $Py -m mp4_sim.gpu.patch_warp
+    & $Py -m mp4_sim.envs.patch_warp
     if ($LASTEXITCODE -ne 0) { throw "[mp4-sim] patching mujoco_warp failed (see above)" }
 }
 
