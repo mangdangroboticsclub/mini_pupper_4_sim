@@ -7,13 +7,16 @@ randomisation).
 
 ## The robots
 
-| | SKU2 | SKU1 |
+| | SKU1 | SKU2 |
 |---|---|---|
-| Body | long | short |
-| Electronics | Raspberry Pi 5 + ESP32 | ESP32 |
-| Weighed mass | 630.5 g | 413.4 g |
-| Calibration | `sku2_contract.json` | `sku1_contract.json` |
-| Joint limits | traced by hand on the robot (`sku2_joint_limits.json`, `sku2_hip_envelope.json`) | traced by hand on the robot (`sku1_joint_limits.json`, `sku1_hip_envelope.json`) |
+| In simulation | <img src="docs/media/sku1.png" width="320" alt="SKU1 standing in simulation"> | <img src="docs/media/sku2.png" width="320" alt="SKU2 standing in simulation, with the optional lidar"> |
+| Body | short | long |
+| Electronics | ESP32 | Raspberry Pi 5 + ESP32 |
+| Weighed mass | 413.4 g | 630.5 g |
+| Calibration | `sku1_contract.json` | `sku2_contract.json` |
+| Joint limits | traced by hand on the robot (`sku1_joint_limits.json`, `sku1_hip_envelope.json`) | traced by hand on the robot (`sku2_joint_limits.json`, `sku2_hip_envelope.json`) |
+
+The SKU2 is shown with the optional lidar on its hood.
 
 ## Requirements
 
