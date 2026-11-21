@@ -1,10 +1,9 @@
-# mp4-sim
+# mini_pupper_4_sim
 
 The simulation foundation for the Mini Pupper v4 quadruped: robot models of the SKU2 and the SKU1 with the data
 measured on the robots, the servo calibration and joint limits, fitted models of the MD-300-150 servo module, and
 simulation environments for [mjlab](https://github.com/mujocolab/mjlab) on MuJoCo Warp (scene, sensors, terrain, plant
-randomisation, an optional lidar on the hood). It holds no policies, rewards or training: those live in the packages
-built on it.
+randomisation).
 
 ## The robots
 
@@ -86,14 +85,3 @@ docs/               INSTALL, ROBOTS
 tests/              model and data hashes, compiled-model fingerprints, calibration, limits, servo models, terrain,
                     GPU scene smoke tests, wheel contents
 ```
-
-## What isn't supported
-
-- The SKU2's `pupper.xml` and `scene.xml` don't open on their own in the MuJoCo viewer: the meshes of its visual-only
-  accessories (lidar, Raspberry Pi, display) are not in the package. Build the model with `mp4_sim.robot.model.get_spec`.
-- The SKU1 has no measured IMU mounting or sensor noise of its own; the SKU2's stand in.
-- The compiled-model fingerprints in the tests are pinned for MuJoCo 3.7.0 on Linux x86-64.
-
-## Licence
-
-Apache-2.0: see [LICENSE](LICENSE) and [NOTICE](NOTICE).
