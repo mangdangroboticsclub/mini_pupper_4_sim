@@ -1,8 +1,11 @@
-# Unified pin set for mp4-sim. Applied with `uv pip install -c` in both modes.
+# The pin set for mp4-sim, applied with `uv pip install -c` in both modes. It pins
+# every package the installers install, so it fixes the whole environment.
 #
-# The shipped policies were trained and evaluated on this set (MuJoCo 3.7,
-# MuJoCo Warp 3.7.0.1, torch 2.14); the fitted servo models were identified on
-# the same MuJoCo line. Change these only together with a re-evaluation.
+# The robot models' compiled fingerprints (tests/test_models.py) and the fitted
+# servo models are pinned on this set (MuJoCo 3.7, MuJoCo Warp 3.7.0.1,
+# torch 2.14); policies trained on these environments depend on it too. Change
+# these only together with a re-evaluation. mini_pupper_4_rl's constraints file
+# holds the same pins plus pyserial.
 
 # --- core physics / GPU sim --------------------------------------------------
 mujoco==3.7.0
@@ -12,24 +15,165 @@ mjlab==1.3.0
 rsl-rl-lib==5.0.1
 tensordict==0.14.2
 
-# --- torch (index is chosen by --torch-backend in the install scripts) --------
+# --- torch (index is chosen by --torch-backend in the install scripts) -------
 torch==2.14.0
-torchvision==0.29.0
 
-# --- ONNX export + runtime ---------------------------------------------------
-onnx==1.23.0
-onnx-ir==1.0.0
+# --- viewer, installed by mjlab ----------------------------------------------
+# mjviser 0.0.17 and newer require mujoco-core, which installs its own mujoco/
+# package over mujoco 3.7.0 and breaks `import mujoco`.
+mjviser==0.0.16
+viser==1.1.1
+
+# --- ONNX export, installed by mjlab -----------------------------------------
+onnx==1.23.2
+onnx-ir==1.1.0
 onnxscript==0.7.2
-onnxruntime==1.30.0
 
 # --- numerics ----------------------------------------------------------------
 numpy==2.5.3
 scipy==1.18.1
-trimesh==5.1.0
+trimesh==5.2.0
 
-# --- CPU RL path ---------------------------------------------------------------
-gymnasium>=1.0
-stable-baselines3>=2.3
+# --- logging, installed by mjlab ---------------------------------------------
 tensorboard==2.21.0
-
 protobuf==7.36.2
+wandb==0.31.0
+
+# --- tests and lint ----------------------------------------------------------
+pytest==9.2.0
+ruff==0.17.6
+
+# --- everything else the installers install ---------------------------------
+# Dependencies of the packages above: colorama on Windows only, the nvidia-*
+# and triton packages with CUDA torch on Linux.
+absl-py==2.5.1
+annotated-types==0.8.0
+anyio==4.16.0
+asttokens==3.0.2
+bcrypt==5.0.0
+certifi==2026.10.23
+cffi==2.1.1
+charset-normalizer==3.5.2
+click==8.5.1
+cloudpickle==3.1.2
+colorama==0.4.6
+contourpy==1.4.0
+cryptography==50.0.2
+cuda-bindings==13.5.0
+cuda-pathfinder==1.8.6
+cuda-toolkit==13.0.3.0
+cwevals==0.0.1b1
+cycler==0.12.1
+decorator==5.3.1
+deprecated==3.0.1
+distro==1.9.0
+docstring-parser==0.18.0
+etils==1.15.0
+executing==2.3.0
+fabric==3.2.3
+filelock==4.2.10
+fonttools==4.68.0
+fsspec==2026.9.0
+gitdb==4.0.12
+gitpython==3.2.1
+glfw==2.11.0
+googleapis-common-protos==1.76.0
+grpcio==1.85.1
+h11==0.16.0
+httpcore==1.0.9
+httpx==0.28.1
+idna==3.20
+imageio==2.38.1
+imageio-ffmpeg==0.8.1
+importlib-metadata==10.2.0
+iniconfig==2.3.1
+invoke==2.2.1
+ipython==9.18.1
+ipython-pygments-lexers==1.1.1
+jedi==0.20.1
+jinja2==3.1.6
+kiwisolver==1.5.1
+lazy-importer==0.1.0
+markdown==3.11.3
+markdown-it-py==4.3.0
+markupsafe==3.0.4
+matplotlib==3.11.2
+matplotlib-inline==0.2.2
+mdurl==0.1.2
+mediapy==1.2.7
+ml-dtypes==0.6.0
+mpmath==1.3.0
+msgspec==0.22.0
+networkx==3.7
+nvidia-cublas==13.1.1.3
+nvidia-cuda-cupti==13.0.85
+nvidia-cuda-nvrtc==13.0.88
+nvidia-cuda-runtime==13.0.96
+nvidia-cudnn-cu13==9.24.0.43
+nvidia-cufft==12.0.0.61
+nvidia-cufile==1.15.1.6
+nvidia-curand==10.4.0.35
+nvidia-cusolver==12.0.4.66
+nvidia-cusparse==12.6.3.3
+nvidia-cusparselt-cu13==0.8.1
+nvidia-nccl-cu13==2.30.7
+nvidia-nvjitlink==13.5.37
+nvidia-nvshmem-cu13==3.4.5
+nvidia-nvtx==13.0.85
+opentelemetry-api==1.45.2
+opentelemetry-exporter-http-transport==0.66b2
+opentelemetry-exporter-otlp-common==0.66b2
+opentelemetry-exporter-otlp-proto-common==1.45.2
+opentelemetry-exporter-otlp-proto-http==1.45.2
+opentelemetry-proto==1.45.2
+opentelemetry-sdk==1.45.2
+opentelemetry-semantic-conventions==0.66b2
+orjson==3.13.0
+packaging==26.3
+paramiko==5.1.0
+parso==0.8.7
+pexpect==4.9.0
+pillow==13.0.0
+platformdirs==4.14.5
+pluggy==1.7.0
+prettytable==3.18.0
+prompt-toolkit==3.0.53
+psutil==7.2.2
+ptyprocess==0.7.0
+pure-eval==0.2.4
+pycparser==3.12
+pydantic==2.14.3
+pydantic-core==2.50.4
+pygments==2.21.0
+pynacl==1.6.2
+pyopengl==3.1.10
+pyparsing==3.3.3
+python-dateutil==4.0.0
+pyvers==0.2.3
+pyyaml==6.0.3
+requests==2.34.2
+rich==14.3.4
+setuptools==84.2.1
+smmap==5.0.3
+sniffio==1.3.1
+stack-data==0.6.3
+sympy==1.14.0
+tensorboard-data-server==0.7.2
+torchrunx==0.4.0
+torchvision==0.29.1
+tqdm==4.70.1
+traitlets==5.16.1
+triton==3.8.0
+typeguard==4.6.0
+typing-extensions==4.16.0
+typing-inspection==0.4.5
+tyro==1.0.17
+tzdata==2026.6
+urllib3==2.8.0
+wcwidth==0.9.4
+websockets==16.1.1
+werkzeug==3.1.9
+wrapt==2.5.2
+xxhash==4.1.0
+zipp==4.1.2
+zstandard==0.25.0

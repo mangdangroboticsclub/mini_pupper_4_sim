@@ -3,7 +3,7 @@
 ``assets/<sku>/scene.xml`` contains the robot *and* a second, massless copy of
 it named ``g_*`` used as the "where the real servos actually are" ghost. The RL
 model deliberately drops that copy; this small class addresses both, and
-``tools/build_model.py`` uses it to pose the stand keyframe.
+the model generator used it to pose the stand keyframe.
 """
 
 from __future__ import annotations

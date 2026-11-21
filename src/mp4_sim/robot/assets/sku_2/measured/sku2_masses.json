@@ -1,0 +1,11 @@
+{
+ "total_kg": 0.6305,
+ "module_kg": 0.06682,
+ "leg_kg": 0.0065,
+ "front_pair_kg": 0.29201,
+ "rear_pair_kg": 0.33849,
+ "base_com_x_m": -0.0059045,
+ "base_com_y_m": -0.0005323,
+ "base_com_dz_m": -0.0161303,
+ "source": "weighed: total 630.5 g; level on scales front/rear 289.0/335.0 g, left/right 308.7/313.5 g; pitched on a 43.0 mm block front/rear 386.2/244.3 g. The whole robot's centre of mass from these (base frame, at the contract's stand, the feet's contact points from robot/assets/sku_2/pupper.xml with the 5.5 mm foot sphere): x -3.77 mm, y -0.28 mm, z -8.10 mm. A servo module 66.82 g and a leg's thigh and calf 6.5 g weighed apart; the base's centre of mass (base_com_*) solved so that the model at the contract's stand has the measured whole-robot centre of mass."
+}

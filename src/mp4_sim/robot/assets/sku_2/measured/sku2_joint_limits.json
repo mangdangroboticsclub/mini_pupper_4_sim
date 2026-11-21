@@ -1,0 +1,221 @@
+{
+ "robot": "Mini Pupper v4 (SKU2), traced by hand with the servos limp",
+ "conventions": {
+  "units": "degrees from the stand pose (the calibrated neutral pose)",
+  "abd_out": "abduction, + = leg outward",
+  "hip_fwd": "hip, + = thigh forward",
+  "knee_fold": "knee relative to the thigh, + = folding; the knee servo (inner coaxial output) must turn with the hip to hold a knee angle, so its limit is on the knee-thigh angle, not on the servo",
+  "track_end": "the potentiometer's electrical track (310 deg) ends; a ~50 deg dead zone lies beyond. Not a mechanical stop, but positions there are unreadable: keep powered motion >= 20 deg inside. Depends on how each joint is mounted and calibrated",
+  "model_joint_range_rad": "the same limits as joint ranges of the robot model (joints *_hip = abduction, *_calf = knee relative to the thigh), absolute angles (stand + measured range)"
+ },
+ "measured": "the robot on its stand, the legs moved by hand with the servos limp, positions recorded at 200 Hz; the abduction and knee - thigh ranges are the robust extremes (reached in two adjacent 2-deg slices holding >= 50 clean samples, no margin); the hip's stop towards the body's middle, as a function of the abduction, is in sku2_hip_envelope.json",
+ "findings": [
+  "FR: abduction -22.2..+28.5 deg (raw -22.2..+28.5); knee-thigh -91.4..+49.6 (raw -91.4..+49.6); thigh backward (towards the middle): open over abduction -9..+7, capped at -21..-11, +9..+27; thigh forward: open over abduction -21..+1, capped at +3..+27; 10 well-traced column side(s) inside the open interval stopped short of the sensor end and 18 capped side(s) rest on a single pass (listed for a hand check)",
+  "FL: abduction -23.0..+31.0 deg (raw -23.0..+31.0); knee-thigh -100.8..+49.0 (raw -100.8..+69.3); thigh backward (towards the middle): open over abduction -1..+25, capped at -23..-3, +27..+31; thigh forward: open over abduction -1..+31, capped at -23..-3; 3 well-traced column side(s) inside the open interval stopped short of the sensor end and 3 capped side(s) rest on a single pass (listed for a hand check)",
+  "RR: abduction -19.6..+29.3 deg (raw -19.6..+29.3); knee-thigh -93.8..+43.3 (raw -104.7..+43.3); thigh backward: open over abduction -1..+29, capped at -19..-3; thigh forward (towards the middle): open over abduction -1..+9, capped at -19..-3, +11..+29; 11 well-traced column side(s) inside the open interval stopped short of the sensor end and 19 capped side(s) rest on a single pass (listed for a hand check)",
+  "RL: abduction -20.8..+25.1 deg (raw -20.8..+25.1); knee-thigh -88.5..+49.7 (raw -88.5..+71.8); thigh backward: open over abduction -1..+25, capped at -19..-3; thigh forward (towards the middle): open over abduction -1..+23, capped at -19..-3, +25; 7 well-traced column side(s) inside the open interval stopped short of the sensor end and 17 capped side(s) rest on a single pass (listed for a hand check)"
+ ],
+ "contract_sha256_prefix": "86f1d330a9f3",
+ "legs": [
+  {
+   "leg": "FR",
+   "abd_out_range": [
+    -22.2,
+    28.5
+   ],
+   "abd_out_range_powered": null,
+   "knee_fold_range": [
+    -91.4,
+    49.6
+   ],
+   "hip_track_end_range": [
+    -76.5,
+    233.5
+   ],
+   "hip_chassis_side": "backward",
+   "hip_chassis_stop_at_abd_in": 22.5,
+   "hip_chassis_stop_at_abd_out": -29.7,
+   "hip_free_abd_range": [
+    -11.0,
+    19.0
+   ],
+   "knee_servo_track_dd_deg": [
+    -149.5,
+    160.5
+   ],
+   "signs_dd_to_phys": {
+    "abd_out": 1,
+    "hip_fwd": 1,
+    "knee_fold": 1
+   },
+   "stand_dd": [
+    1474,
+    765,
+    1495
+   ],
+   "source": "hand traces (four passes); abd_out_range and knee_fold_range = the robust extremes (raw [-22.2, 28.5] and [-91.4, 49.6]); the chassis stops = the hip envelope's value towards the body's middle at the abduction extremes (null = open: the track ends); abd_out_range_powered not measured",
+   "model_joint_range_rad": {
+    "FR_hip": [
+     -0.3875,
+     0.4974
+    ],
+    "FR_calf": [
+     -1.355,
+     1.1059
+    ],
+    "FR_thigh_note": "no fixed range: see sku2_hip_envelope.json"
+   },
+   "knee_fold_open_sides": []
+  },
+  {
+   "leg": "FL",
+   "abd_out_range": [
+    -23.0,
+    31.0
+   ],
+   "abd_out_range_powered": null,
+   "knee_fold_range": [
+    -100.8,
+    49.0
+   ],
+   "hip_track_end_range": [
+    -50.9,
+    259.1
+   ],
+   "hip_chassis_side": "backward",
+   "hip_chassis_stop_at_abd_in": -24.5,
+   "hip_chassis_stop_at_abd_out": -25.3,
+   "hip_free_abd_range": [
+    -11.0,
+    23.0
+   ],
+   "knee_servo_track_dd_deg": [
+    -217.0,
+    93.0
+   ],
+   "signs_dd_to_phys": {
+    "abd_out": -1,
+    "hip_fwd": -1,
+    "knee_fold": -1
+   },
+   "stand_dd": [
+    1592,
+    2591,
+    2170
+   ],
+   "source": "hand traces (two passes); abd_out_range and knee_fold_range = the robust extremes (raw [-23.0, 31.0] and [-100.8, 69.3]); the chassis stops = the hip envelope's value towards the body's middle at the abduction extremes (null = open: the track ends); abd_out_range_powered not measured",
+   "model_joint_range_rad": {
+    "FL_hip": [
+     -0.5411,
+     0.4014
+    ],
+    "FL_calf": [
+     -1.0954,
+     1.5191
+    ],
+    "FL_thigh_note": "no fixed range: see sku2_hip_envelope.json"
+   },
+   "knee_fold_open_sides": []
+  },
+  {
+   "leg": "RR",
+   "abd_out_range": [
+    -19.6,
+    29.3
+   ],
+   "abd_out_range_powered": null,
+   "knee_fold_range": [
+    -93.8,
+    43.3
+   ],
+   "hip_track_end_range": [
+    -119.5,
+    190.5
+   ],
+   "hip_chassis_side": "forward",
+   "hip_chassis_stop_at_abd_in": 103.2,
+   "hip_chassis_stop_at_abd_out": 88.4,
+   "hip_free_abd_range": [
+    -7.0,
+    27.0
+   ],
+   "knee_servo_track_dd_deg": [
+    -160.1,
+    149.9
+   ],
+   "signs_dd_to_phys": {
+    "abd_out": -1,
+    "hip_fwd": 1,
+    "knee_fold": 1
+   },
+   "stand_dd": [
+    1562,
+    1195,
+    1601
+   ],
+   "source": "hand traces (two passes); abd_out_range and knee_fold_range = the robust extremes (raw [-19.6, 29.3] and [-104.7, 43.3]); the chassis stops = the hip envelope's value towards the body's middle at the abduction extremes (null = open: the track ends); abd_out_range_powered not measured",
+   "model_joint_range_rad": {
+    "RR_hip": [
+     -0.5114,
+     0.3421
+    ],
+    "RR_calf": [
+     -1.3969,
+     0.996
+    ],
+    "RR_thigh_note": "no fixed range: see sku2_hip_envelope.json"
+   },
+   "knee_fold_open_sides": []
+  },
+  {
+   "leg": "RL",
+   "abd_out_range": [
+    -20.8,
+    25.1
+   ],
+   "abd_out_range_powered": null,
+   "knee_fold_range": [
+    -88.5,
+    49.7
+   ],
+   "hip_track_end_range": [
+    -155.7,
+    154.3
+   ],
+   "hip_chassis_side": "forward",
+   "hip_chassis_stop_at_abd_in": 98.2,
+   "hip_chassis_stop_at_abd_out": 99.0,
+   "hip_free_abd_range": [
+    -17.0,
+    23.0
+   ],
+   "knee_servo_track_dd_deg": [
+    -130.4,
+    179.6
+   ],
+   "signs_dd_to_phys": {
+    "abd_out": 1,
+    "hip_fwd": -1,
+    "knee_fold": -1
+   },
+   "stand_dd": [
+    1610,
+    1543,
+    1304
+   ],
+   "source": "hand traces (two passes); abd_out_range and knee_fold_range = the robust extremes (raw [-20.8, 25.1] and [-88.5, 71.8]); the chassis stops = the hip envelope's value towards the body's middle at the abduction extremes (null = open: the track ends); abd_out_range_powered not measured",
+   "model_joint_range_rad": {
+    "RL_hip": [
+     -0.363,
+     0.4381
+    ],
+    "RL_calf": [
+     -1.1077,
+     1.3044
+    ],
+    "RL_thigh_note": "no fixed range: see sku2_hip_envelope.json"
+   },
+   "knee_fold_open_sides": []
+  }
+ ]
+}

@@ -63,25 +63,27 @@ BAM_ROLES = (("abd", JOINT_TARGETS[:1], TransmissionType.JOINT),
 def bam(name: str, params_json: dict, scales: tuple = (), vin_range: tuple | None = None,
         stiff_frictionloss: bool = False) -> Arm:
     """``params_json``: role -> a fitted JSON;
-    ``scales``: ((parameter, factor), ...) on every role (e.g. ``armature`` for a reduced-armature variant);
+    ``scales``: not supported by ``bam_servo.BamServoCfg`` (an empty tuple only);
     ``stiff_frictionloss``: False keeps MuJoCo's default friction constraint."""
     from .bam_servo import BamServoCfg
+    if scales:
+        raise ValueError("arms.bam: parameter scales are not supported by bam_servo.BamServoCfg")
     cfgs, lat, params = [], [], {"roles": {}, "scales": [list(s) for s in scales], "vin_range": vin_range,
                                   "stiff_frictionloss": stiff_frictionloss}
     for role, targets, trn in BAM_ROLES:
         path = params_json[role]
         delay = command_delay_steps(path)
         cfgs.append(BamServoCfg(target_names_expr=targets, transmission_type=trn, vin_range=vin_range,
-                                stiff_frictionloss=stiff_frictionloss, param_scales=tuple(scales),
+                                stiff_frictionloss=stiff_frictionloss,
                                 delay_min_lag=0, delay_max_lag=MAX_LAG_STEPS, delay_hold_prob=1.0,
                                 json_path=str(path)))
         lat.append(delay)
-        params["roles"][role] = {"params": paths.rel(path), "sha256": paths.sha256(path), "command_delay_ms": delay}
+        params["roles"][role] = {"params": paths.name(path), "sha256": paths.sha256(path), "command_delay_ms": delay}
     return Arm(name, tuple(cfgs), tuple(lat), params)
 
 
 def t5ub06() -> Arm:
-    """T5 ub06: a refit of md01vp m6 on the bench data with the armature pinned at 0.6 of a bound measured on the bare
+    """t5ub06: a refit of md01vp m6 on the bench data with the armature pinned at 0.6 of a bound measured on the bare
     output arm (the knee 2.2e-4, the hip 2.7e-4 kg m^2) and kd_ratio at 1.0; it predicts SKU2's joints better than the
     published sets at the robot's light loads (actuators/params/md01/bam_t5ub06_id_*_m6.json)."""
     return bam("bam_t5ub06", T5UB06)

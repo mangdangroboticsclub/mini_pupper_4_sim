@@ -1,5 +1,5 @@
 {
- "_about": "servo models for the sim, one per tuning preset. fit_servo.py fills them from a `sweep` step test; unfitted ones are a copy of 'sim'.",
+ "_about": "Position-servo profiles, one per servo tuning preset of the firmware. 'sim' is the stock profile (mp4_sim.actuators.arms.stock); the others are estimates from step tests of the servos, or copies of 'sim' where none was taken.",
  "profiles": {
   "sim": {
    "kp": 8.0,
@@ -8,7 +8,7 @@
    "damping": 0.0381,
    "armature": 0.0002,
    "latency_ms": 5.0,
-   "source": "build_model.py estimates (the original sim)"
+   "source": "estimates (the stock profile)"
   },
   "strong": {
    "kp": 8.0,
@@ -17,7 +17,7 @@
    "damping": 0.0381,
    "armature": 0.0002,
    "latency_ms": 5.0,
-   "source": "from your servotest.txt step timings (30 deg thigh/knee steps, 100 Hz log): starts ~5 ms, at target ~50 ms, ~1 deg overshoot = the 'sim' model within the 10 ms log resolution (and the backflip matches the sim). Kept = sim.",
+   "source": "step timings (30 deg thigh/knee steps, 100 Hz log): starts ~5 ms, at target ~50 ms, ~1 deg overshoot: the 'sim' profile within the 10 ms log resolution, so kept equal to 'sim'.",
    "fitted": true,
    "servo_gains": {
     "kp": 120,
@@ -32,7 +32,7 @@
    "damping": 0.0381,
    "armature": 0.0002,
    "latency_ms": 5.0,
-   "source": "NOT MEASURED YET - copy of 'sim' (preset 'Normal (walk / demo)')",
+   "source": "not measured: a copy of 'sim' (preset 'Normal (walk / demo)')",
    "fitted": false
   },
   "silent": {
@@ -42,7 +42,7 @@
    "damping": 0.0381,
    "armature": 0.0002,
    "latency_ms": 4.0,
-   "source": "from your servotest.txt step timings (30 deg thigh/knee steps, 100 Hz log): starts <10 ms, at target ~55 ms, 0.3-0.7 deg steady offset (not modelled). Provisional: run fit_servo.py servotest.txt for the full fit.",
+   "source": "step timings (30 deg thigh/knee steps, 100 Hz log): starts <10 ms, at target ~55 ms, 0.3-0.7 deg steady offset (not modelled). An estimate, not a fit.",
    "fitted": true,
    "provisional": true,
    "servo_gains": {
@@ -58,7 +58,7 @@
    "damping": 0.0381,
    "armature": 0.0002,
    "latency_ms": 12.0,
-   "source": "from your servotest.txt step timings (30 deg thigh/knee steps, 100 Hz log): starts 10-20 ms late, at target ~70 ms. Provisional: run fit_servo.py servotest.txt for the full fit.",
+   "source": "step timings (30 deg thigh/knee steps, 100 Hz log): starts 10-20 ms late, at target ~70 ms. An estimate, not a fit.",
    "fitted": true,
    "provisional": true,
    "servo_gains": {

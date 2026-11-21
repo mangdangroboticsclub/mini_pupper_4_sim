@@ -1,69 +1,54 @@
 # Robot assets
 
-> **SKU2 URDF to be replaced.** `sku_2/urdf/sku_2_urdf_fixed.urdf` is a
-> repaired SolidWorks export. An updated SKU2 URDF will replace it; then put it
-> in `sku_2/urdf/`, regenerate with
-> `tools/build_model.py --sku sku_2`, and update `sku_2/sku2_masses.json` if
-> the new export carries measured masses.
+The Mini Pupper v4 models: SKU2 (`sku_2`, the long body) and SKU1 (`sku_1`, the short body on the same legs). Each
+`pupper.xml` is a generated MJCF (12 hinges, 4 knee tendons, 12 position actuators, IMU site, `stand` keyframe, ghost
+copy `g_*`). `mp4_sim.robots` lists each robot's files with their sha256; `tests/test_assets.py` checks them.
+
+`pupper.xml`, `scene.xml`, `servo_map.json` and `sku_1/parts/base_screen_face.obj` are generated from the CAD export by
+a tool that is not part of this repository (their first lines name it and its files). They are the reference data the
+policies trained on them record by sha256, and ship exactly as generated.
 
 ## Per SKU
 
 | File | What it is |
 |---|---|
-| `pupper.xml` | Generated MJCF: 12 hinges, 4 knee tendons, 12 position actuators, IMU site, `stand` keyframe, ghost copy `g_*` |
-| `scene.xml` | `pupper.xml` plus floor and lights, for the viewer |
-| `servo_map.json` | Firmware servo angles to model joint angles |
-| `urdf/` | Repaired URDF that `tools/build_model.py` reads |
-| `meshes/` | CAD meshes referenced by the URDF |
-| `parts/` | Split meshes referenced by `pupper.xml` |
-| `display/` | The screen (bezel + panel meshes in the base frame, `display.json`): visual only, not in `pupper.xml`; `mp4_sim.robot.display.add_display` attaches it, `sku2.get_spec(strip_visuals=False)` already does |
+| `pupper.xml` | The model: 59.75 mm shins, mesh feet (19.3 x 19.6 x 6.0 mm) |
+| `scene.xml` | `pupper.xml` plus floor and lights, for the MuJoCo viewer (the SKU1's; the SKU2's needs meshes not shipped, below) |
+| `servo_map.json` | Firmware servo angles to model joint angles (`mp4_sim.robot.mapping`) |
+| `parts/` | The meshes `pupper.xml` references |
+| `urdf/`, `meshes/` | The URDF the model was generated from, and its meshes |
+| `measured/` | What was measured on the robot (below) |
 
-`servo_profiles.json` (shared) holds the stock position-servo profile.
+SKU2's `parts/` includes its visual-only accessories (`acc_*`, `base_screen_face.obj`, `screen_face.png`: lidar,
+Raspberry Pi, display), so `scene.xml` opens in the MuJoCo viewer; `mp4_sim.robot.model.get_spec` removes them from the
+simulated robot. SKU1's `parts/` holds all 40 meshes and the texture; its front screen (`base_display`,
+`base_screen`, `base_screen_face`) and covers are visual only (contype = conaffinity = 0, density 0).
+`sku_1/SHA256SUMS` lists every SKU1 model file (`sha256sum -c SHA256SUMS`).
 
-## SKU2 extras
+`sku_1/pupper.xml` has the SKU2's legs on the short body: thigh axes 97.1 mm front to rear (136.6 on the SKU2), one base
+collision box 144 x 80 x 27 mm. The legs, feet, joint axes, knee tendons and servo-map signs are the SKU2's; the CAD
+export's one asymmetric leg is RL (its thigh axis 1.6 mm further out, thigh 50.03 mm).
+
+## Measured data (`measured/`)
 
 | File | What it is |
 |---|---|
-| `sku2_contract.json` | Servo signs, the corrected stand (hip axes 70 mm above the feet), calibration offsets, firmware ticks |
-| `sku2_masses.json` | Weighed 450 g split: 66.82 g per motor module, 6.5 g per leg, base takes the rest, base COM x −23.13 mm |
-| `sku2_masses_478g.json` | The same with a Raspberry Pi heatsink fitted (478.66 g, the extra on the base); the terrain task's default |
-| `imu_mount.json` | Sensor-to-body rotation (`swap_xy`) |
-| `noise_n1.json`, `noise_n2.json` | Uniform observation noise profiles: `noise_n1.json` one half-width per channel, `noise_n2.json` one per element (the training default) |
+| `sku2_contract.json`, `sku1_contract.json` | The calibration: servo signs, the stand (all twelve joints and the servo coordinates), calibration offsets, firmware ticks, knee tendon coefficients (`mp4_sim.calibration`) |
+| `sku2_masses.json` | The weighed SKU2 (630.5 g): per motor module, per leg, the base takes the rest, the base's centre of mass |
+| `sku1_masses_413g.json` | The weighed SKU1 (413.4 g; the name carries the mass), its centre of mass from scales with the rear raised |
+| `sku2_joint_limits.json` + `.sha256`, `sku1_joint_limits.json` + `.sha256` | Each robot's joint limits traced on the robot, and the file's recorded sha256 (`mp4_sim.limits`) |
+| `sku2_hip_envelope.json`, `sku1_hip_envelope.json` | The hip's stop towards the body's middle as a function of the abduction |
+| `imu_mount.json` | The IMU's mounting (sensor to body frame) |
+| `noise_measured.json` | Sensor noise measured on the robot, per channel and element |
 
-## How SKU2 is loaded
+The SKU1 uses the SKU2's IMU mount and noise profile.
 
-`pupper.xml` still carries SKU1's 360 g mass budget. `mp4_sim.robot.sku2.get_spec`
-reads it and, without editing the file, removes the ghost, keyframe, XML
-actuators and sensor; adds the IMU (`imu_ang_vel`, `imu_lin_vel`,
-`imu_lin_acc` on site `imu`); and applies `sku2_masses.json` (or the mass file
-passed as `masses`; the terrain task passes `sku2_masses_478g.json`). The stand
-comes from `sku2_contract.json`, not the keyframe.
+## How a model is loaded
 
-## Regenerating
+`pupper.xml` carries a 360 g CAD mass budget. `mp4_sim.robot.model.get_spec` reads it and, without editing the file,
+removes the ghost, keyframe, XML actuators and sensor and the SKU2 accessories' geoms; adds the IMU (`imu_ang_vel`,
+`imu_lin_vel`, `imu_lin_acc` on site `imu`); makes the feet a sphere (`foot_radius_m`, default 5.5 mm, its bottom at the
+mesh foot's lowest point at the stand) or keeps the mesh; and applies the robot's masses. The stand comes from the
+robot's calibration, not the keyframe. A policy's metadata records the model file's sha256 (`model.legs_meta`).
 
-```
-python tools/fix_sku2_urdf.py            # cad/sku_2/... SolidWorks export -> sku_2/urdf + meshes
-python tools/build_model.py --sku sku_2  # urdf + meshes -> pupper.xml, scene.xml, servo_map.json, parts/
-```
-
-The screen comes from the SKU 1 SolidWorks assembly and is placed on both SKUs
-(SKU 2: centred on its export's placeholder `display_link` box):
-
-```
-python tools/export_display.py --assembly path/to/assembly.SLDASM   # Windows + SolidWorks: -> cad/sku_1/display/
-python tools/build_display.py                                       # -> sku_1/display/, sku_2/display/
-```
-
-It has no mass and no contacts, so regenerating it changes neither
-`pupper.xml` nor the contract.
-
-`sku2_contract.json` is derived from the servo map and records the hash of the
-`pupper.xml` and `servo_map.json` it was built from. Regenerating either
-invalidates it.
-
-## Provenance
-
-Copied from the earlier Mini Pupper simulation project (models, URDFs, meshes,
-servo profiles, generator tools) and the walking-policy project (SKU2 contract,
-masses, IMU mount, noise profiles). SKU2 `pupper.xml` sha256 (LF):
-`7bd8ecc99c261936d04a03d41d17868ad573250d34739d85c809836e467db9b4`.
+`servo_profiles.json` (shared) holds a stock position-servo profile (`mp4_sim.actuators.arms.stock`).
