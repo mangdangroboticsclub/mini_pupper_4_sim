@@ -1,4 +1,4 @@
-# mini_pupper_4_sim
+# Mini Pupper v4 Simulator
 
 The simulation foundation for the Mini Pupper v4 quadruped: robot models of the SKU2 and the SKU1 with the data
 measured on the robots, the servo calibration and joint limits, fitted models of the MD-300-150 servo module, and
@@ -9,16 +9,11 @@ randomisation).
 
 | | SKU2 | SKU1 |
 |---|---|---|
-| Body | long; Raspberry Pi 5 and 3S LiPo inside | short, on the same legs, servos and board |
+| Body | long | short |
+| Electronics | Raspberry Pi 5 + ESP32 | ESP32 |
 | Weighed mass | 630.5 g | 413.4 g |
 | Calibration | `sku2_contract.json` | `sku1_contract.json` |
 | Joint limits | traced by hand on the robot (`sku2_joint_limits.json`, `sku2_hip_envelope.json`) | traced by hand on the robot (`sku1_joint_limits.json`, `sku1_hip_envelope.json`) |
-| IMU mounting, sensor noise | measured | the SKU2's |
-| Name in the code | `"sku2"` (the default) | `"sku1"` |
-
-Each robot's data were measured on one reference unit. [docs/ROBOTS.md](docs/ROBOTS.md) describes the frames and joint
-order, what each measured file holds, how it was measured, and how to adapt the data to another unit. The files are in
-`src/mp4_sim/robot/assets/sku_<n>/measured/`, and `mp4_sim.robots` records every file's sha256.
 
 ## Requirements
 
