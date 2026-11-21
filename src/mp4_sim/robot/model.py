@@ -4,8 +4,8 @@ calibrated stand.
 Changes, made on the MjSpec at load time (the file is never edited):
 
 - the ghost robot (``g_base``), the ``stand`` keyframe, the twelve XML position actuators (the servo models replace
-  them) and the XML sensor are removed; on SKU2 the visual-only accessories (lidar, Raspberry Pi, display, screen face:
-  their files are not in the package) are removed; with ``strip_visuals`` the other mesh geoms (``contype =
+  them) and the XML sensor are removed; on SKU2 the visual-only accessories (lidar, Raspberry Pi, display, screen face) are
+  removed; with ``strip_visuals`` the other mesh geoms (``contype =
   conaffinity = 0``) and their meshes too (masses are explicit ``<inertial>``s, so the dynamics do not change);
 - an IMU at site ``imu``: gyro ``imu_ang_vel``, velocimeter ``imu_lin_vel``, accelerometer ``imu_lin_acc``;
 - the weighed masses (the robot's ``measured/<robot>_masses*.json``: each module and each leg's thigh and calf scaled to
@@ -60,8 +60,7 @@ BODY_CONTACT_BODIES = ("base",) + tuple(f"{leg}_hip" for leg in LEGS)   # the tr
 SPAWN_DZ_M = -0.00045591091663704786
 FOOT_RADIUS_M = 0.0055                  # the default foot sphere
 FOOT_KINDS = ("sphere", "mesh")
-# SKU2 pupper.xml's visual-only accessories (lidar, Raspberry Pi, display, screen face): their files are not in the
-# package
+# SKU2 pupper.xml's visual-only accessories (lidar, Raspberry Pi, display, screen face), removed from the simulated robot
 ACCESSORY_MESHES = ("acc_display_housing", "acc_display_screen", "acc_lidar_mount", "acc_lidar_sensor", "acc_pi_black",
                     "acc_pi_metal", "acc_pi_pcb", "acc_pi_white", "base_screen_face")
 

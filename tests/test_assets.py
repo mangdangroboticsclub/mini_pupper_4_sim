@@ -64,12 +64,12 @@ def test_limits_files_carry_their_recorded_hashes():
 
 @pytest.mark.parametrize("robot", robots.ROBOTS)
 def test_every_mesh_the_model_names_is_packaged(robot):
-    """SKU2's visual-only accessories are not packaged (``model.ACCESSORY_MESHES``); every other mesh is."""
+    """Every mesh the model names is packaged, the SKU2's visual-only accessories included."""
     r = robots.get(robot)
     spec = mujoco.MjSpec.from_file(str(r.xml))
     for mesh in spec.meshes:
         packaged = (r.dir / "parts" / mesh.file).is_file()
-        assert packaged == (robot == "sku1" or mesh.name not in model.ACCESSORY_MESHES), mesh.name
+        assert packaged, mesh.name
 
 
 def test_stairs_and_tile_data():

@@ -19,9 +19,9 @@ policies trained on them record by sha256, and ship exactly as generated.
 | `urdf/`, `meshes/` | The URDF the model was generated from, and its meshes |
 | `measured/` | What was measured on the robot (below) |
 
-SKU2's `parts/` omits the visual-only accessories `pupper.xml` names (`acc_*`, `base_screen_face.obj`,
-`screen_face.png`: lidar, Raspberry Pi, display), so the file compiles only through `mp4_sim.robot.model.get_spec`,
-which removes them. SKU1's `parts/` holds all 40 meshes and the texture; its front screen (`base_display`,
+SKU2's `parts/` includes its visual-only accessories (`acc_*`, `base_screen_face.obj`, `screen_face.png`: lidar,
+Raspberry Pi, display), so `scene.xml` opens in the MuJoCo viewer; `mp4_sim.robot.model.get_spec` removes them from the
+simulated robot. SKU1's `parts/` holds all 40 meshes and the texture; its front screen (`base_display`,
 `base_screen`, `base_screen_face`) and covers are visual only (contype = conaffinity = 0, density 0).
 `sku_1/SHA256SUMS` lists every SKU1 model file (`sha256sum -c SHA256SUMS`).
 

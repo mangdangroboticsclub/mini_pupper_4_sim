@@ -97,7 +97,7 @@ SKU2 = Robot(
     _SKU2_DIR / "measured" / "sku2_hip_envelope.json", _SKU2_DIR / "measured" / "imu_mount.json",
     _SKU2_DIR / "measured" / "noise_measured.json", top_z_m=0.0265, lidar_x_mm=43.0,
     hashes={
-        "SHA256SUMS": "c540013054b8db81564ae14bb2a05ed68f802e798032dd58417f4cb6a903ea41",     # the model files, meshes
+        "SHA256SUMS": "e305cb05ad0ffe27327c0360d6e73035d4c6fb6d3594715f05d47dd738a428e8",     # the model files, meshes
         "pupper.xml": "455316472c9c059c7bb9e2d5236f87c59a6d58e42071c89507fcbe8bf83f3dcf",
         "scene.xml": "cf77a3dd2047fc94d957d08ba4fa50c1297fee9b33129a20a530c66eeb6c01ec",
         "servo_map.json": "cbd96e2550e5cbcd7a66eb1c784144aa19714b1a32246197131179f91c5b322c",
