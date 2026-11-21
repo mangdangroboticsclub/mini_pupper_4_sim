@@ -16,8 +16,6 @@ randomisation).
 | Calibration | `sku1_contract.json` | `sku2_contract.json` |
 | Joint limits | traced by hand on the robot (`sku1_joint_limits.json`, `sku1_hip_envelope.json`) | traced by hand on the robot (`sku2_joint_limits.json`, `sku2_hip_envelope.json`) |
 
-The SKU2 is shown with the optional lidar on its hood.
-
 ## Requirements
 
 - [uv](https://docs.astral.sh/uv/) 0.12.7 or newer. The installer fetches Python 3.12 if needed.
