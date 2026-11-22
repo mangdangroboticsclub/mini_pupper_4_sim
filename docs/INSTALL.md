@@ -14,11 +14,11 @@
 
 | Mode | For | Installs |
 |---|---|---|
-| `gpu` | Machines with an NVIDIA GPU (Windows, Linux) | mjlab, MuJoCo Warp, warp-lang, rsl_rl, CUDA 13.0 torch, plus everything in `cpu` |
-| `cpu` | Any machine, including macOS and laptops without CUDA | MuJoCo, Gymnasium, Stable-Baselines3, CPU torch, ONNX tooling |
+| `gpu` | Machines with an NVIDIA GPU (Windows, Linux): the simulation environments (`mp4_sim.envs`) | mjlab, MuJoCo Warp, warp-lang, CUDA 13.0 torch, plus everything in `cpu` |
+| `cpu` | Any machine, including macOS and laptops without CUDA: the robot models, calibration, joint limits and servo models on plain MuJoCo | MuJoCo, NumPy, SciPy, CPU torch |
 
-`auto` (the default) picks `gpu` when `nvidia-smi` is on `PATH`, and picks
-`cpu` on macOS.
+`auto` (the default) picks `gpu` when `nvidia-smi` is on `PATH` (except on
+macOS), and `cpu` otherwise, for example on a machine without an NVIDIA driver.
 
 ## Running the installer
 
@@ -41,11 +41,13 @@ Both scripts:
 3. Install mp4-sim itself in editable mode. `pyproject.toml` lists only the
    packages both modes share; backend packages and all pins come from
    `requirements/`.
-4. In `gpu` mode, patch MuJoCo Warp (`python -m mp4_sim.gpu.patch_warp`, see
+4. In `gpu` mode, patch MuJoCo Warp (`.venv/bin/python -m mp4_sim.envs.patch_warp`, see
    below).
-5. Import every key package, report whether torch sees CUDA, and list the
-   onnxruntime execution providers. In `gpu` mode the check fails if CUDA is
-   unavailable or MuJoCo Warp is not patched.
+5. Check that `mujoco-core` is not installed (see "Pins and why"), import
+   every key package, report whether torch sees CUDA, and check each robot's
+   model and measured files against their recorded sha256
+   (`mp4_sim.robots.check_files`). In `gpu` mode the check also fails if CUDA
+   is unavailable or MuJoCo Warp is not patched.
 
 Use `--venv` / `-VenvDir` for a different location. Re-running is safe; the
 venv is reused.
@@ -55,40 +57,49 @@ venv is reused.
 When a geom touches more than 50 heightfield cells (a fallen body on fine
 terrain), mujoco-warp 3.7.0.1 skips the extra contacts and prints a warning
 from the GPU kernel, for every geom pair and every physics substep. With
-thousands of robots training on rough ground that slows training several-fold
-and fills the disk. `python -m mp4_sim.gpu.patch_warp` removes only the
-warning; the contacts are handled as before. The feet never reach the limit.
+thousands of robots simulated on rough ground that slows the simulation
+several-fold and fills the disk. `.venv/bin/python -m mp4_sim.envs.patch_warp` removes
+only the warning; the contacts are handled as before. The feet never reach the
+limit.
 
-`mp4_sim.gpu.train` refuses to start on an unpatched install
-(`--allow-unpatched` overrides). Reinstalling mujoco-warp undoes the patch:
-run the command again. `--check` only reports.
+`mp4_sim.envs.patch_warp.is_patched()` reports the state, and a trainer built
+on this package can refuse an unpatched install. Reinstalling mujoco-warp
+undoes the patch: run the command again. `--check` only reports.
 
 ## Pins and why
 
-All versions live in `requirements/constraints.txt` (gymnasium and
-stable-baselines3 as minimum versions, the rest pinned). The shipped policies
-were trained and evaluated on this set, and the fitted servo models were
-identified on the MuJoCo 3.7 line. Change a pin only together with a
-re-evaluation.
+All versions live in `requirements/constraints.txt`: it pins every package the
+installer installs, on every platform, so it fixes the whole environment. The
+compiled robot models
+are fingerprinted on this set (`tests/test_models.py`), and the fitted servo
+models were identified on the MuJoCo 3.7 line; policies trained on these
+environments depend on it too. Change a pin only together with a
+re-evaluation. [mini_pupper_4_rl](https://github.com/mangdang-bam/mini_pupper_4_rl)
+has its own constraints file: the same pins plus pyserial.
 
 | Package | Version | Reason |
 |---|---|---|
-| Python | 3.12 | Required by mjlab-based training and the actuator code |
-| `mujoco` | 3.7.0 | The MuJoCo line the servo models were fitted on and the policies trained on |
+| Python | 3.12 | Required by mjlab and the actuator code |
+| `mujoco` | 3.7.0 | The MuJoCo line the servo models were fitted on; the compiled-model fingerprints are pinned on it |
 | `mujoco-warp` | 3.7.0.1 | Matches `mujoco` 3.7.0; the version `patch_warp` patches |
-| `warp-lang` | 1.12.1 | Version the policies were trained with; mjlab requires >= 1.12.0 |
-| `mjlab` | 1.3.0 | Training framework |
-| `rsl-rl-lib` | 5.0.1 | Pinned by mjlab 1.3.0; `gpu/algorithms.py` extends its PPO |
-| `torch` / `torchvision` | 2.14.0 / 0.29.0 | Version the policies were trained with; CUDA 13.0 wheels (`--torch-backend cu130`) |
-| `onnx` / `onnxruntime` | 1.23.0 / 1.30.0 | Versions the export and `mp4_sim.export.verify` were run with |
-| `trimesh` | 5.1.0 | Used by `tools/build_model.py` and `tools/fix_sku2_urdf.py`; mjlab requires >= 4.8.3 |
+| `warp-lang` | 1.12.1 | mjlab requires >= 1.12.0 |
+| `mjlab` | 1.3.0 | The simulation framework the environments are written for |
+| `rsl-rl-lib` | 5.0.1 | Pinned by mjlab 1.3.0 |
+| `torch` | 2.14.0 | CUDA 13.0 wheels (`--torch-backend cu130`) |
+| `mjviser` | 0.0.16 | mjlab's viewer, installed by mjlab. 0.0.17 and newer require `mujoco-core`, which installs its own `mujoco/` package over `mujoco` 3.7.0 and breaks `import mujoco` |
+| `viser` | 1.1.1 | Required by `mjviser` 0.0.16 |
+| `trimesh` | 5.2.0 | mjlab requires >= 4.8.3 |
 
-The remaining pins (numpy, scipy, tensordict, tensorboard, protobuf, onnx-ir,
-onnxscript) are the versions the set resolves with.
+Every other pin (numpy, scipy, tensordict, tensorboard, protobuf, onnx, onnx-ir,
+onnxscript, wandb and the packages they depend on; the nvidia-* and triton
+packages only with CUDA torch on Linux, colorama only on Windows) is the
+version the set resolves with. `scripts/install/verify.py` fails if
+`mujoco-core` is installed; delete `.venv` and run the installer again.
 
 ## Known risks
 
-- **Headless Linux** needs EGL for rendering (videos from
-  `mp4_sim.gpu.evaluate --video`): `export MUJOCO_GL=egl`.
-- **Weights & Biases** is pulled in by mjlab. Training logs to TensorBoard by
-  default; set `WANDB_MODE=disabled` when running offline.
+- **Headless Linux** needs EGL for rendering: `export MUJOCO_GL=egl`.
+- **Installing other packages into `.venv`** without `-c requirements/constraints.txt`
+  can upgrade `mjviser` and bring in `mujoco-core` (see "Pins and why").
+- **Weights & Biases** is pulled in by mjlab; set `WANDB_MODE=disabled` when
+  running offline.

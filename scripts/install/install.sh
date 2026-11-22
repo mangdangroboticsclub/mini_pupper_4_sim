@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Create the mp4-sim Python virtual environment (Linux / macOS).
 #
-#   gpu mode - mjlab / MuJoCo Warp parallel training, ONNX export, and the CPU
-#              MuJoCo + Gymnasium path. Needs an NVIDIA GPU; torch comes from
+#   gpu mode - the mjlab / MuJoCo Warp simulation environments, plus
+#              everything in cpu mode. Needs an NVIDIA GPU; torch comes from
 #              the cu130 wheel index.
-#   cpu mode - the CPU simulator, servo models and ONNX export/runtime.
-#              No CUDA, no mjlab. Only mode on macOS.
+#   cpu mode - the robot models, calibration, joint limits and servo models
+#              on plain MuJoCo. No CUDA, no mjlab. Only mode on macOS.
 #
 # Usage:
 #   bash scripts/install/install.sh [--mode auto|gpu|cpu] [--venv .venv]
@@ -79,7 +79,7 @@ fi
 if [[ "$MODE" == "gpu" ]]; then
   # mujoco_warp prints a warning per heightfield overflow from its GPU kernel; remove the warning (the physics is unchanged)
   echo "[mp4-sim] patching mujoco_warp ..."
-  "$PY" -m mp4_sim.gpu.patch_warp
+  "$PY" -m mp4_sim.envs.patch_warp
 fi
 
 if [[ $SKIP_VERIFY -eq 0 ]]; then

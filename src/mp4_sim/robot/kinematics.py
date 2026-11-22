@@ -11,7 +11,7 @@ Geometry, seen from the side of one leg:
 * ``th1`` thigh angle from vertical, positive *forward* (+x).
 * ``th2`` knee angle such that the shin sits at ``90 - th2`` from vertical
   (that is how the knee *servo* is wired: it sets the shin's angle, not the
-  angle between thigh and shin — see ``docs``/``build_model.py``).
+  angle between thigh and shin — see ``servo_map.json``).
 * ``x`` forward, ``z`` down, relative to the thigh pivot (mm).
 
 Servo angles are the numbers ``servo_write()`` takes: degrees, ``0`` = the

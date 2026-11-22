@@ -3,7 +3,7 @@
   <include file="pupper.xml"/>
   <statistic center="0 0 0.08" extent="0.35"/>
   <visual>
-    <headlight diffuse="0.6 0.6 0.6" ambient="0.35 0.35 0.35" specular="0 0 0"/>
+    <headlight diffuse="0.35 0.35 0.35" ambient="0.50 0.50 0.50" specular="0 0 0"/>
     <rgba haze="0.15 0.25 0.35 1"/>
     <global azimuth="140" elevation="-22" offwidth="1600" offheight="1000"/>
     <quality shadowsize="4096"/>
@@ -15,7 +15,7 @@
     <material name="floor" texture="grid" texuniform="true" texrepeat="10 10" reflectance="0.1"/>
   </asset>
   <worldbody>
-    <light pos="0 0 1.2" dir="0 0 -1" directional="true" castshadow="true"/>
+    <light pos="0 0 1.2" dir="0 0 -1" directional="true" castshadow="true" diffuse="0.45 0.45 0.45" specular="0.1 0.1 0.1"/>
     <geom name="floor" type="plane" size="0 0 0.05" material="floor" contype="2" conaffinity="1"
           friction="1.0 0.02 0.001"/>
   </worldbody>

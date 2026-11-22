@@ -4,37 +4,40 @@ import mujoco
 import numpy as np
 import pytest
 
-from mp4_sim import paths
-from mp4_sim.contract import ACTION_SIZE, Contract
-from mp4_sim.robot import sku2
+from mp4_sim import paths, robots
+from mp4_sim.calibration import ACTION_SIZE, Contract
+from mp4_sim.robot import model
 from mp4_sim.robot.mapping import ServoMap
 
 
-def test_contract_loads():
-    c = Contract.load()
+@pytest.mark.parametrize("robot", robots.ROBOTS)
+def test_contract_loads(robot):
+    c = Contract.load(robot=robot)
     assert len(c.signs) == ACTION_SIZE
     assert len(c.joint_order) == ACTION_SIZE
     assert set(np.abs(c.signs)) == {1.0}
 
 
-def test_sku2_spec_applies_weighed_masses():
-    model = sku2.get_spec().compile()
-    masses = json.loads(paths.MASSES_JSON.read_text())
-    assert model.body_mass.sum() == pytest.approx(masses["total_kg"])
-    assert model.body("FR_hip").mass[0] == pytest.approx(masses["module_kg"])
-    assert model.nu == 0
+@pytest.mark.parametrize("robot", robots.ROBOTS)
+def test_spec_applies_weighed_masses(robot):
+    r = robots.get(robot)
+    m = model.get_spec(legs=model.Legs(robot=robot)).compile()
+    masses = json.loads(r.masses_path.read_text())
+    assert m.body_mass.sum() == pytest.approx(masses["total_kg"])
+    assert m.body("FR_hip").mass[0] == pytest.approx(masses["module_kg"])
+    assert m.nu == 0
     imu = {"imu_ang_vel": mujoco.mjtSensor.mjSENS_GYRO,
            "imu_lin_vel": mujoco.mjtSensor.mjSENS_VELOCIMETER,
            "imu_lin_acc": mujoco.mjtSensor.mjSENS_ACCELEROMETER}
     for name, kind in imu.items():
-        assert model.sensor(name).type[0] == kind
+        assert m.sensor(name).type[0] == kind
 
 
-def test_sku2_contract_matches_assets():
-    recorded = json.loads(paths.CONTRACT_JSON.read_text())["sources"]
-    by_name = {k.rsplit("/", 1)[-1]: v for k, v in recorded.items()}
-    assert by_name["pupper.xml"] == paths.sha256(paths.SKU2_XML)
-    assert by_name["servo_map.json"] == paths.sha256(paths.SKU2_DIR / "servo_map.json")
+@pytest.mark.parametrize("robot", robots.ROBOTS)
+def test_model_files_match_the_registry(robot):
+    r = robots.get(robot)
+    assert paths.sha256(r.xml) == r.hashes["pupper.xml"]
+    assert paths.sha256(r.servo_map_json) == r.hashes["servo_map.json"]
 
 
 @pytest.mark.parametrize("sku", ["sku_1", "sku_2"])
@@ -52,3 +55,5 @@ def test_t5ub06_arm():
     assert arm.latency_steps == (1, 5, 1)
     assert [r["params"].rsplit("/", 1)[-1] for r in arm.params["roles"].values()] == [
         "bam_t5ub06_id_3_m6.json", "bam_t5ub06_id_2_m6.json", "bam_t5ub06_id_3_m6.json"]
+    with pytest.raises(ValueError):
+        arms.bam("scaled", arms.T5UB06, scales=(("armature", 0.5),))
