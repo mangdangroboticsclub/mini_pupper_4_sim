@@ -57,9 +57,9 @@ plant's randomisation events; a task adds its observations, actions, rewards and
 
 ## The RL skills built on it
 
-[mini_pupper_4_rl](https://github.com/mangdang-bam/mini_pupper_4_rl) trains and evaluates a walker and a get-up policy
-on these environments, with `--robot sku2|sku1`, and runs the SKU2 policies on the robot. It installs this package at a
-tagged release and checks the hashes of the files its policies were exported for.
+[mini_pupper_4_rl](https://github.com/mangdangroboticsclub/mini_pupper_4_rl) trains and evaluates a walker and a get-up policy
+on these environments, with `--robot sku2|sku1`, and ships the SKU2 and SKU1 policies that run on the robots. It installs
+this package at a tagged release and checks the hashes of the files its policies were exported for.
 
 ## What is where
 

@@ -128,7 +128,7 @@ does not: every unit has its own servo offsets.
    your calibration's `contract_sha256_prefix`, and record the file's sha256 in the `.sha256` file beside it.
 3. **Masses.** Weigh the robot as above and write a masses file with the same keys; pass its path as `masses_json`.
 
-To replace a shipped measured file (for example a later fit of the SKU1's limits), work in a source checkout of this
+To replace a shipped measured file (for example a new fit of a robot's joint limits), work in a source checkout of this
 repository installed in editable mode (`pip install -e .`), not in an installed copy: copy the new file over the old
 one under the same name, write its sha256 into `<robot>_joint_limits.sha256` for a limits file, and update the hash in
 `src/mp4_sim/robots.py`; `tests/test_assets.py` and `robots.check_files` check the result. The RL repository's

@@ -74,7 +74,7 @@ compiled robot models
 are fingerprinted on this set (`tests/test_models.py`), and the fitted servo
 models were identified on the MuJoCo 3.7 line; policies trained on these
 environments depend on it too. Change a pin only together with a
-re-evaluation. [mini_pupper_4_rl](https://github.com/mangdang-bam/mini_pupper_4_rl)
+re-evaluation. [mini_pupper_4_rl](https://github.com/mangdangroboticsclub/mini_pupper_4_rl)
 has its own constraints file: the same pins plus pyserial.
 
 | Package | Version | Reason |
